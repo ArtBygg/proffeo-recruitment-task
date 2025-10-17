@@ -14,38 +14,24 @@ Projekt ma być responsywny i działać zarówno na desktopie, jak i na urządze
 ---
 
 ## Zasady realizacji
-- Zadanie należy umieścić w publicznym repozytorium GitHub, aby był wgląd w historię commitów.  
-- **Nazwa repozytorium:** imię i nazwisko kandydata.  
-- **Czas na wykonanie:** do 8 godzin.  
-- **Commity:** częste i opisowe.  
+- Zadanie należy umieścić w publicznym repozytorium GitHub, aby był wgląd w historię commitów.
+- **Nazwa repozytorium:** imię i nazwisko kandydata.
+- **Czas na wykonanie:** do 8 godzin.
+- **Commity:** częste i opisowe.
 - Kod powinien być zgodny z dobrymi praktykami (DRY, SOLID, czystość architektury).
-- Użycie AI dopuszczalne jako wsparcie w zakresie planowania, testów i dokumentacji. 
 
 ---
 
 ## Wymagania techniczne
 
 - **Framework:** Angular 20  
-- **Komponenty:** standalone components  
+- **Komponenty:** Standalone Components  
 - **Stan:** signals  
 - **Change detection:** zoneless (`provideZonelessChangeDetection()`)  
 - **Style:** TailwindCSS v4 (theme, zmienne, flexbox)  
 - **Architektura:** lazy loading modułów/feature’ów  
 - **Stan aplikacji:** signals + prosty singleton service trzymający dane w pamięci (cache)  
-- **Animacje:** co najmniej jedna w nowej składni `animate.enter` / `animate.leave`  
-- **Asynchroniczność:** RxJS + HttpClient  
-- **Loader:** prosty spinner lub skeleton  
-- **Responsywność:** poprawne wyświetlanie na desktopie i mobile  
 - **Struktura katalogów:** przejrzysta i uporządkowana (np. `features/`, `shared/`, `core/`, `services/`)  
-
----
-
-## Plan przed implementacją
-Przed rozpoczęciem pracy należy przygotować w pliku `.md` (oczekujemy użycia AI do planowania i dokumentacji):
-- strukturę katalogów,  
-- listę komponentów,  
-- serwisy,  
-- podejście do zarządzania stanem.
 
 ---
 
