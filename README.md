@@ -80,14 +80,7 @@ Ponowne zapytania do API wykonujemy tylko w przypadku:
 - zmiany filtrów,  
 - odświeżenia strony.  
 
----
-
-## Bonus (dodatkowe punkty)
-- Dodaj zakładkę z widokiem Gantta, w którym pokażesz posty z zamockowanymi datami start–end (API ich nie zwraca).  
-- Dane mogą być zapisane w modelach TypeScript.  
-- Wyświetlenie w formie prostego timeline (tablica Gantt).  
-
----
+--
 
 ## Podsumowanie
 Aplikacja powinna:  
