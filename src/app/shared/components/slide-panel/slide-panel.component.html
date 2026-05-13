@@ -1,0 +1,128 @@
+@if (isOpen()) {
+  @if (!isMobile()) {
+    <div class="relative flex h-full flex-col border-l border-gray-200 bg-gray-50">
+      <div class="flex-shrink-0 p-4">
+        <div class="flex items-start justify-between">
+          <div class="w-full flex-1">
+            <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+          </div>
+
+          <button
+            (click)="closePanel()"
+            class="rounded-lg p-1.5 transition-colors hover:bg-gray-100"
+          >
+            <mat-icon
+              fontIcon="close"
+              class="text-gray-400 hover:text-gray-600"
+            ></mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+    </div>
+  }
+
+  <!-- Mobile view - Bottom sheet -->
+  @if (isMobile()) {
+    <!-- Backdrop - only visible when expanded -->
+    @if (showBackdrop() && panelState() === 'expanded') {
+      <div
+        (click)="closePanel()"
+        class="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
+      ></div>
+    }
+
+    <!-- Mobile Panel -->
+    <div
+      (touchstart)="$event.stopPropagation()"
+      [style.transform]="
+        isDragging() || isSwipingHorizontally()
+          ? 'translate(' + currentTranslateX() + 'px, ' + currentTranslateY() + 'px)'
+          : null
+      "
+      [style.transition]="isDragging() || isSwipingHorizontally() ? 'none' : 'transform 300ms ease-out'"
+      [class.translate-y-0]="!isDragging() && !isSwipingHorizontally() && panelState() === 'expanded'"
+      [style.height.dvh]="100"
+      [style.transform]="
+        !isDragging() && !isSwipingHorizontally() && panelState() === 'collapsed'
+          ? 'translateY(calc(100dvh - ' + mobileCollapsedHeight() + 'px))'
+          : null
+      "
+      class="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-gray-50 shadow-2xl shadow-black"
+    >
+      <!-- Visual swipe indicators -->
+      @if (isSwipingHorizontally() && panelState() === 'expanded') {
+        <div class="z-150 pointer-events-none absolute inset-0">
+          @if (swipeDirection() === 'left') {
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-50">
+              <mat-icon
+                fontIcon="chevron_right"
+                class="text-primary-600 text-4xl"
+              ></mat-icon>
+            </div>
+          }
+          @if (swipeDirection() === 'right') {
+            <div class="absolute left-4 top-1/2 -translate-y-1/2 opacity-50">
+              <mat-icon
+                fontIcon="chevron_left"
+                class="text-primary-600 text-4xl"
+              ></mat-icon>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Drag handle -->
+      <div
+        (touchstart)="onTouchStart($event)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd()"
+        class="w-full flex-shrink-0 cursor-grab py-3 active:cursor-grabbing"
+      >
+        <div class="mx-auto h-1 w-12 rounded-full bg-gray-300"></div>
+      </div>
+
+      <!-- Content wrapper for touch events -->
+      <div
+        (touchstart)="onTouchStart($event)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd()"
+        class="flex flex-1 flex-col overflow-hidden"
+      >
+        <!-- Header -->
+        @if (headerTemplate) {
+          <div class="flex-shrink-0 px-4 pb-4">
+            <div class="flex items-start justify-between">
+              <div class="w-full flex-1">
+                <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+              </div>
+
+              <button
+                (click)="closePanel()"
+                class="ml-2 flex-shrink-0 rounded-lg p-1.5 transition-colors hover:bg-gray-100"
+              >
+                <mat-icon
+                  fontIcon="close"
+                  class="text-gray-400"
+                ></mat-icon>
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Scrollable content (visible when expanded) -->
+        <div
+          #scrollable
+          [class.opacity-0]="panelState() === 'collapsed'"
+          [class.opacity-100]="panelState() === 'expanded'"
+          [class.pointer-events-none]="panelState() === 'collapsed'"
+          [style.opacity]="isSwipingHorizontally() ? 1 - Math.abs(currentTranslateX()) / 300 : null"
+          class="flex-1 overflow-y-auto transition-opacity duration-300"
+        >
+          <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+        </div>
+      </div>
+    </div>
+  }
+}

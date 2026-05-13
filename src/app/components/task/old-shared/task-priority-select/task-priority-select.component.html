@@ -1,0 +1,40 @@
+<button
+  (menuOpened)="disableScroll()"
+  (menuClosed)="enableScroll()"
+  [class.cursor-pointer]="!disabled()"
+  [matMenuTriggerFor]="menu"
+  [disabled]="disabled()"
+  class="flex items-center gap-2"
+>
+  <div class="flex h-8 w-8 items-center justify-center">
+    <mat-icon
+      [fontIcon]="priorityIconName"
+      [ngClass]="{
+        'text-slate-500': value() === taskPriority.NORMAL,
+        'text-rose-600': value() === taskPriority.HIGH,
+        'text-orange-400': value() === taskPriority.MEDIUM
+      }"
+    ></mat-icon>
+  </div>
+
+  @if (!minimalMode()) {
+    <p class="text-slate whitespace-nowrap text-base">
+      {{ 'task-priority-' + value()?.toLowerCase() | translate }}
+    </p>
+  }
+</button>
+
+<mat-menu #menu="matMenu">
+  @for (item of dropdownValues; track $index) {
+    <button
+      (click)="onSelectPriority(item.value)"
+      class="flex w-full cursor-pointer items-center px-4 py-2 hover:bg-slate-100"
+    >
+      <mat-icon
+        [fontIcon]="item.iconName"
+        [ngClass]="item.iconColor"
+      ></mat-icon>
+      {{ item.label }}
+    </button>
+  }
+</mat-menu>

@@ -1,0 +1,10 @@
+<section class="flex flex-row items-center justify-center w-full">
+  <mat-paginator
+    (page)="paginationChange($event)"
+    [pageIndex]="page()()"
+    [length]="total()"
+    [pageSize]="limit()()"
+    [pageSizeOptions]="availableLimits"
+    class="mat-mdc-paginator !bg-transparent"
+  ></mat-paginator>
+</section>

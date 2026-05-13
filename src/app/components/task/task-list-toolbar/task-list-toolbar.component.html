@@ -1,0 +1,59 @@
+<div class="flex justify-between items-center gap-5 p-2">
+  <proffeo-input
+    (inputChangeWithDebounce)="onSearch($event)"
+    [value]="searchPhrase()"
+    [placeholder]="'tasks-search-name' | translate"
+    [debounceDelay]="300"
+    [proffeoFilterCountBadge]="searchPhrase()?.length > 0 ? 1 : 0"
+    matIconName="search"
+    roundedTwClass="rounded-full"
+    class="w-full md:w-[35%]"
+  ></proffeo-input>
+
+  @if (!isMobile()) {
+    <div class="flex items-center gap-2">
+      <div class="relative flex">
+        <proffeo-button
+          (click)="filtersCleared()"
+          [proffeoFilterCountBadge]="activeFiltersCount()"
+          text="project-tasks.filters.actions.clear"
+          fontIcon="filter_list_off"
+        ></proffeo-button>
+      </div>
+      <div class="relative flex p-1">
+        <proffeo-button
+          (click)="showImportSection.set(!showImportSection())"
+          fontIcon="upload_file"
+        ></proffeo-button>
+      </div>
+      <proffeo-button
+        (click)="startTaskCreation()"
+        [type]="ButtonType.ACCENT"
+        text="tasks-list-add-task"
+        fontIcon="add"
+        class="flex"
+      ></proffeo-button>
+    </div>
+  }
+</div>
+@if (isMobile()) {
+  <proffeo-shortcut-filters
+    (openFiltersPanel)="showFilters.set(true)"
+    class="block p-2"
+  />
+}
+@if (showFilters() && isMobile()) {
+  <proffeo-task-filters-panel
+    (closeClicked)="showFilters.set(false)"
+    animate.enter="fade-in"
+    class="fixed right-0 top-0 bg-white w-screen h-screen border-l border-slate-200 z-50"
+  ></proffeo-task-filters-panel>
+}
+@if (showImportSection()) {
+  <div class="w-full pt-5">
+    <proffeo-import-tasks-from-template [project]="activeProject()" />
+  </div>
+}
+@if (!isMobile()) {
+  <proffeo-task-filters class="flex p-2"></proffeo-task-filters>
+}

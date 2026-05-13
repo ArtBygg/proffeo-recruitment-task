@@ -1,0 +1,190 @@
+<div
+  class="flex min-h-full overflow-y-auto w-full max-lg:bg-white flex-col gap-3 border-default bg-primary 2xl:bg-white p-5"
+>
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.number' | translate }}
+    </p>
+    <proffeo-task-type-select
+      (taskTypeSelected)="onTaskTypeSelected($event)"
+      [readonly]="false"
+      [taskTypes]="activeCompanyTaskTypes()"
+      [activeTaskType]="task().taskType()"
+      [taskNumber]="task().taskNumber"
+    ></proffeo-task-type-select>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">{{ 'time-reports-form-modal-duration' | translate }}</p>
+    <proffeo-task-timer
+      [mode]="taskTimerMode.readonly"
+      [timeSpan]="
+        task().statistics?.summaryTime
+          ? { totalSeconds: convertDurationToSeconds(task().statistics.summaryTime) }
+          : null
+      "
+      [estimation]="task().estimation?.time"
+    ></proffeo-task-timer>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.estimated-time' | translate }}
+    </p>
+    <proffeo-estimation-select
+      (estimationSelected)="onEstimationSelected($event)"
+      [estimation]="task().estimation"
+      [showCostEstimation]="false"
+    ></proffeo-estimation-select>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.location' | translate }}
+    </p>
+    <proffeo-location-select
+      (locationClicked)="onLocationClicked()"
+      [location]="task().location()"
+      [showIcon]="false"
+      [isSmallText]="false"
+    ></proffeo-location-select>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.participants' | translate }}
+    </p>
+    <proffeo-task-user-assignees
+      (changeIndustry)="onIndustryClicked()"
+      (changeGroup)="onChangeGroupClicked()"
+      (changeUsers)="onChangeParticipantsClicked()"
+      [projectIndustry]="task().projectIndustry()"
+      [projectGroupAdmin]="task().projectGroupAdministrator()"
+      [taskUsers]="taskUsers()"
+      [avatarSize]="AvatarSize.MINI"
+      [avatarsOverlapping]="false"
+    ></proffeo-task-user-assignees>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.tags' | translate }}
+    </p>
+    <div class="flex flex-wrap gap-1">
+      @for (tag of tags(); track tag.id) {
+        <proffeo-tag
+          (click)="onAddTagToTask()"
+          [tag]="tag"
+          class="cursor-pointer"
+        ></proffeo-tag>
+      } @empty {
+        <button
+          (click)="onAddTagToTask()"
+          class="flex items-center justify-center px-2 font-medium text-hover-medium"
+        >
+          <p>-</p>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="flex w-full flex-col gap-1 items-start justify-start">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.priority' | translate }}
+    </p>
+    <proffeo-task-priority-select
+      (prioritySelected)="onPrioritySelected($event)"
+      [taskPriority]="task().priority"
+      [small]="false"
+      [readonly]="false"
+    ></proffeo-task-priority-select>
+  </div>
+  <div class="flex w-full flex-col gap-1 items-start justify-start">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.status' | translate }}
+    </p>
+    <proffeo-task-status-select
+      (statusSelected)="onStatusSelected($event)"
+      [mode]="TaskStatusSelectEnum.DOTS"
+      [taskStatus]="task().status"
+      [readonly]="false"
+    ></proffeo-task-status-select>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.progress' | translate }}
+    </p>
+    <proffeo-percentage-select
+      (newPercentageValue)="onPercentageChange($event)"
+      [value]="task().percentageOfProgress ?? 0"
+      [displayMode]="percentageDisplayMode.PROGRESS_BAR"
+      [progressBarWidth]="'140px'"
+      [progressBarHeight]="'18px'"
+      [isReadonly]="false"
+    ></proffeo-percentage-select>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.industry' | translate }}
+    </p>
+    <proffeo-task-industry-select
+      (industryClicked)="onIndustryClicked()"
+      [projectIndustry]="task().projectIndustry()?.industry()"
+      [isReadonly]="false"
+      [showIcon]="false"
+    ></proffeo-task-industry-select>
+  </div>
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.estimated-cost' | translate }}
+    </p>
+    <proffeo-estimation-select
+      (estimationSelected)="onEstimationSelected($event)"
+      [estimation]="task().estimation"
+      [showTimeEstimation]="false"
+    ></proffeo-estimation-select>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.start-date' | translate }}
+    </p>
+    <proffeo-task-date-select
+      (dateChange)="onTaskStartDateSelected($event)"
+      [currentDate]="task().startDate"
+      [iconVisible]="false"
+      [maxDate]="task().endDate"
+    ></proffeo-task-date-select>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">
+      {{ 'project-tasks.list.column-headers.end-date' | translate }}
+    </p>
+    <proffeo-task-date-select
+      (dateChange)="onTaskEndDateSelected($event)"
+      [currentDate]="task().endDate"
+      [iconVisible]="false"
+      [minDate]="task().startDate"
+    ></proffeo-task-date-select>
+  </div>
+
+  <div class="flex w-full flex-col gap-1">
+    <p class="text-sm opacity-50">Utworzono przez</p>
+    <div class="flex gap-2 items-center">
+      <div
+        class="flex h-[28px] w-[28px] md:h-[36px] md:w-[36px] items-center justify-center rounded-full bg-gradient-to-br from-gray-400 to-gray-500 text-white"
+      >
+        <p class="text-sm md:text-base">
+          {{ task().createdBy()?.firstName?.slice(0, 2).toUpperCase() ?? '?' }}
+        </p>
+      </div>
+      <div class="flex flex-col">
+        <p class="text-sm md:text-base">{{ task().createdBy?.()?.firstName ?? '—' }}</p>
+        <p class="text-sm">{{ createdDate() }}</p>
+      </div>
+    </div>
+  </div>
+</div>

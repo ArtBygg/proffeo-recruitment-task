@@ -1,0 +1,108 @@
+<div class="flex flex-col h-full w-full focus:">
+  <div class="flex flex-row items-center justify-between px-6 py-4">
+    <div class="font-semibold line-clamp-2">{{ 'estimation' | translate }}</div>
+    <div class="flex items-center justify-end gap-2">
+      <button
+        mat-dialog-close
+        class="p-0 m-0 bg-transparent border-none flex items-center"
+      >
+        <mat-icon
+          fontIcon="close"
+          class="text-slate-500 text-3xl cursor-pointer"
+        ></mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-grow overflow-auto">
+    <mat-dialog-content>
+      <form [formGroup]="estimateForm">
+        <div class="w-full text-center">
+          <mat-button-toggle-group
+            (change)="toggleEstimationType($event.value)"
+            multiple
+            hideMultipleSelectionIndicator="true"
+          >
+            <mat-button-toggle
+              [checked]="showTimeEstimation"
+              value="time"
+            >
+              {{ 'task-details-modal-time-estimation' | translate }}
+            </mat-button-toggle>
+            <mat-button-toggle
+              [checked]="showCostEstimation"
+              value="money"
+            >
+              {{ 'task-details-modal-price-estimation' | translate }}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
+        <!-- Time Estimation Section -->
+        @if (showTimeEstimation) {
+          <div class="flex flex-col items-center my-4">
+            <div formGroupName="timeEstimate">
+              <proffeo-input
+                [enableNgContent]="true"
+                type="number"
+                formControlName="amount"
+                ngContentTwClasses="w-1/2"
+                placeholder="{{ 'labels-project-time-estimation' | translate }}"
+                class="max-w-60 flex"
+              >
+                <proffeo-dropdown
+                  (valueChange)="estimateForm.controls.timeEstimate.controls.unit.patchValue($event)"
+                  [value]="estimateForm.controls.timeEstimate.controls.unit.value"
+                  [dropdownItems]="timeUnitsItems"
+                ></proffeo-dropdown>
+              </proffeo-input>
+            </div>
+          </div>
+        }
+
+        <!-- Monetary Estimation Section -->
+        @if (showCostEstimation) {
+          <div class="flex flex-col items-center my-4">
+            <div
+              formGroupName="costEstimate"
+              class="flex gap-1"
+            >
+              <proffeo-input
+                [enableNgContent]="true"
+                type="number"
+                formControlName="amount"
+                ngContentTwClasses="w-1/2"
+                placeholder="{{ 'labels-project-financial-estimation' | translate }}"
+                class="max-w-60 flex"
+              >
+                <proffeo-dropdown
+                  (valueChange)="estimateForm.controls.costEstimate.controls.currency.patchValue($event)"
+                  [value]="estimateForm.controls.costEstimate.controls.currency.value"
+                  [dropdownItems]="currencyUnitsItems"
+                ></proffeo-dropdown>
+              </proffeo-input>
+            </div>
+          </div>
+        }
+      </form>
+    </mat-dialog-content>
+  </div>
+
+  <div
+    mat-dialog-actions
+    class="flex flex-row items-center justify-end gap-2 border-t border-slate-300 swiper-slide-shadow-top"
+  >
+    <proffeo-button
+      (click)="onCancel()"
+      mat-dialog-close
+      text="companies-cancel"
+    ></proffeo-button>
+    <proffeo-button
+      (click)="onSave()"
+      [disabled]="!isFormValid()"
+      [ngClass]="{ 'opacity-50 cursor-not-allowed': !isFormValid() }"
+      [type]="ButtonType.ACCENT"
+      text="companies-save"
+    ></proffeo-button>
+  </div>
+</div>

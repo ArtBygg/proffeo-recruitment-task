@@ -1,0 +1,27 @@
+<mat-form-field class="w-full">
+  <div
+    (click)="datePicker.open()"
+    class="flex items-center w-full h-full"
+  >
+    <input
+      [placeholder]="label()"
+      [matDatepicker]="datePicker"
+      [formControl]="control()"
+      matInput
+    />
+    <mat-icon
+      matSuffix
+      fontIcon="calendar_month"
+    ></mat-icon>
+  </div>
+  @if (errorMessage()) {
+    <mat-error>
+      {{ errorMessage() }}
+    </mat-error>
+  }
+</mat-form-field>
+
+<mat-datepicker
+  #datePicker
+  [touchUi]="isMobile()"
+></mat-datepicker>

@@ -1,0 +1,163 @@
+<div
+  (click)="toggleSublocations()"
+  [ngClass]="{ 'cursor-pointer': sublocations()?.length > 0 }"
+  class="flex items-center justify-between gap-2 rounded-lg p-1 hover:bg-gray-100"
+>
+  <div class="flex items-center">
+    @if (!isReadonly()) {
+      <proffeo-radio
+        (change)="selectLocation(location())"
+        (click)="$event.stopPropagation()"
+        [checked]="location().id === selectedLocation()?.id"
+        [id]="location().id"
+        [value]="location().id"
+        name="location"
+        class="mr-2"
+      ></proffeo-radio>
+      <span [ngClass]="{ 'font-semibold': isPartOfSelectedLocation(location()) }">{{ location().name }}</span>
+    } @else {
+      @if (location().id === selectedLocation()?.id) {
+        <mat-icon
+          fontIcon="task_alt"
+          class="text-primary-500 mr-1 h-[20px] w-[20px] text-[20px]"
+        ></mat-icon>
+      }
+
+      <span [ngClass]="{ 'font-semibold': isPartOfSelectedLocation(location()) }">{{ location().name }}</span>
+    }
+  </div>
+  <span class="flex items-center">
+    <div class="artbygg-col-xs">
+      <!-- @if (attachments$ | async; as attachments) {
+        @if (attachments.length > 0) {
+          <div
+            (click)="toggleAttachments()"
+            class="flex w-[38px] cursor-pointer items-center justify-start rounded border border-slate-400 p-1"
+          >
+            <mat-icon
+              [ngClass]="{'text-slate-500': !attachmentsVisible, 'text-rose-600': attachmentsVisible}"
+              class="text-slate-500 text-[20px] h-[20px] w-[20px] material-symbols-outlined"
+              fontIcon="attach_file">
+            </mat-icon>
+          <span
+            [ngClass]="{ 'text-slate-500': !attachmentsVisible, 'text-rose-600': attachmentsVisible }"
+            class="text-sm leading-none"
+          >{{ attachments.length }}
+          </span>
+        </div>
+        }
+      } -->
+    </div>
+    <div class="artbygg-col-xs">
+      @if (sublocations()?.length > 0) {
+        <div
+          [ngClass]="{
+            'border-2 border-slate-700 text-slate-700': isPartOfSelectedLocation(location())
+          }"
+          class="flex w-[38px] cursor-pointer items-center justify-center gap-0.5 rounded border border-slate-400 p-1"
+        >
+          <mat-icon
+            [ngClass]="{
+              'text-slate-500': !sublocationsVisible || !isPartOfSelectedLocation(location()),
+              'text-rose-600': sublocationsVisible,
+              'text-slate-700': isPartOfSelectedLocation(location())
+            }"
+            fontIcon="subdirectory_arrow_right"
+            class="icon-sm text-slate-500"
+          ></mat-icon>
+          <span
+            [ngClass]="{
+              'text-slate-500': !sublocationsVisible || !isPartOfSelectedLocation(location()),
+              'text-rose-600': sublocationsVisible,
+              'text-slate-700': isPartOfSelectedLocation(location())
+            }"
+            class="text-sm leading-none"
+          >
+            {{ sublocations().length }}
+          </span>
+        </div>
+      }
+    </div>
+  </span>
+</div>
+
+@if (attachmentsVisible) {
+  <div class="ml-[1rem] mt-4">
+    <!--  XXXXXXXXXXXXXX        <proffeo-carousel [images]="attachments$ | async" (deleteFile)="onDeleteLocationFile($event)"></aartbygg-carousel>-->
+
+    <div class="flex items-center gap-2">
+      <!--      <proffeo-thumbnails-carousel-->
+      <!-- TODO: repair-->
+      <!--      <artbygg-thumbnails-carousel-->
+      <!--        (photoDeleted)="onDeleteLocationFile($event)"-->
+      <!--        [images]="attachments$ | async"-->
+      <!--        class="overflow-hidden"-->
+      <!--      ></proffeo-thumbnails-carousel>-->
+
+      <div class="flex w-full overflow-x-auto">
+        <div class="flex gap-2 whitespace-nowrap">
+          @for (file of attachments(); let i = $index; track i) {
+            <div class="relative flex-none">
+              @if (file.isImage()) {
+                <img
+                  (click)="openDialog(i)"
+                  [src]="file.previewUrl()"
+                  alt="image"
+                  class="border-primary h-24 w-24 cursor-pointer rounded-md border-2 object-cover"
+                />
+                <!-- TODO: repair-->
+                <!--                <img-->
+                <!--                  [ngClass]="{ 'rounded-md border-2 border-primary': isActive(i) }"-->
+                <!--                  class="cursor-pointer object-cover h-24 w-24"-->
+                <!--                  [src]="file.previewUrl()"-->
+                <!--                  alt="image"-->
+                <!--                />-->
+              } @else {
+                <div
+                  (click)="openDialog(i)"
+                  class="border-primary flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-md border-2"
+                >
+                  <!-- TODO: repair-->
+                  <!--                  <div-->
+                  <!--                    [ngClass]="isActive(i) ? 'rounded-md border-2 border-primary' : 'border-slate-200'"-->
+                  <!--                    class="cursor-pointer flex flex-col items-center justify-center h-24 w-24 border"-->
+                  <!--                  >-->
+                  @if (file.isPdf()) {
+                    <mat-icon
+                      fontIcon="description"
+                      class="text-primary text-4xl"
+                    ></mat-icon>
+                  }
+
+                  @if (file.isVideo()) {
+                    <mat-icon
+                      fontIcon="movie"
+                      class="text-secondary text-4xl"
+                    ></mat-icon>
+                  }
+                  <div class="mt-2 w-24 truncate px-2 text-center text-sm text-slate-500">
+                    {{ file.name }}
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (sublocationsVisible) {
+  <div class="ml-[1rem]">
+    @for (location of sublocations(); track location.id) {
+      <proffeo-single-location-item
+        (locationSelected)="selectLocation($event)"
+        [location]="location"
+        [isReadonly]="isReadonly()"
+        [projectId]="projectId"
+        [selectedLocation]="selectedLocation()"
+      ></proffeo-single-location-item>
+    }
+  </div>
+}

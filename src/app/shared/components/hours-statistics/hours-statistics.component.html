@@ -1,0 +1,17 @@
+<div
+  [class.hover-action]="hoverAction()"
+  class="hours-statistics-container flex items-center"
+>
+  <mat-icon
+    [ngClass]="hoursStatisticsColorClass"
+    fontIcon="timer"
+    class="icon icon-size-4"
+  ></mat-icon>
+  <span class="text-container text-sm pl-1">
+    {{ usedHours() | appShortNumber }}
+    @if (showEstimationHours()) {
+      <span>/ {{ estimationHours() | appShortNumber }}</span>
+    }
+    H
+  </span>
+</div>

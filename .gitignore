@@ -20,12 +20,14 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
+# Cursor — ignore editor data, but keep shared rules in repo
+.cursor/*
+!.cursor/rules/
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
-!.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json
 .history/*
 
 # Miscellaneous

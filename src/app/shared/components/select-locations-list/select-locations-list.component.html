@@ -1,0 +1,36 @@
+@for (location of locations(); track location.id) {
+  <div
+    [class.pl-2rem]="level() > 0"
+    class="pl-2rem mb-3 mt-3"
+  >
+    <div class="flex items-center">
+      <!--      <mat-icon (click)="toggle()" class="mr-2 text-slate-600 text-[20px] w-[20px] h-[20px]">-->
+      <!--        {{ expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}-->
+      <!--      </mat-icon>-->
+      <mat-icon
+        (click)="toggleSublocationsVisibility(location)"
+        [class.invisible]="!location.childrenCount()"
+        [fontIcon]="sublocationsVisible[location.id] ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+        size="1.5rem"
+        class="ml-2 cursor-pointer text-slate-500"
+      ></mat-icon>
+
+      <!-- Use proffeo-checkbox after component fix -->
+      <mat-checkbox
+        (change)="selectLocation($event, location)"
+        [checked]="checkedLocationsMap().get(location.id)"
+        [value]="location.id"
+      ></mat-checkbox>
+      {{ location.name }}
+    </div>
+    @if (sublocationsVisible[location.id]) {
+      <proffeo-select-locations-list
+        (locationRemoved)="onLocationRemoved($event)"
+        (locationSelected)="onLocationSelected($event)"
+        [level]="level() + 1"
+        [selectedLocations]="selectedLocations()"
+        [locations]="sublocations$[location.id]()"
+      ></proffeo-select-locations-list>
+    }
+  </div>
+}

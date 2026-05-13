@@ -1,0 +1,72 @@
+@if (form(); as f) {
+  <form [formGroup]="f">
+    <!-- TIME INPUT (manual / range) -->
+    <proffeo-time-input-section
+      (quickTimeSelected)="onQuickTimeSelected($event)"
+      [mode]="selectedValue()"
+      [manualTimeControl]="manualTimeControl"
+      [timeRangeForm]="timeRangeForm"
+      [minuteStep]="currentMinuteStep()"
+    ></proffeo-time-input-section>
+
+    <div class="flex flex-col mt-4 gap-6">
+      <!-- User -->
+      @if (userNameControl?.value) {
+        <div class="flex items-center gap-2 p-3 bg-slate-50 rounded-md border border-slate-200">
+          <mat-icon
+            fontIcon="person"
+            class="text-slate-500"
+          ></mat-icon>
+          <span class="text-sm text-slate-700">{{ userNameControl.value }}</span>
+        </div>
+      }
+
+      <!-- Date -->
+      <div>
+        <proffeo-date-picker
+          [control]="dateControl"
+          label="{{ 'time-report-date' | translate }}"
+        ></proffeo-date-picker>
+
+        @if (dateControl?.hasError('required') && dateControl?.touched) {
+          <mat-error class="text-sm font-medium mt-1">
+            {{ 'ui-forms-this-field-is-required' | translate }}
+          </mat-error>
+        }
+      </div>
+
+      <!-- Hour Type -->
+      <div>
+        <proffeo-dropdown
+          [dropdownItems]="hourTypes"
+          [formControl]="hourTypeControl"
+          [placeholder]="'time-report-hour-type' | translate"
+          [selected]="defaultOrdinaryHours"
+          widthTwClass="w-full"
+        ></proffeo-dropdown>
+
+        @if (hourTypeControl?.hasError('required') && hourTypeControl?.touched) {
+          <mat-error class="text-sm mt-1">
+            {{ 'ui-forms-this-field-is-required' | translate }}
+          </mat-error>
+        }
+      </div>
+
+      <!-- Project / Task / Location -->
+      <proffeo-project-task-selector
+        (selectionChange)="onProjectTaskSelectionChange($event)"
+        [readonly]="isReadonlyMode()"
+        [preselection]="projectTaskPreselection()"
+      ></proffeo-project-task-selector>
+
+      <!-- Comment -->
+      <proffeo-text-area
+        [control]="commentControl"
+        label="{{ 'time-reports-comments-type-your-message' | translate }}"
+      ></proffeo-text-area>
+
+      <!-- File Attachments -->
+      <proffeo-time-report-file-attachments></proffeo-time-report-file-attachments>
+    </div>
+  </form>
+}

@@ -1,0 +1,18 @@
+@use '@angular/material' as mat;
+@use '../_theme-colors' as theme;
+
+@include mat.select-overrides(
+  (
+    enabled-trigger-text-color: var(--color-font),
+    disabled-trigger-text-color: var(--color-font),
+    placeholder-text-color: var(--color-font)
+  )
+);
+
+.mat-mdc-option.mdc-list-item.mat-mdc-option-multiple {
+  .mdc-list-item__primary-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

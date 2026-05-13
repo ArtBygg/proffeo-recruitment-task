@@ -1,0 +1,43 @@
+<proffeo-modal [title]="'project-tasks.modals.create-modal-title' | translate">
+  <div class="w-full h-full">
+    <proffeo-task-create
+      [(firstStep)]="firstStep"
+      [projectIndustries]="dialogData.projectIndustries()"
+      [projectLocations]="dialogData.projectLocations()"
+      [createTaskForm]="createTaskForm()"
+      [project]="dialogData.project()"
+      [taskTypes]="dialogData.taskTypes()"
+      class="w-full"
+    ></proffeo-task-create>
+  </div>
+
+  <div
+    [class.justify-end]="firstStep()"
+    modal-actions
+    class="flex w-full justify-between md:justify-end gap-2"
+  >
+    @if (firstStep()) {
+      <proffeo-button
+        text="close"
+        matDialogClose
+      ></proffeo-button>
+    } @else {
+      <proffeo-button
+        (click)="firstStep.set(true)"
+        text="labels-project-buttons-back"
+      ></proffeo-button>
+      <proffeo-button
+        (click)="save(true)"
+        [type]="ButtonType.ACCENT"
+        [disabled]="invalid || saving()"
+        text="task-create-save-and-new"
+      ></proffeo-button>
+      <proffeo-button
+        (click)="save()"
+        [type]="ButtonType.ACCENT"
+        [disabled]="invalid || saving()"
+        text="task-create-save"
+      ></proffeo-button>
+    }
+  </div>
+</proffeo-modal>

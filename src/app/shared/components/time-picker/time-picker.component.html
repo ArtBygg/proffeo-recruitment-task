@@ -1,0 +1,66 @@
+<div class="flex justify-center items-center gap-3">
+  <div class="flex flex-col items-center text-center justify-between gap-1 select-none">
+    <mat-icon
+      (click)="addHour()"
+      fontIcon="keyboard_arrow_up"
+      class="text-slate-500 font-bold cursor-pointer hover:text-rose-600 text-[20px] h-[20px] w-[20px] material-symbols-outlined"
+    ></mat-icon>
+    <div class="relative">
+      <input
+        #hoursInput
+        (change)="onHoursChange(hoursInput.value)"
+        (focusout)="onBlur(hoursInput)"
+        (focus)="onFocus(hoursInput)"
+        (input)="onHourInput($event)"
+        [class]="
+          'hoursInput w-14 text-center border border-black border-opacity-10 rounded-md px-2 py-2 h-[42px] ' +
+          (hasChanged() ? 'text-slate-900' : 'text-slate-500')
+        "
+        [value]="formatValue((valueAccessor.value$ | async)?.hours)"
+        type="number"
+        pattern="[0-9]*"
+        maxlength="2"
+        max="23"
+        min="0"
+      />
+      <span class="absolute top-1/2 -translate-y-1/2 -right-3 text-3xl pointer-events-none text-slate-500">:</span>
+    </div>
+    <mat-icon
+      (click)="subtractHour()"
+      fontIcon="keyboard_arrow_down"
+      class="text-slate-500 font-bold cursor-pointer hover:text-rose-600 text-[20px] h-[20px] w-[20px] material-symbols-outlined"
+    ></mat-icon>
+  </div>
+
+  <div class="flex flex-col items-center text-center justify-between gap-1 select-none">
+    <mat-icon
+      (click)="addMinute()"
+      fontIcon="keyboard_arrow_up"
+      class="text-slate-500 font-bold cursor-pointer hover:text-rose-600 text-[20px] h-[20px] w-[20px] material-symbols-outlined"
+    ></mat-icon>
+    <div class="relative">
+      <input
+        #minutesInput
+        (change)="onMinutesChange(minutesInput.value)"
+        (focusout)="onBlur(minutesInput)"
+        (focus)="onFocus(minutesInput)"
+        (input)="onMinuteInput($event)"
+        [class]="
+          'minutesInput w-14 text-center border border-black border-opacity-10 rounded-md px-2 py-2 h-[42px] ' +
+          (hasChanged() ? 'text-slate-900' : 'text-slate-500')
+        "
+        [value]="formatValue((valueAccessor.value$ | async)?.minutes)"
+        type="number"
+        pattern="[0-9]*"
+        maxlength="2"
+        max="59"
+        min="0"
+      />
+    </div>
+    <mat-icon
+      (click)="subtractMinute()"
+      fontIcon="keyboard_arrow_down"
+      class="text-slate-500 font-bold cursor-pointer hover:text-rose-600 text-[20px] h-[20px] w-[20px] material-symbols-outlined"
+    ></mat-icon>
+  </div>
+</div>

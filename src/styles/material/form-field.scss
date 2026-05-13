@@ -1,0 +1,39 @@
+@use '@angular/material' as mat;
+
+@mixin mat-form-field-tokens() {
+  @include mat.form-field-overrides(
+    (
+      outlined-container-shape: var(--radius-md),
+      outlined-outline-width: var(--border-width),
+      outlined-focus-outline-width: 2px,
+      outlined-outline-color: var(--color-slate-200),
+      outlined-hover-outline-color: var(--color-slate-400),
+      outlined-focus-outline-color: var(--color-slate-200),
+      outlined-error-outline-color: var(--color-error),
+      outlined-error-hover-outline-color: var(--color-error),
+      outlined-label-text-color: var(--color-font),
+      outlined-input-text-color: var(--color-font),
+      outlined-hover-label-text-color: var(--color-slate-800),
+      outlined-focus-label-text-color: var(--color-slate-800),
+      outlined-error-label-text-color: var(--color-error),
+      outlined-error-hover-label-text-color: var(--color-error),
+      outlined-disabled-input-text-color: var(--color-font),
+      outlined-disabled-label-text-color: var(--color-font),
+      outlined-disabled-outline-color: var(--color-gray-200),
+      container-vertical-padding: calc(var(--spacing) * 2),
+      container-height: var(--material-container-height)
+    )
+  );
+}
+
+.mdc-notched-outline__notch {
+  border: none;
+}
+
+.mdc-text-field--outlined {
+  background: var(--color-white);
+
+  &.mdc-text-field--disabled {
+    background: var(--color-gray-100);
+  }
+}

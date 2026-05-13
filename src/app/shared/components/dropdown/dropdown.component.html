@@ -1,0 +1,56 @@
+<mat-form-field
+  subscriptSizing="dynamic"
+  class="w-full"
+>
+  <mat-select
+    (selectionChange)="internalValue = $event.value"
+    [panelWidth]="250"
+    [value]="internalValue"
+    [multiple]="multiple()"
+    [placeholder]="placeholder()"
+    [ngClass]="disableStyling() ? '' : 'border-default bg-white px-3 py-2'"
+    class="text-font border-hover"
+  >
+    <mat-select-trigger class="text-nowrap text-font gap-1.5">
+      @if (getSelectedItems()?.length > 0) {
+        @if (getSelectedItems()[0]?.iconName) {
+          <mat-icon
+            [fontIcon]="getSelectedItems()[0]?.iconName"
+            [ngClass]="getSelectedItems()[0]?.iconColor"
+            class="text-[16px] min-w-4 min-h-4"
+          ></mat-icon>
+        }
+        <p class="truncate text-font font-bold {{ widthTwClass() }}">
+          @if (translateLabels()) {
+            {{ getSelectedItems()[0]?.label | translate }}
+          } @else {
+            {{ getSelectedItems()[0]?.label }}
+          }
+          @if (getSelectedItems()?.length > 1) {
+            (+{{ getSelectedItems().length - 1 }})
+          }
+        </p>
+      }
+    </mat-select-trigger>
+    @for (item of dropdownItems(); track $index) {
+      <mat-option
+        [value]="item.value"
+        class="flex items-center truncate text-nowrap gap-1.5"
+      >
+        @if (item.iconName) {
+          <mat-icon
+            [fontIcon]="item.iconName"
+            [ngClass]="item.iconColor"
+            [class.text-white!]="item.value === value"
+            class="text-[16px] min-w-4 min-h-4"
+          ></mat-icon>
+        }
+        @if (translateLabels()) {
+          <p class="truncate">{{ item.label | translate }}</p>
+        } @else {
+          <p class="truncate">{{ item.label }}</p>
+        }
+      </mat-option>
+    }
+  </mat-select>
+</mat-form-field>

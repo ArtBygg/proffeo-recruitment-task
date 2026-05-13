@@ -1,0 +1,22 @@
+<div
+  (click)="onLocationClicked(); isReadonly() ? null : $event.stopPropagation()"
+  class="flex items-center cursor-pointer gap-2 w-full min-w-0"
+>
+  @if (showIcon()) {
+    <mat-icon
+      fontIcon="location_on"
+      class="h-[20px]! w-[22px]! text-[20px]! flex-shrink-0 opacity-50"
+    ></mat-icon>
+  }
+
+  <div class="min-w-0">
+    <p
+      #namePath
+      [class.text-sm]="isSmallText()"
+      [matTooltip]="fullLocationsNamePath"
+      class="truncate text-hover-medium w-full"
+    >
+      {{ location ? visibleLocationsNamePath || '—' : '—' }}
+    </p>
+  </div>
+</div>

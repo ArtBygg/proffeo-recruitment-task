@@ -1,0 +1,51 @@
+<div class="flex relative mb-4">
+  <proffeo-input
+    [formControl]="searchControl"
+    [placeholder]="'placeholders.search-input' | translate"
+    matIconName="search"
+    class="grow-3"
+  ></proffeo-input>
+
+  @if (selectMode() === SelectMode.MULTIPLE) {
+    <!-- Use proffeo-checkbox after component fix -->
+    <mat-checkbox
+      (change)="toggleAllIndustries($event)"
+      [checked]="isAllIndustriesSelected()"
+      class="whitespace-nowrap"
+    >
+      {{ 'ui-forms-select-all' | translate }}
+    </mat-checkbox>
+  }
+</div>
+
+<div class="h-full flex-grow">
+  @for (industry of filteredIndustries(); track industry?.id; let isLast = $last) {
+    <div class="flex items-center">
+      <div
+        [ngClass]="isLast ? '' : 'border-b border-slate-300'"
+        class="flex-column flex w-full items-center py-2"
+      >
+        @if (selectMode() === SelectMode.SINGLE) {
+          <!--          TODO - SPRAWDZIĆ TEN $EVENT (NIE ZWRACA BOOL!)-->
+          <proffeo-radio
+            (click)="selectIndustry($event, industry)"
+            [value]="industry.id"
+            [checked]="selectedIndustries()[0]?.id === industry.id"
+            name="industry"
+            class="mr-2"
+          ></proffeo-radio>
+        } @else {
+          <!--          TODO - SPRAWDZIC TUTAJ TEZ-->
+          <proffeo-checkbox
+            (valueChange)="selectIndustry($event, industry)"
+            [formControl]="industriesControls?.get(industry?.id!)"
+          ></proffeo-checkbox>
+        }
+
+        <div class="ml-2 flex w-full flex-col truncate py-2">
+          <p>{{ industry?.name }}</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

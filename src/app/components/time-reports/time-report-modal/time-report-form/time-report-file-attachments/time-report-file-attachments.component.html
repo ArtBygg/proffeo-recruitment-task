@@ -1,0 +1,19 @@
+@if (isAddingNewReport()) {
+  <proffeo-file-drop
+    (filesAdded)="onAddPreviewFiles($event)"
+    class="block mb-4"
+  ></proffeo-file-drop>
+  <proffeo-file-preview-list
+    (removeFile)="onRemovePreviewFile($event)"
+    [files]="previewFiles()"
+  ></proffeo-file-preview-list>
+} @else {
+  <proffeo-file-drop
+    (filesAdded)="onUploadFiles($event)"
+    class="block mb-4"
+  ></proffeo-file-drop>
+  <proffeo-file-horizontal-list
+    (delete)="onDeleteFile($event)"
+    [files]="files()"
+  ></proffeo-file-horizontal-list>
+}

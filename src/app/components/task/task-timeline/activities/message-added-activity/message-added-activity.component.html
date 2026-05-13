@@ -1,0 +1,15 @@
+@if (activity().data?.message) {
+  <div class="text-[14px] text-slate-800 break-words">
+    {{ activity()?.data?.message }}
+  </div>
+}
+
+@if (files().length > 0) {
+  <div class="my-3">
+    <proffeo-thumbnails-carousel
+      (thumbnailClick)="onThumbnailClick($event)"
+      [files]="files()"
+      [showCurrentSlideIndicator]="false"
+    ></proffeo-thumbnails-carousel>
+  </div>
+}

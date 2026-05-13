@@ -1,0 +1,43 @@
+<div class="flex flex-col w-full h-full overflow-hidden">
+  <!-- Header -->
+  <div class="flex w-full items-center justify-between px-5 py-2.5 border-b border-slate-100 shrink-0">
+    <div class="flex gap-1.5 items-center">
+      <proffeo-avatar
+        [size]="AvatarSize.EXTRA_SMALL"
+        [user]="files()[currentIndex()]?.createdBy()"
+      ></proffeo-avatar>
+      <div class="flex flex-col">
+        <p class="text-sm">
+          {{ files()[currentIndex()]?.createdBy()?.firstName }}
+          {{ files()[currentIndex()]?.createdBy()?.lastName }}
+        </p>
+        <p class="text-xs">{{ files()[currentIndex()]?.createdAt | intlDateTime }}</p>
+      </div>
+    </div>
+
+    <mat-icon
+      (click)="closeDialog()"
+      fontIcon="close"
+      class="hover:text-accent! cursor-pointer transition-all transition-150"
+    ></mat-icon>
+  </div>
+
+  <div class="grow min-h-0 overflow-auto border-b border-slate-100">
+    <proffeo-full-image-carousel
+      [(index)]="currentIndex"
+      (descriptionChanged)="onDescriptionChanged($event)"
+      (fileDelete)="onFileDeleted($event)"
+      [files]="files()"
+      [emblaId]="'embla-full-' + modalId"
+    ></proffeo-full-image-carousel>
+  </div>
+
+  <div class="shrink-0 px-2">
+    <proffeo-thumbnails-carousel
+      [(index)]="currentIndex"
+      [files]="files()"
+      [emblaId]="'embla-thumbs-' + modalId"
+      [showCurrentSlideIndicator]="true"
+    ></proffeo-thumbnails-carousel>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div
+  (click)="clicked(); isReadonly() ? null : $event.stopPropagation()"
+  [class.cursor-pointer]="!isReadonly()"
+  class="flex items-center gap-1 w-full"
+>
+  @if (showIcon()) {
+    <mat-icon
+      fontIcon="info"
+      class="h-[20px]! w-[24px]! text-[20px]! flex-shrink-0 opacity-50"
+    ></mat-icon>
+  }
+
+  @if (!minimalMode()) {
+    <p
+      [class.text-hover-medium]="!isReadonly()"
+      [class.text-sm]="isSmallText()"
+      class="truncate min-w-0"
+    >
+      {{ projectIndustry()?.name ?? '—' }}
+    </p>
+  }
+</div>

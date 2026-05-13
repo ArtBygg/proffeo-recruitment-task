@@ -1,0 +1,27 @@
+.breadcrumb-item {
+  position: relative;
+  transition: background 0.2s;
+}
+
+.breadcrumb-item::after {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: -1px;
+  width: 5px;
+  height: 100%;
+  background: var(--color-primary);
+  content: '';
+  clip-path: polygon(0% 100%, 80% 50%, 0% 0%, 100% 0%, 100% 100%);
+}
+.breadcrumb-item:not(:first-child)::before {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 5px;
+  height: 100%;
+  background: var(--color-primary);
+  content: '';
+  clip-path: polygon(0 0, 0% 100%, 20% 100%, 100% 50%, 20% 0);
+}

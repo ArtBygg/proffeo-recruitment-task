@@ -1,0 +1,55 @@
+/*
+*** fixed px width because with percentages it breaks in different places
+*/
+
+.embla-thumbs {
+  max-width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.embla-thumbs__container {
+  max-width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.embla-thumbs__slide-wrapper {
+  width: 120px;
+  height: 68px; /* Ratio 16:9 */
+}
+
+.embla-thumbs__slide {
+  width: 100%;
+  height: 100%;
+}
+
+.embla-thumbs__slide.active {
+  border-width: 3px;
+  border-color: var(--color-accent);
+}
+
+@media (min-width: 640px) {
+  .embla-thumbs__slide-wrapper {
+    width: 110px;
+    height: 62px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .embla-thumbs__slide-wrapper {
+    width: 100px;
+    height: 56px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .embla-thumbs__slide-wrapper {
+    width: 90px;
+    height: 51px;
+  }
+}

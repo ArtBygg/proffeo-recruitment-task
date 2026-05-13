@@ -1,0 +1,50 @@
+<div
+  [ngClass]="readonly() ? 'pointer-events-none' : 'hover-opacity'"
+  [matMenuTriggerFor]="taskPrioritySelect"
+  class="flex w-full items-center justify-center"
+>
+  @if (small()) {
+    <!-- SMALL: tylko ikona -->
+    <div class="flex items-center justify-center min-w-[24px] h-[24px]">
+      <mat-icon
+        [ngClass]="taskPriorities.get(selectedPriority())"
+        fontIcon="flag"
+        class="material-symbols-filled icon-sm"
+      ></mat-icon>
+    </div>
+  } @else {
+    <!-- LARGE: ikona + tekst -->
+    <div class="flex items-center gap-1 font-medium">
+      <mat-icon
+        [ngClass]="taskPriorities.get(selectedPriority())"
+        fontIcon="flag"
+        class="material-symbols-filled icon-sm"
+      ></mat-icon>
+
+      <p class="capitalize text-sm md:text-base">
+        {{ selectedPriority().toLowerCase() }}
+      </p>
+    </div>
+  }
+</div>
+
+<mat-menu #taskPrioritySelect="matMenu">
+  <div class="flex flex-col w-full">
+    @for (menuItem of taskPriorities.keys(); track menuItem) {
+      <div
+        (click)="selectPriority(menuItem)"
+        class="flex items-center gap-2 py-1.5 px-3 hover-opacity"
+      >
+        <mat-icon
+          [ngClass]="taskPriorities.get(menuItem)"
+          fontIcon="flag"
+          class="material-symbols-filled text-[18px]"
+        ></mat-icon>
+
+        <p class="font-medium capitalize">
+          {{ menuItem.toLowerCase() }}
+        </p>
+      </div>
+    }
+  </div>
+</mat-menu>

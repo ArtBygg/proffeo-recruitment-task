@@ -1,0 +1,14 @@
+<div
+  [class.hover-action]="hoverAction()"
+  class="financials-statistics-container flex items-center"
+>
+  <mat-icon
+    [ngClass]="financialStatisticsColorClass"
+    fontIcon="attach_money"
+    class="icon icon-size-4 mr-1"
+  ></mat-icon>
+  <span class="text-container text-sm">
+    {{ usedFinancialAmount() | appShortNumber }} / {{ estimationFinancialAmount() | appShortNumber }}
+    {{ currency() }}
+  </span>
+</div>

@@ -1,0 +1,40 @@
+<tiptap-bubble-menu
+  [editor]="editor()"
+  [updateDelay]="0"
+  [tippyOptions]="{
+    offset: [0, 15],
+    placement: 'top',
+    popperOptions: {
+      strategy: 'fixed',
+      modifiers: [{ name: 'flip', enabled: false }]
+    }
+  }"
+  [shouldShow]="shouldShowMenu"
+  pluginKey="tableColumnMenu"
+>
+  <div
+    role="toolbar"
+    class="editor-menu border rounded max-w-min"
+  >
+    <mat-action-list>
+      <button
+        (click)="onAddColumnBefore()"
+        mat-list-item
+      >
+        Add column before
+      </button>
+      <button
+        (click)="onAddColumnAfter()"
+        mat-list-item
+      >
+        Add column after
+      </button>
+      <button
+        (click)="onDeleteColumn()"
+        mat-list-item
+      >
+        Delete column
+      </button>
+    </mat-action-list>
+  </div>
+</tiptap-bubble-menu>

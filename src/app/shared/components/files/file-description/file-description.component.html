@@ -1,0 +1,63 @@
+<div class="w-full">
+  @if (!isEditing()) {
+    <!-- View mode -->
+    <div
+      (click)="startEdit()"
+      class="group relative cursor-pointer p-1 border-2 rounded-md border-gray-100 sm:border-transparent hover:bg-gray-100 transition-colors"
+    >
+      @if (description()) {
+        <p class="text-sm text-slate-700 break-words">{{ description() }}</p>
+      } @else {
+        <p class="text-sm opacity-80 line-clamp-2">
+          {{ 'file-upload-add-description' | translate }}
+        </p>
+      }
+    </div>
+  } @else {
+    <!-- Edit mode -->
+    <div class="space-y-2">
+      <div class="flex items-center p-1 border-2 rounded-md border-gray-300">
+        <textarea
+          #descriptionTextarea
+          [(ngModel)]="editedDescription"
+          (keydown)="onKeydown($event)"
+          [maxlength]="MAX_DESCRIPTION_LENGTH"
+          cdkTextareaAutosize
+          class="w-full text-sm text-slate-700 rounded-md focus:outline-none"
+        ></textarea>
+      </div>
+
+      <div class="flex justify-between">
+        <div class="text-xs text-gray-400 text-left">
+          {{ editedDescription()?.length }} / {{ MAX_DESCRIPTION_LENGTH }}
+        </div>
+
+        <div class="flex gap-2">
+          <button
+            (click)="saveEdit()"
+            type="button"
+            matTooltip="Save Changes"
+            class="flex items-center justify-center w-6 h-6 rounded-md bg-proffeo-green hover-opacity"
+          >
+            <mat-icon
+              fontIcon="check"
+              class="text-white! icon-md"
+            ></mat-icon>
+          </button>
+
+          <button
+            (click)="cancelEdit()"
+            type="button"
+            matTooltip="Cancel Changes"
+            class="flex items-center justify-center w-6 h-6 rounded-md bg-proffeo-red hover-opacity"
+          >
+            <mat-icon
+              fontIcon="close"
+              class="text-white! icon-md"
+            ></mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

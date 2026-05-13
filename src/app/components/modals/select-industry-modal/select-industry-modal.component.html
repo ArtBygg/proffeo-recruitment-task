@@ -1,0 +1,25 @@
+<proffeo-modal [title]="dialogData.title | translate">
+  <div class="flex h-full w-full flex-col gap-2">
+    @if (industries()) {
+      <proffeo-select-industry-list
+        [(selectedIndustries)]="selectedIndustries"
+        [selectMode]="selectMode"
+        [industries]="industries()"
+      ></proffeo-select-industry-list>
+    }
+  </div>
+  <div
+    modal-actions
+    class="flex w-full justify-end gap-2"
+  >
+    <proffeo-button
+      text="close"
+      matDialogClose
+    ></proffeo-button>
+    <proffeo-button
+      (click)="save()"
+      [type]="ButtonType.ACCENT"
+      text="save-and-close"
+    ></proffeo-button>
+  </div>
+</proffeo-modal>

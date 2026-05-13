@@ -1,0 +1,39 @@
+<div
+  #languageMenuTrigger="matMenuTrigger"
+  (click)="$event.stopPropagation()"
+  [matMenuTriggerFor]="languageMenu"
+  class="flex min-w-4 min-h-3 gap-2 items-center group cursor-pointer"
+>
+  <img
+    [ngSrc]="`img/flags/${currentLanguageFlag()}.svg`"
+    [alt]="currentLanguageLabel()"
+    width="20"
+    height="15"
+    class="opacity-75 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] group-hover:opacity-100"
+  />
+  @if (expanded()) {
+    <p class="text-white/75 group-hover:text-white">{{ currentLanguageLabel() }}</p>
+  }
+</div>
+<mat-menu #languageMenu="matMenu">
+  <div
+    (click)="closeMenuAndStopPropagation($event)"
+    class="flex flex-col"
+  >
+    @for (lang of AvailableLanguagesOptions; track $index) {
+      <div
+        (click)="onSelectLanguage(lang.value)"
+        class="flex items-center gap-2 w-full px-3 py-1.5 bg-white group cursor-pointer border-b border-slate-200 hover:bg-darkGray-100 transition-default"
+      >
+        <img
+          [ngSrc]="`img/flags/${lang.iconName}.svg`"
+          [alt]="lang.label"
+          width="20"
+          height="15"
+          class="drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
+        />
+        <p class="group-hover:text-white transition-default">{{ lang.label }}</p>
+      </div>
+    }
+  </div>
+</mat-menu>

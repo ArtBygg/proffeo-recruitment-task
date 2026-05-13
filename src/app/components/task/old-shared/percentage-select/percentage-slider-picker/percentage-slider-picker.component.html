@@ -1,0 +1,17 @@
+<div class="flex w-full px-2 items-center">
+  <mat-slider
+    (change)="onChange()"
+    [max]="max()"
+    [min]="min()"
+    [step]="step()"
+  >
+    <input
+      #slider
+      [(ngModel)]="value"
+      matSliderThumb
+    />
+  </mat-slider>
+  @if (showSliderValue()) {
+    <span class="pl-1">{{ slider.value }} %</span>
+  }
+</div>

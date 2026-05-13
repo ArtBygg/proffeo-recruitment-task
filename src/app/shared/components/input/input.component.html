@@ -1,0 +1,51 @@
+<div [class]="'flex relative items-center w-full bg-white h-[42px] ' + roundedTwClass()">
+  @if (matIconName()) {
+    <div class="flex absolute left-0 h-full items-center justify-center px-1 border-r border-slate-200 w-[36px]">
+      <mat-icon
+        [fontIcon]="matIconName()"
+        class="icon-md ml-[2px]"
+      ></mat-icon>
+    </div>
+  }
+
+  @if (matAutocomplete()) {
+    <input
+      #input
+      (focusout)="focusLost.emit()"
+      [value]="value ?? ''"
+      [type]="type()"
+      [class]="inputTwClasses() + ' ' + roundedTwClass() + ' h-[42px]'"
+      [matAutocomplete]="matAutocomplete()"
+      [placeholder]="placeholder()"
+      [ngClass]="{ 'pl-[44px]!': matIconName(), 'rounded-r-none border-r-none': enableNgContent() }"
+    />
+  } @else {
+    <input
+      #input
+      (focusout)="focusLost.emit()"
+      [value]="value ?? ''"
+      [type]="type()"
+      [class]="inputTwClasses() + ' ' + roundedTwClass() + ' h-[42px]'"
+      [placeholder]="placeholder()"
+      [readonly]="readonly()"
+      [ngClass]="{
+        'pl-[44px]!': matIconName(),
+        'rounded-r-none! border-r-none!': enableNgContent(),
+        'pl-4 pr-4 py-2': roundedTwClass(),
+        'border-opacity-100 border-red-500!': invalid(),
+        'bg-gray-100 pointer-events-none': readonly() || isDisabledFinal()
+      }"
+    />
+  }
+
+  @if (enableNgContent()) {
+    <div
+      [class]="
+        'flex items-center rounded-r-md rounded-l-none border-l border border-slate-200 h-[42px] ' +
+        ngContentTwClasses()
+      "
+    >
+      <ng-content></ng-content>
+    </div>
+  }
+</div>

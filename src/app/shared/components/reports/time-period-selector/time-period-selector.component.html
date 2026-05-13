@@ -1,0 +1,38 @@
+<div
+  [ngClass]="allReports ? 'justify-center gap-4' : 'justify-center'"
+  class="relative flex w-full items-center justify-center gap-4"
+>
+  <mat-button-toggle-group
+    (change)="selectMode($event.value)"
+    [hideMultipleSelectionIndicator]="true"
+    [hideSingleSelectionIndicator]="true"
+    [multiple]="false"
+    [value]="selectedTimeMode()"
+    class="bg-darkGray-100 rounded-md border-none"
+  >
+    <mat-button-toggle
+      [value]="selectedTimeReportType.DAY"
+      class="bg-transparent text-base"
+    >
+      Day
+    </mat-button-toggle>
+    <mat-button-toggle
+      [value]="selectedTimeReportType.WEEK"
+      class="bg-transparent text-base"
+    >
+      Week
+    </mat-button-toggle>
+    <mat-button-toggle
+      [value]="selectedTimeReportType.MONTH"
+      class="bg-transparent text-base"
+    >
+      Month
+    </mat-button-toggle>
+    <mat-button-toggle
+      [value]="selectedTimeReportType.YEAR"
+      class="bg-transparent text-base"
+    >
+      Year
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>

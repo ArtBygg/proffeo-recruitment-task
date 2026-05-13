@@ -1,0 +1,78 @@
+<div class="container flex flex-col w-full relative">
+  <form
+    [formGroup]="form"
+    autocomplete="off"
+    class="w-full"
+  >
+    <tiptap-editor
+      #editorContainer
+      [editor]="editor"
+      [style]="{
+        '--editor-max-height': maxHeight(),
+        '--editor-min-height': minHeight()
+      }"
+      formControlName="text"
+      class="prose editor-container prose-headings:mt-0 prose-headings:mb-0 prose-p:mt-0"
+    ></tiptap-editor>
+
+    @if (showMenu()) {
+      <proffeo-editor-text-menu [editor]="editor"></proffeo-editor-text-menu>
+      <proffeo-editor-custom-node-menu [editor]="editor"></proffeo-editor-custom-node-menu>
+      <proffeo-editor-new-block-menu [editor]="editor"></proffeo-editor-new-block-menu>
+      <proffeo-table-column-menu [editor]="editor"></proffeo-table-column-menu>
+      <proffeo-table-row-menu [editor]="editor"></proffeo-table-row-menu>
+    }
+  </form>
+  @if (showButtons()) {
+    <div class="flex w-full mt-2 sticky bottom-2 rounded-md px-4 py-2 bg-slate-200 justify-between items-center">
+      <p class="font-medium text-sm">{{ 'unsaved-changes' | translate }}</p>
+      <div class="flex gap-2.5 items-center">
+        <button
+          (click)="cancel()"
+          class="items-center justify-center bg-proffeo-red h-7 w-7 rounded-md hover:opacity-75 transition-default cursor-pointer"
+        >
+          <mat-icon
+            fontIcon="close"
+            class="text-white! icon-md"
+          ></mat-icon>
+        </button>
+        <button
+          (click)="save()"
+          class="items-center justify-center bg-proffeo-green h-7 w-7 rounded-md hover:opacity-75 transition-default cursor-pointer"
+        >
+          <mat-icon
+            fontIcon="check"
+            class="text-white! icon-md"
+          ></mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="flex pt-2 items-center justify-end w-full">
+      <button
+        (click)="save()"
+        mat-icon-button
+        matTooltip="{{ 'tasks-list-save-changes' | translate }}"
+        color="primary"
+        class="material-icons app-toolbar-menu save-button artbygg-column-container px-1"
+      >
+        <mat-icon
+          fontIcon="check_circle"
+          class="text-slate-500 text-[25px] w-[25px] h-[25px]"
+        ></mat-icon>
+      </button>
+
+      <button
+        (click)="cancel()"
+        mat-icon-button
+        matTooltip="{{ 'tasks-list-cancel-changes' | translate }}"
+        color="warn"
+        class="material-icons app-toolbar-menu cancel-button"
+      >
+        <mat-icon
+          fontIcon="cancel"
+          class="text-slate-500 text-[25px] w-[25px] h-[25px] material-symbols-outlined"
+        ></mat-icon>
+      </button>
+    </div>
+  }
+</div>

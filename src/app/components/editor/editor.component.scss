@@ -1,0 +1,262 @@
+@use 'tailwindcss';
+
+:host ::ng-deep .mat-mdc-tab-body-wrapper {
+  height: 100% !important;
+}
+
+ul {
+  padding-left: 16px;
+  list-style: disc !important;
+}
+
+ol {
+  padding-left: 16px;
+  list-style: auto !important;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 26px;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+h4 {
+  font-size: 22px;
+}
+
+h5 {
+  font-size: 20px;
+}
+
+h6 {
+  font-size: 18px;
+}
+
+.ProseMirror {
+  min-height: 150px;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+@media (min-width: 620px) {
+  .ProseMirror {
+    padding: 12px;
+  }
+}
+
+/* Editor menu */
+.editor-menu {
+  @apply overflow-x-auto overflow-y-hidden flex items-center justify-start bg-white w-full;
+}
+
+.editor-menu .editor-menu-item {
+  @apply flex items-center justify-center whitespace-nowrap text-slate-600 rounded p-1.5 focus:outline-none;
+}
+
+.editor-menu .editor-menu-item.active {
+  @apply bg-slate-100;
+}
+
+/* Tiptap */
+.tiptap :first-child {
+  margin-top: 0;
+}
+.tiptap a {
+  cursor: pointer;
+}
+.tiptap p.is-editor-empty:first-child::before {
+  @apply text-slate-500;
+  height: 0;
+  float: left;
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+.tiptap img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0.2rem;
+}
+.tiptap.ProseMirror:focus {
+  @apply ring-0;
+}
+.tiptap.ProseMirror {
+  min-height: var(--editor-min-height, 150px);
+  max-height: var(--editor-max-height, 600px);
+  field-sizing: content;
+  @apply overflow-y-auto rounded-md border-0 sm:leading-6 text-slate-900;
+}
+
+/* Task list */
+.tiptap ul[data-type='taskList'] {
+  margin-left: 0;
+  padding: 0;
+  list-style: none;
+}
+.tiptap ul[data-type='taskList'] li {
+  display: flex;
+  align-items: flex-start;
+  justify-items: center;
+}
+.tiptap ul[data-type='taskList'] li > label {
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+.tiptap ul[data-type='taskList'] li > div {
+  flex: 1 1 auto;
+}
+.tiptap ul[data-type='taskList'] li > div p {
+  margin-bottom: 0;
+}
+.tiptap ul[data-type='taskList'] input[type='checkbox'] {
+  cursor: pointer;
+}
+.tiptap ul[data-type='taskList'] ul[data-type='taskList'] {
+  margin: 0;
+}
+
+/* Resize cursor */
+.tiptap.resize-cursor {
+  cursor: ew-resize;
+  cursor: col-resize;
+}
+
+/* Checkbox style inside editor */
+.tiptap {
+  @apply outline-none;
+}
+.tiptap input[type='checkbox'] {
+  @apply w-4 h-4 border-2 rounded relative cursor-pointer bg-white transition-all duration-200;
+}
+.tiptap input[type='checkbox']:checked {
+  @apply text-slate-700;
+}
+.tiptap input[type='checkbox']:checked::after {
+  content: '✓';
+  @apply text-white text-lg absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2;
+}
+
+/* Prose tables */
+.prose table {
+  width: 100%;
+  margin: 0;
+  overflow: visible;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+.prose table td,
+.prose table th {
+  box-sizing: border-box;
+  position: relative;
+  min-width: 1em;
+  padding: 6px 8px;
+  border: 1px solid var(--color-slate-200);
+  vertical-align: top;
+}
+.prose table td > *,
+.prose table th > * {
+  margin-bottom: 0;
+}
+.prose table th {
+  background-color: var(--color-slate-200);
+  font-weight: bold;
+  text-align: left;
+}
+.prose table .selectedCell {
+  @apply bg-slate-200 border-double;
+}
+.prose table .column-resize-handle {
+  @apply -bottom-[2px] flex pointer-events-none absolute -right-1 top-0 w-2;
+}
+.prose table .column-resize-handle::before {
+  @apply bg-black/20 h-full w-[1px] ml-2;
+  @apply dark:bg-white/20;
+  content: '';
+}
+
+/* Grips */
+.prose table .grip-column,
+.prose table .grip-row {
+  @apply items-center bg-black/5 cursor-pointer flex justify-center absolute z-10;
+  @apply dark:bg-white/10;
+}
+
+/* Column grips */
+.prose table .grip-column {
+  @apply w-[calc(100%+1px)] border-l border-black/20 h-3 left-0 -ml-[1px] -top-3;
+  @apply dark:border-white/20;
+}
+.prose table .grip-column:hover::before,
+.prose table .grip-column.selected::before {
+  content: '';
+  @apply w-2.5;
+}
+.prose table .grip-column:hover {
+  @apply bg-black/10;
+  @apply dark:bg-white/20;
+}
+.prose table .grip-column:hover::before {
+  @apply border-b-2 border-dotted border-black/60;
+  @apply dark:border-white/60;
+}
+.prose table .grip-column.first {
+  @apply border-transparent rounded-tl-sm;
+}
+.prose table .grip-column.last {
+  @apply rounded-tr-sm;
+}
+.prose table .grip-column.selected {
+  @apply bg-black/30 border-black/30 shadow-sm;
+  @apply dark:bg-white/30 dark:border-white/30;
+}
+.prose table .grip-column.selected::before {
+  @apply border-b-2 border-dotted;
+}
+
+/* Row grips */
+.prose table .grip-row {
+  @apply h-[calc(100%+1px)] border-t border-black/20 -left-3 w-3 top-0 -mt-[1px];
+  @apply dark:border-white/20;
+}
+.prose table .grip-row:hover::before,
+.prose table .grip-row.selected::before {
+  @apply h-2.5;
+  content: '';
+}
+.prose table .grip-row:hover {
+  @apply bg-black/10;
+  @apply dark:bg-white/20;
+}
+.prose table .grip-row:hover::before {
+  @apply border-l-2 border-dotted border-black/60;
+  @apply dark:border-white/60;
+}
+.prose table .grip-row.first {
+  @apply border-transparent rounded-tl-sm;
+}
+.prose table .grip-row.last {
+  @apply rounded-bl-sm;
+}
+.prose table .grip-row.selected {
+  @apply bg-black/30 border-black/30 shadow-sm;
+  @apply dark:bg-white/30 dark:border-white/30;
+}
+.prose table .grip-row.selected::before {
+  @apply border-l-2 border-dotted;
+}
+
+.prose .tableWrapper {
+  margin: 1.5rem 0;
+}
+
+/* Custom drag handle */
+.custom-drag-handle {
+  @apply bg-red-500 w-5 h-5;
+}

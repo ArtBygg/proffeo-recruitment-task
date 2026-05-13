@@ -1,0 +1,53 @@
+<!-- Upload status section -->
+@if (uploadingFiles().length > 0) {
+  <div class="mb-4 space-y-2">
+    @for (upload of uploadingFiles(); track upload.id) {
+      @if (upload.status === UploadStatus.Started) {
+        <div class="bg-accent-50 border border-accent-200 rounded-lg p-3 flex items-center gap-3">
+          <div class="flex-1">
+            <p class="text-sm font-medium text-accent-900">{{ upload.fileName }}</p>
+            <mat-progress-bar
+              [value]="upload.progress"
+              mode="determinate"
+              class="mt-1"
+            ></mat-progress-bar>
+          </div>
+          <span class="text-xs text-accent-700">{{ upload.progress }}%</span>
+        </div>
+      }
+      @if (upload.status === UploadStatus.Failure) {
+        <div class="bg-error/20 border border-error/40 rounded-lg p-3 flex items-center justify-between">
+          <div class="flex-1">
+            <p class="text-sm font-medium text-error">{{ upload.fileName }}</p>
+            <p class="text-xs text-error mt-1">{{ upload.error }}</p>
+          </div>
+          <mat-icon
+            (click)="dismissUpload(upload.id)"
+            fontIcon="cancel"
+            class="text-error hover:opacity-80 cursor-pointer"
+          ></mat-icon>
+        </div>
+      }
+    }
+  </div>
+}
+
+<div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-4">
+  @for (file of localFiles(); track file.id) {
+    <proffeo-horizontal-file-item
+      (preview)="onPreviewFile($event)"
+      (delete)="onDeleteFile($event)"
+      (download)="onDownloadFile($event)"
+      (setAsAvatar)="onSetAsAvatar($event)"
+      [file]="file"
+      [canSetAsAvatar]="canSetAsAvatar() && file.isImage()"
+      [isAvatar]="avatarFileId() === file.id"
+      [showButtons]="true"
+      class="w-full"
+    />
+  } @empty {
+    <div class="col-span-full text-center py-12">
+      <p class="text-gray-500 text-sm">{{ 'files.no-files-to-display' | translate }}</p>
+    </div>
+  }
+</div>

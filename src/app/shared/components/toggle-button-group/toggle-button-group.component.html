@@ -1,0 +1,33 @@
+<div
+  [class.opacity-50]="disabled()"
+  [class.cursor-not-allowed]="disabled()"
+  class="flex items-center gap-2"
+>
+  @if (label() && showLabel()) {
+    <span class="text-base font-medium text-gray-700">{{ translateLabel() ? (label() | translate) : label() }}:</span>
+  }
+
+  <div class="inline-flex rounded-lg bg-gray-200 p-1">
+    @for (option of options(); track option.value) {
+      <button
+        (click)="selectOption(option)"
+        [disabled]="disabled() || option.disabled"
+        [ngClass]="{
+          'bg-white text-gray-900 shadow': isSelected(option),
+          'text-gray-600 hover:text-gray-900': !isSelected(option)
+        }"
+        [class.cursor-not-allowed]="disabled() || option.disabled"
+        [class.opacity-50]="option.disabled"
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+      >
+        @if (option.icon) {
+          <mat-icon [fontIcon]="option.icon"></mat-icon>
+        }
+        @if (showOptionLabels()) {
+          <span>{{ translateOptions() ? (option.label | translate) : option.label }}</span>
+        }
+      </button>
+    }
+  </div>
+</div>

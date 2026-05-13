@@ -1,0 +1,19 @@
+<div
+  [matTooltip]="tooltipDate"
+  [class.hover-action]="hoverAction()"
+  matTooltipPosition="above"
+  class="days-counter-statistics-container flex items-center"
+>
+  <mat-icon
+    [ngClass]="daysLeftColorClass"
+    fontIcon="calendar_today"
+    class="icon icon-size-4 mr-1"
+  ></mat-icon>
+  <span class="text-container text-sm">
+    @if (displayedDate) {
+      {{ displayedDate | appDateDaysCounter }}
+    } @else {
+      -
+    }
+  </span>
+</div>

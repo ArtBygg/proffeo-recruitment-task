@@ -1,0 +1,21 @@
+export const ALLOWED_FILES_TYPES: string[] = [
+  'image/jpeg',
+  'image/png',
+  'image/bmp',
+  'image/gif',
+  'text/plain',
+  'text/csv',
+  'text/html',
+  'audio/mpeg',
+  'video/mp4',
+  'video/mpeg',
+  'video/x-msvideo',
+  'application/pdf',
+  'application/vnd.ms-excel',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/x-zip-compressed',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+];

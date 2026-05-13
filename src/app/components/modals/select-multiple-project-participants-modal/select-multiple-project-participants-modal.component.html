@@ -1,0 +1,62 @@
+<proffeo-modal [title]="title | translate">
+  <div class="w-full">
+    <div class="relative mb-4">
+      <proffeo-input
+        [formControl]="searchControl"
+        [placeholder]="'placeholders.search-input' | translate"
+        matIconName="search"
+      ></proffeo-input>
+    </div>
+
+    @if (projectParticipants?.length > 0) {
+      <div>
+        <div class="flex items-center">
+          <div class="flex w-full items-center border-b border-slate-300">
+            <proffeo-checkbox [formControl]="selectAllControl"></proffeo-checkbox>
+            <proffeo-label class="ml-4 py-4">{{ 'ui-forms-select-all' | translate }}</proffeo-label>
+          </div>
+        </div>
+
+        @for (projectParticipant of filteredProjectParticipants(); track projectParticipant.id) {
+          <div class="flex items-center">
+            <proffeo-checkbox
+              [disabled]="isLockedById(projectParticipant.id)"
+              [formControl]="getControl(projectParticipant.id)"
+            ></proffeo-checkbox>
+            <proffeo-avatar
+              [user]="projectParticipant.user()"
+              size="extra small"
+              class="ml-4"
+            ></proffeo-avatar>
+            <div class="ml-2 flex w-full flex-col truncate py-2">
+              <proffeo-label>
+                {{ projectParticipant.user()?.firstName }} {{ projectParticipant.user()?.lastName }}
+              </proffeo-label>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (filteredProjectParticipants()?.length === 0) {
+      <p>
+        {{ 'placeholders.no-results-found' | translate }}
+      </p>
+    }
+  </div>
+
+  <div
+    modal-actions
+    class="flex w-full justify-end gap-2"
+  >
+    <proffeo-button
+      (click)="close()"
+      text="close"
+    ></proffeo-button>
+    <proffeo-button
+      (click)="handleSaveClick()"
+      [type]="ButtonType.ACCENT"
+      text="save-and-close"
+    ></proffeo-button>
+  </div>
+</proffeo-modal>

@@ -1,0 +1,59 @@
+<div
+  class="group h-full flex flex-col justify-between relative bg-white border border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200 overflow-hidden"
+>
+  <proffeo-file-item-thumbnail
+    (click)="preview.emit(file().id)"
+    [file]="file()"
+    [isAvatar]="isAvatar()"
+    class="cursor-pointer w-full h-25"
+  />
+
+  <div class="flex items-center justify-between pl-2 py-1.5">
+    <p
+      [matTooltip]="displayLabel()"
+      class="flex-1 min-w-0 text-gray-700 text-sm line-clamp-1 group-hover:text-accent-600 transition-colors"
+    >
+      {{ displayLabel() }}
+    </p>
+    <mat-icon
+      [matMenuTriggerFor]="contextMenu"
+      fontIcon="more_vert"
+      class="icon-md cursor-pointer"
+    ></mat-icon>
+  </div>
+
+  <mat-menu
+    #contextMenu="matMenu"
+    xPosition="before"
+  >
+    <div
+      (click)="$event.stopPropagation()"
+      class="flex flex-col gap-3 p-1 w-44"
+    >
+      <proffeo-file-description
+        (descriptionChange)="onDescriptionChange($event)"
+        [description]="file()?.description"
+      />
+
+      <div class="flex items-center gap-2 p-1">
+        <proffeo-avatar
+          [user]="file()?.createdBy()"
+          [size]="avatarSize"
+        ></proffeo-avatar>
+        <span class="text-xs text-gray-500">
+          {{ file()?.createdAt | date: 'd.MM.yy' }}
+        </span>
+      </div>
+    </div>
+
+    <proffeo-file-item-actions
+      (preview)="preview.emit(file().id)"
+      (delete)="delete.emit(file().id)"
+      (download)="download.emit(file().id)"
+      (setAsAvatar)="setAsAvatar.emit(file().id)"
+      [file]="file()"
+      [canSetAsAvatar]="canSetAsAvatar()"
+      [isAvatar]="isAvatar()"
+    />
+  </mat-menu>
+</div>

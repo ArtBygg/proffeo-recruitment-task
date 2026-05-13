@@ -1,0 +1,16 @@
+<mat-form-field class="w-full">
+  <mat-label>{{ label() }}</mat-label>
+  <textarea
+    #autosize="cdkTextareaAutosize"
+    [cdkAutosizeMinRows]="rows()"
+    [cdkAutosizeMaxRows]="rows()"
+    [formControl]="control()"
+    matInput
+    cdkTextareaAutosize
+  ></textarea>
+  @if (errorMessage()) {
+    <mat-error>
+      {{ errorMessage() }}
+    </mat-error>
+  }
+</mat-form-field>

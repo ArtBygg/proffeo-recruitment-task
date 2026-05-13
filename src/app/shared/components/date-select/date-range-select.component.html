@@ -1,0 +1,50 @@
+<div
+  (click)="picker.open()"
+  class="flex items-center justify-between w-full bg-slate-200 px-2 py-4 rounded-md cursor-pointer hover:bg-slate-300 transition-colors"
+>
+  <div class="flex items-center justify-center font-semibold text-xl select-none flex-grow gap-2">
+    @if (form().valid) {
+      @if ((form().get('dateFrom')?.value | intlDate) === (form().get('dateTo')?.value | intlDate)) {
+        <span>
+          {{ form().get('dateFrom')?.value | intlDate }}
+          @if (isToday()) {
+            <span>({{ 'dashboards-today' | translate }})</span>
+          }
+        </span>
+      }
+
+      @if ((form().get('dateFrom')?.value | intlDate) !== (form().get('dateTo')?.value | intlDate)) {
+        <span>{{ form().get('dateFrom')?.value | intlDate }} - {{ form().get('dateTo')?.value | intlDate }}</span>
+      }
+    }
+    <mat-icon class="cursor-pointer">calendar_today</mat-icon>
+  </div>
+  <form
+    [formGroup]="form()"
+    class="visually-hidden"
+  >
+    <mat-date-range-input
+      [formGroup]="form()"
+      [rangePicker]="picker"
+    >
+      <input
+        matStartDate
+        formControlName="dateFrom"
+        placeholder="Start date"
+      />
+      <input
+        matEndDate
+        formControlName="dateTo"
+        placeholder="End date"
+      />
+    </mat-date-range-input>
+    <mat-datepicker-toggle
+      [for]="picker"
+      matIconSuffix
+    ></mat-datepicker-toggle>
+    <mat-date-range-picker
+      #picker
+      (closed)="onPickerClosed()"
+    ></mat-date-range-picker>
+  </form>
+</div>

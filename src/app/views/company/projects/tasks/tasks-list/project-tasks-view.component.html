@@ -1,0 +1,27 @@
+<proffeo-page-wrapper
+  [title]="'project-tasks.list.title' | translate"
+  [hideHeader]="activeTask() !== undefined"
+>
+  <div
+    page-header
+    class="w-full flex-col gap-5"
+  ></div>
+
+  <div class="w-full flex flex-col gap-5">
+    <proffeo-task-splitview-list
+      [allTasks]="tasks()"
+      [isLoading]="isLoading()"
+    />
+    @if (!activeTask()) {
+      <div class="flex w-full items-center justify-center">
+        <mat-paginator
+          (page)="onPageEvent($event)"
+          [length]="tasks()?.total"
+          [pageIndex]="taskFiltersState.page()"
+          [pageSize]="taskFiltersState.limit()"
+          [pageSizeOptions]="[25, 50, 75, 100]"
+        ></mat-paginator>
+      </div>
+    }
+  </div>
+</proffeo-page-wrapper>

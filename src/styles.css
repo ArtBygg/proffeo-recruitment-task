@@ -1,4 +1,186 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import './styles/utilities.css';
+@import './styles/components.css';
+@import './styles/animations.css';
+@import './styles/time-reports.css';
+@custom-variant dark (&:where(.dark, .dark *));
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@theme {
+  --color-primary: #f8fafc;
+  --color-secondary: #1e293b;
+  --color-accent: #d5203e;
+  --color-font: var(--color-slate-700);
+
+  --color-icon: #1e293b;
+
+  --color-error: var(--color-red-400);
+  --color-warning: #efaa41ff;
+  --color-success: var(--color-emerald-600);
+  --color-info: var(--color-sky-500);
+
+  --color-proffeo-red: var(--color-error);
+  --color-proffeo-green: var(--color-success);
+
+  --color-to-do: rgba(100, 116, 139, 0.6);
+  --color-in-progress: rgba(29, 78, 216, 0.6);
+  --color-done: rgba(21, 128, 61, 0.6);
+  --color-in-planning: rgba(99, 102, 241, 0.6);
+  --color-in-review: rgba(217, 119, 6, 0.6);
+  --color-accepted: rgba(147, 51, 234, 0.6);
+  --color-rejected: rgba(239, 68, 68, 0.6);
+
+  --color-priority-normal: rgba(100, 116, 139, 0.6);
+  --color-priority-medium: rgba(217, 119, 6, 0.6);
+  --color-priority-high: rgba(239, 68, 68, 0.6);
+
+  /* Custom color: darkGray */
+  --color-darkGray-50: #e7ebf2;
+  --color-darkGray-100: #c2ccde;
+  --color-darkGray-200: #8a9dba;
+  --color-darkGray-300: #526e96;
+  --color-darkGray-400: #2e4e79;
+  --color-darkGray-500: #1e293b;
+  --color-darkGray-600: #181f2e;
+  --color-darkGray-700: #121621;
+  --color-darkGray-800: #0c0e14;
+  --color-darkGray-900: #06070a;
+  --color-darkGray: var(--color-darkGray-500);
+
+  /* Breakpoints synced with material-one's */
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 960px;
+  --breakpoint-lg: 1280px;
+  --breakpoint-xl: 1440px;
+  --breakpoint-2xl: 1600px;
+
+  --max-width-content: 1536px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-primary);
+  color: var(--color-font);
+  font-size: 16px;
+  font-family: Geist, 'Helvetica Neue', sans-serif;
+}
+
+.mat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1 !important;
+  font-family: 'Material Symbols Outlined', serif;
+  font-optical-sizing: none !important;
+  vertical-align: middle;
+  --icon-size: 24px;
+  --icon-opsz: 24;
+  width: var(--icon-size) !important;
+  min-width: var(--icon-size);
+  max-width: var(--icon-size);
+  height: var(--icon-size) !important;
+  color: var(--color-icon) !important;
+  font-size: var(--icon-size) !important;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' var(--icon-opsz);
+}
+
+mat-icon.white-icon,
+.mat-icon.white-icon,
+mat-icon.white-icon.material-symbols-filled {
+  width: 1em !important;
+  min-width: 1em !important;
+  max-width: 1em !important;
+  height: 1em !important;
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  font-size: 1em !important;
+}
+
+.material-symbols-filled {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' var(--icon-opsz);
+}
+
+.mat-mdc-menu-content {
+  padding: 0 !important;
+}
+
+.mat-mdc-menu-panel {
+  min-width: 50px !important;
+}
+
+.mat-mdc-card {
+  border: 1px solid var(--color-slate-200) !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-option-active {
+  background-color: var(--color-slate-100) !important;
+  color: var(--color-font) !important;
+}
+
+.mat-mdc-option-active .mdc-list-item__primary-text {
+  color: var(--color-font) !important;
+}
+
+.mat-mdc-select-panel {
+  padding: 0px !important;
+}
+
+.proffeo-mat-select-custom-option .mat-mdc-option-pseudo-checkbox {
+  display: none !important;
+}
+
+.proffeo-mat-select-custom-option .mdc-list-item__primary-text {
+  margin-left: -12px;
+}
+
+.mat-mdc-paginator-container {
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+* {
+  scrollbar-color: #757d98 #33415510;
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background: #33415510;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: #757d98;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #757d98;
+}
+
+.mat-tab-wrapper .mat-mdc-tab-header {
+  display: none !important;
+}
+
+.transition-max-height {
+  transition: max-height 0.3s ease-in-out;
+}

@@ -1,0 +1,52 @@
+<proffeo-modal [title]="'project-tags.add-tag-to-task' | translate">
+  <div class="flex h-full w-full flex-grow flex-col">
+    <div class="flex flex-col items-center justify-center">
+      <proffeo-label class="mb-3">{{ 'project-tags.select-tag' | translate }}:</proffeo-label>
+      @for (tag of tags(); track tag?.id) {
+        <div class="mb-2 flex w-full items-center truncate text-nowrap">
+          <!-- TODO: fix proffeo-checkbox component, until then simple mat checkbox -->
+          <!-- do we even need our own checkbox component? -->
+          <mat-checkbox
+            (change)="onTagToggle(tag.id, $event.checked)"
+            [checked]="isTagSelected(tag.id)"
+          ></mat-checkbox>
+          <span
+            [matTooltip]="tag?.description"
+            [style.background-color]="tag?.hexColor + '65'"
+            class="task-tag inline-flex h-10 w-[80%] cursor-default items-center justify-between rounded-2xl px-2 py-0.5 text-base font-medium"
+          >
+            {{ tag?.name }}
+            <mat-icon
+              (click)="editTag(tag)"
+              fontIcon="edit"
+              class="edit-tag materials-symbols-outlined ml-5 h-[20px] w-[20px] cursor-pointer text-[20px] text-slate-500"
+            />
+          </span>
+        </div>
+      }
+      <div class="mb-3 mt-2 flex w-full items-center">
+        <proffeo-button
+          (click)="addTag()"
+          [type]="ButtonType.ACCENT"
+          text="project-tags.add-project-tag"
+        ></proffeo-button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    modal-actions
+    class="flex w-full justify-end gap-2"
+  >
+    <proffeo-button
+      mat-dialog-close
+      text="close"
+      class=""
+    ></proffeo-button>
+    <proffeo-button
+      (click)="handleSaveClick()"
+      [type]="ButtonType.ACCENT"
+      text="save-and-close"
+    ></proffeo-button>
+  </div>
+</proffeo-modal>

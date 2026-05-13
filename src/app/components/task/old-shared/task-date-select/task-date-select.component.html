@@ -1,0 +1,35 @@
+<div>
+  <button
+    (click)="openDatePicker()"
+    class="flex items-center gap-1 w-full"
+  >
+    @if (iconVisible()) {
+      <mat-icon
+        [fontIcon]="fontIcon() ?? 'calendar_month'"
+        class="h-[20px]! w-[20px]! text-[20px]! opacity-50"
+      ></mat-icon>
+    }
+    <p
+      [class.text-sm]="isSmall()"
+      class="truncate text-hover-medium"
+    >
+      {{ currentDate() ? (currentDate() | date: (shortYear() ? 'dd.MM.yy' : 'dd.MM.yyyy')) : '—' }}
+    </p>
+  </button>
+
+  <mat-form-field class="hidden-date-input">
+    <input
+      (dateChange)="onDateSelected($event)"
+      [matDatepicker]="datePicker"
+      [min]="minDate()"
+      [max]="maxDate()"
+      [value]="selectedDateValue()"
+      matInput
+    />
+  </mat-form-field>
+  <mat-datepicker
+    #datePicker
+    [touchUi]="isMobile()"
+    panelClass="ab-date-picker-wrapper shadow-lg border-1 border-primary"
+  ></mat-datepicker>
+</div>

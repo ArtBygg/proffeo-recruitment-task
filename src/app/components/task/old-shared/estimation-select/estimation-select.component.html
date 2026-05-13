@@ -1,0 +1,37 @@
+<div class="flex gap-4">
+  <!-- Time Estimation -->
+  @if (showTimeEstimation()) {
+    <div
+      (click)="openEstimationModal($event)"
+      class="flex items-center gap-2 text-slate-500 cursor-pointer"
+    >
+      @if (hasTimeEstimation()) {
+        <p class="text-hover-medium">{{ estimation().time | intlDuration }}</p>
+      } @else {
+        <mat-icon
+          fontIcon="remove"
+          class="text-[25px] w-[25px] h-[25px] text-slate-600"
+        ></mat-icon>
+      }
+    </div>
+  }
+
+  <!-- Cost Estimation -->
+  @if (showCostEstimation()) {
+    <div
+      (click)="openEstimationModal($event)"
+      class="flex items-center gap-2 text-slate-500 cursor-pointer"
+    >
+      @if (hasCostEstimation()) {
+        <p class="text-hover-medium">
+          {{ estimation().financial.amount | intlCurrency: estimation().financial.currency.toUpperCase() }}
+        </p>
+      } @else {
+        <mat-icon
+          fontIcon="remove"
+          class="text-[25px] w-[25px] h-[25px] text-slate-600"
+        ></mat-icon>
+      }
+    </div>
+  }
+</div>

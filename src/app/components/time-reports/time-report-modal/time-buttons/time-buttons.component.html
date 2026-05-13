@@ -1,0 +1,26 @@
+<mat-grid-list
+  [cols]="5"
+  gutterSize="8px"
+  rowHeight="2:1"
+>
+  @for (item of items; track $index) {
+    <mat-grid-tile>
+      <div
+        (click)="onSelect(item)"
+        [ngClass]="{
+          'border-slate-200 hover:bg-darkGray-200': !isSelected(item),
+          'border-slate-400 bg-darkGray-300': isSelected(item)
+        }"
+        matRipple
+        class="item w-full h-full flex items-center justify-center border rounded-md cursor-pointer transition-colors bg-darkGray-100"
+      >
+        <span
+          [ngClass]="isSelected(item) ? 'text-white' : 'text-slate-900'"
+          class="select-none font-medium"
+        >
+          {{ item.label }}
+        </span>
+      </div>
+    </mat-grid-tile>
+  }
+</mat-grid-list>

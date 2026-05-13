@@ -1,0 +1,141 @@
+<!-- HEADER -->
+<div class="flex items-center justify-between border-b border-slate-300 px-4 py-2">
+  @if (task()?.project(); as project) {
+    <div class="flex-col truncate">
+      <div class="truncate font-semibold text-slate-800">{{ project.name }}</div>
+      <div class="truncate text-slate-800">{{ task()?.name }}</div>
+    </div>
+  } @else {
+    <div class="text-slate-800 font-medium">
+      {{ modalTitle | translate }}
+    </div>
+  }
+
+  <mat-icon
+    mat-dialog-close
+    fontIcon="close"
+    class="text-slate-500 cursor-pointer text-[25px] h-[25px] w-[25px] material-symbols-outlined"
+  ></mat-icon>
+</div>
+
+<!-- CONTENT -->
+<div class="flex flex-col overflow-hidden overflow-y-auto p-4">
+  <div class="flex flex-col">
+    <!-- Mode title -->
+    <div class="flex justify-center pb-2">
+      {{ modalTitle | translate }}
+    </div>
+
+    <!-- Time reporting type selection -->
+    @if (!onlyTimerMode()) {
+      <div class="flex justify-center items-center gap-2">
+        <div class="artbygg-col-xxs"></div>
+
+        <proffeo-time-reporting-type-selection
+          (selectionChange)="onTimeReportingTypeChange($event)"
+          [initialValue]="selectedTimeReportingType()"
+          [isTimerVisible]="canShowTimerOption()"
+          [task]="task()"
+        ></proffeo-time-reporting-type-selection>
+
+        <!-- Minute step menu -->
+        @if (selectedTimeReportingType() !== TimeReportingType.TIMER) {
+          <div class="artbygg-col-xxs items-start">
+            <mat-icon
+              [matMenuTriggerFor]="minuteMenu"
+              fontIcon="settings"
+              class="cursor-pointer text-slate-400 text-[25px] w-[25px] h-[25px] material-symbols-outlined"
+            ></mat-icon>
+            <mat-menu #minuteMenu="matMenu">
+              <button
+                mat-menu-item
+                disabled
+              >
+                {{ 'minute-step-menu-description' | translate }}
+              </button>
+              @for (step of minuteSteps(); track step) {
+                <button
+                  (click)="onMinuteStepChange(step)"
+                  mat-menu-item
+                >
+                  {{ step }}
+                  {{ step === 1 ? ('minute-step-menu-minute' | translate) : ('minute-step-menu-minutes' | translate) }}
+                </button>
+              }
+            </mat-menu>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- TIMER MODE -->
+    @if (selectedTimeReportingType() === TimeReportingType.TIMER) {
+      <div class="flex items-center justify-center py-6">
+        <proffeo-task-timer
+          (timerStarted)="startTimer()"
+          [mode]="taskTimerMode.column"
+          [taskTimer]="activeTimer()"
+          [iconSize]="'large'"
+        ></proffeo-task-timer>
+      </div>
+
+      @if (!activeTimer()?.isStarted) {
+        <div class="flex justify-center py-2">
+          <span class="text-xl font-semibold text-slate-500">
+            {{ 'time-reports-form-modal-start-timer' | translate }}
+          </span>
+        </div>
+      } @else {
+        <form [formGroup]="form()">
+          @let commentControl = form().controls.comment;
+          <mat-form-field
+            appearance="outline"
+            class="w-full"
+          >
+            <textarea
+              [placeholder]="'time-reports-comments-type-your-message' | translate"
+              [formControl]="commentControl"
+              [cdkAutosizeMinRows]="3"
+              [cdkAutosizeMaxRows]="6"
+              matInput
+              cdkTextareaAutosize
+            ></textarea>
+            @if (commentControl.hasError('required') && commentControl.touched) {
+              <mat-error>{{ `errors.required` | translate }}</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="flex justify-center mt-3">
+            <proffeo-button
+              (click)="stopTimer()"
+              [type]="ButtonType.ACCENT"
+              text="time-reports-form-modal-stop-timer"
+            ></proffeo-button>
+          </div>
+        </form>
+      }
+    } @else {
+      <!-- MANUAL / RANGE MODE - show full form -->
+      <proffeo-time-report-form
+        [form]="form()"
+        [selectedValue]="selectedTimeReportingType()"
+        [timeReport]="timeReport"
+        [task]="task()"
+        [currentMinuteStep]="currentMinuteStep"
+      ></proffeo-time-report-form>
+
+      <!-- Save buttons -->
+      <div class="flex justify-center gap-12 pb-6 pt-4">
+        <proffeo-button
+          (click)="saveTimeReport(false)"
+          text="time-reports-form-modal-save"
+        ></proffeo-button>
+        <proffeo-button
+          (click)="saveTimeReport(true)"
+          [type]="ButtonType.ACCENT"
+          text="time-reports-form-modal-save-and-exit"
+        ></proffeo-button>
+      </div>
+    }
+  </div>
+</div>

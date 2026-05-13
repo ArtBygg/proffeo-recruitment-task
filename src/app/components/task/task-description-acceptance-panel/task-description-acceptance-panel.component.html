@@ -1,0 +1,58 @@
+<div class="flex w-full flex-col rounded-md border border-black/10 bg-white shadow-sm">
+  <mat-accordion class="w-full">
+    <mat-expansion-panel class="!shadow-none border-0">
+      <mat-expansion-panel-header class="px-4 py-3 hover:bg-slate-50/80">
+        <mat-panel-title class="flex w-full items-center gap-3">
+          <mat-icon
+            fontIcon="how_to_reg"
+            class="text-accent shrink-0"
+          ></mat-icon>
+          <span class="text-base font-semibold text-slate-900">
+            {{ 'task-description-acceptance-panel.title' | translate }}
+            ({{ acceptanceSummary().requiredCount }}/{{ acceptanceSummary().acceptedCount }})
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="flex flex-col gap-3 px-4 pb-4 pt-0">
+        @if (participantRows().length === 0) {
+          <p class="text-sm text-slate-500">
+            {{ 'task-description-acceptance-panel.no-participants' | translate }}
+          </p>
+        } @else {
+          <ul class="flex flex-col gap-2">
+            @for (row of participantRows(); track row.rowId) {
+              <li
+                class="flex flex-wrap items-center justify-between gap-2 rounded-md border border-black/5 bg-slate-50/60 px-3 py-2"
+              >
+                <span class="min-w-0 flex-1 text-sm font-medium text-slate-900">
+                  {{ row.displayName }}
+                </span>
+                <div class="flex shrink-0 items-center gap-2">
+                  @if (row.hasAccepted) {
+                    <span class="text-sm text-emerald-700">
+                      {{ 'task-description-acceptance-panel.accepted' | translate }}
+                    </span>
+                  } @else if (row.showAcceptButton) {
+                    <mat-button-toggle
+                      (click)="onAcceptDescription()"
+                      [attr.aria-label]="'task-description-acceptance-panel.accept-description' | translate"
+                      [disabled]="isAcceptSubmitting()"
+                      class="accept-description-toggle"
+                    >
+                      <mat-icon fontIcon="check"></mat-icon>
+                    </mat-button-toggle>
+                  } @else if (row.showPendingLabel) {
+                    <span class="text-sm text-slate-600">
+                      {{ 'task-description-acceptance-panel.pending' | translate }}
+                    </span>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

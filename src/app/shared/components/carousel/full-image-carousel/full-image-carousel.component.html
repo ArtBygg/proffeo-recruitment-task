@@ -1,0 +1,118 @@
+<div class="flex flex-col h-full w-full min-h-0">
+  <!-- Main carousel container -->
+  <div
+    #emblaRoot
+    [id]="emblaId()"
+    class="embla w-full flex-grow min-h-[300px] md:min-h-[400px] items-center flex relative"
+  >
+    <div class="embla__container">
+      @for (slide of files(); track slide.id) {
+        <div class="embla__slide relative">
+          <!-- Blurred background image -->
+          <div class="relative w-full h-full overflow-hidden rounded-md bg-black">
+            @if (slide.isImage()) {
+              <!-- Rozmyte tło -->
+              <img
+                [src]="slide.fullviewUrl()"
+                alt="background"
+                draggable="false"
+                class="absolute inset-0 h-full w-full object-cover opacity-70 blur-md select-none pointer-events-none"
+              />
+              <!-- Ostry główny obraz -->
+              <img
+                [src]="slide.fullviewUrl()"
+                alt="image"
+                referrerpolicy="no-referrer"
+                draggable="false"
+                class="relative z-10 h-full w-full object-contain"
+              />
+            } @else if (slide.isVideo()) {
+              <video
+                [src]="slide.fullviewUrl()"
+                [muted]="true"
+                playsinline
+                controls
+                preload="metadata"
+                class="absolute inset-0 h-full w-full object-contain z-10"
+              ></video>
+            } @else if (slide.isPdf()) {
+              <iframe
+                [src]="toSafePdfUrl(slide.fullviewUrl())"
+                title="PDF preview"
+                class="absolute inset-0 h-full w-full z-10 bg-white"
+              ></iframe>
+            }
+          </div>
+        </div>
+      } @empty {
+        <div class="embla__slide flex items-center justify-center">
+          <p class="text-slate-500">{{ 'placeholders.no-images-to-display' | translate }}</p>
+        </div>
+      }
+    </div>
+
+    <!-- Download button -->
+    @if (currentImage()) {
+      <a
+        [href]="currentImage()!.fullviewUrl()"
+        target="_blank"
+        download
+        class="rounded z-[10] bg-black/65 flex items-center justify-center p-1.5 absolute right-5 top-5 hover:bg-accent/75 transition-all transition-150 cursor-pointer"
+      >
+        <mat-icon
+          fontIcon="download"
+          class="text-white! icon-md"
+        ></mat-icon>
+      </a>
+    }
+
+    <!-- Counter -->
+    <span
+      class="rounded z-[10] bg-black/65 flex items-center justify-center p-1.5 px-2 absolute right-5 bottom-5 transition-all transition-150"
+    >
+      <p class="text-white text-sm">{{ index() + 1 }}/{{ files().length }}</p>
+    </span>
+
+    <!-- Previous arrow -->
+    <span
+      (click)="slideLeft()"
+      [ngClass]="canScrollPrev() ? 'hover:bg-accent/75 cursor-pointer bg-black/75' : 'bg-black/40 pointer-events-none'"
+      class="absolute flex items-center justify-center w-10 h-10 z-[10] rounded-full aspect-square left-3 transition-all transition-150 ring-1 ring-white/20"
+    >
+      <mat-icon
+        fontIcon="chevron_backward"
+        class="text-white!"
+      ></mat-icon>
+    </span>
+
+    <!-- Next arrow -->
+    <span
+      (click)="slideRight()"
+      [ngClass]="canScrollNext() ? 'hover:bg-accent/75 cursor-pointer bg-black/75' : 'bg-black/40 pointer-events-none'"
+      class="absolute flex items-center justify-center w-10 h-10 z-[10] rounded-full aspect-square right-3 transition-all transition-150 ring-1 ring-white/20"
+    >
+      <mat-icon
+        fontIcon="chevron_forward"
+        class="text-white!"
+      ></mat-icon>
+    </span>
+  </div>
+
+  <!-- Description section -->
+  @if (currentImage()) {
+    <div class="w-full px-4 py-3 bg-gray-50 flex-shrink-0">
+      <div class="flex items-center gap-2 justify-center mb-1.5">
+        <div class="text-center font-medium text-slate-700 text-sm">
+          {{ currentImage()!.name }}
+        </div>
+      </div>
+
+      <div class="max-w-3xl mx-auto">
+        <proffeo-file-description
+          (descriptionChange)="onDescriptionChange($event)"
+          [description]="currentImage()!.description"
+        ></proffeo-file-description>
+      </div>
+    </div>
+  }
+</div>

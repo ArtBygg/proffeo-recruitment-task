@@ -1,0 +1,30 @@
+<div class="flex relative mb-4">
+  <proffeo-input
+    class="grow-3"
+    matIconName="search"
+    [formControl]="searchControl"
+    [placeholder]="'placeholders.search-input' | translate"
+  ></proffeo-input>
+</div>
+
+<div class="max-h-64 overflow-y-auto flex-grow">
+  @for (company of filteredCompanies(); track company?.id; let isLast = $last) {
+    <div class="flex items-center">
+      <div
+        class="flex w-full items-center py-2"
+        [ngClass]="isLast ? '' : 'border-b border-slate-300'"
+      >
+        <proffeo-radio
+          class="mr-2"
+          (click)="selectCompany(company)"
+          name="company"
+          [value]="company.id"
+          [checked]="selectedCompanyId() === company.id"
+        ></proffeo-radio>
+        <div class="ml-2 flex w-full flex-col truncate py-2">
+          <p>{{ company?.name ?? company?.id }}</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

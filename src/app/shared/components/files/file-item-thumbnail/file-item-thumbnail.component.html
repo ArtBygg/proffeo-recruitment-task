@@ -1,0 +1,42 @@
+<div class="relative object-contain w-full h-full bg-gray-50 rounded-lg overflow-hidden">
+  @if (file()?.isImage()) {
+    <img
+      [src]="file()?.previewUrl()"
+      [alt]="file()?.name"
+      loading="lazy"
+      class="w-full h-full object-contain"
+    />
+  } @else if (file()?.isPdf()) {
+    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100">
+      <mat-icon
+        fontIcon="picture_as_pdf"
+        class="text-red-500 icon-xl"
+      ></mat-icon>
+    </div>
+  } @else if (file()?.isVideo()) {
+    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
+      <mat-icon
+        fontIcon="videocam"
+        class="text-purple-500 icon-xl"
+      ></mat-icon>
+    </div>
+  } @else {
+    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+      <mat-icon
+        fontIcon="description"
+        class="text-gray-400 icon-xl"
+      ></mat-icon>
+    </div>
+  }
+
+  <!-- Avatar Badge -->
+  @if (isAvatar()) {
+    <div
+      class="absolute top-2 right-2 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full flex items-center gap-1 shadow-lg"
+    >
+      <span>
+        {{ 'files.files-list-is-avatar' | translate }}
+      </span>
+    </div>
+  }
+</div>

@@ -1,0 +1,350 @@
+<div
+  [class.grid-cols-4]="isMobile()"
+  [class.grid-cols-[repeat(14,minmax(0,1fr))]]="!isMobile()"
+  class="grid min-w-0 w-full gap-4"
+>
+  <div
+    [class.col-span-4]="isMobile()"
+    [class.col-span-2]="!isMobile()"
+    class="min-w-[120px] flex inline-flex"
+  >
+    <mat-form-field class="w-full">
+      <mat-label>{{ 'task-filters.sortBy' | translate }}</mat-label>
+
+      <mat-select
+        (selectionChange)="setOrderBy($event.value)"
+        [value]="orderBy()"
+      >
+        <mat-select-trigger>
+          {{ taskFiltersHelperService.getSortByLabel(orderBy()) }}
+        </mat-select-trigger>
+
+        @for (sortField of sortByOptions(); track sortField) {
+          <mat-option [value]="sortField">{{ taskFiltersHelperService.getSortByLabel(sortField) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      (click)="toggleSortDir()"
+      [attr.aria-label]="'task-filters.sortDirection' | translate"
+      type="button"
+      class="border border-slate-200 hover:border-slate-400 w-[var(--mat-form-field-container-height)] shrink-0 rounded bg-white flex items-center justify-center aspect-square cursor-pointer"
+    >
+      <mat-icon [fontIcon]="order() === SortDirection.ASC ? 'arrow_upward' : 'arrow_downward'"></mat-icon>
+    </button>
+  </div>
+
+  <mat-form-field
+    (click)="startDatePicker.open()"
+    [proffeoFilterCountBadge]="
+      taskFiltersHelperService.isDateRangeFilterActive(filters()?.startDateFrom, filters()?.startDateTo) ? 1 : 0
+    "
+    [class.col-span-4]="isMobile()"
+    [class.col-span-3]="!isMobile()"
+    class="cursor-pointer"
+  >
+    <mat-label>{{ 'task-filters.startDate' | translate }}</mat-label>
+
+    <mat-date-range-input [rangePicker]="startDatePicker">
+      <input
+        (dateChange)="updateFiltersField('startDateFrom', $event.value)"
+        [placeholder]="'task-filters.dateFrom' | translate"
+        [value]="taskFiltersHelperService.parseDateFromFilter(filters()?.startDateFrom)"
+        matStartDate
+        class="cursor-pointer"
+      />
+      <input
+        (dateChange)="updateFiltersField('startDateTo', $event.value)"
+        [placeholder]="'task-filters.dateTo' | translate"
+        [value]="taskFiltersHelperService.parseDateFromFilter(filters()?.startDateTo)"
+        matEndDate
+        class="cursor-pointer"
+      />
+    </mat-date-range-input>
+    @if (taskFiltersHelperService.isDateRangeFilterActive(filters()?.startDateFrom, filters()?.startDateTo)) {
+      <button
+        (click)="clearDateRangeFilter($event, 'startDateFrom', 'startDateTo')"
+        [attr.aria-label]="'task-filters.clearDateRange' | translate"
+        type="button"
+        matIconSuffix
+        class="inline-flex cursor-pointer items-center justify-center text-slate-500 hover:text-slate-800"
+      >
+        <mat-icon fontIcon="close" />
+      </button>
+    }
+    <mat-datepicker-toggle
+      [for]="startDatePicker"
+      matIconSuffix
+    ></mat-datepicker-toggle>
+    <mat-date-range-picker #startDatePicker></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-form-field
+    (click)="endDatePicker.open()"
+    [proffeoFilterCountBadge]="
+      taskFiltersHelperService.isDateRangeFilterActive(filters()?.endDateFrom, filters()?.endDateTo) ? 1 : 0
+    "
+    [class.col-span-4]="isMobile()"
+    [class.col-span-3]="!isMobile()"
+    class="cursor-pointer"
+  >
+    <mat-label>{{ 'task-filters.endDate' | translate }}</mat-label>
+
+    <mat-date-range-input [rangePicker]="endDatePicker">
+      <input
+        (dateChange)="updateFiltersField('endDateFrom', $event.value)"
+        [placeholder]="'task-filters.dateFrom' | translate"
+        [value]="taskFiltersHelperService.parseDateFromFilter(filters()?.endDateFrom)"
+        matStartDate
+        class="cursor-pointer"
+      />
+      <input
+        (dateChange)="updateFiltersField('endDateTo', $event.value)"
+        [placeholder]="'task-filters.dateTo' | translate"
+        [value]="taskFiltersHelperService.parseDateFromFilter(filters()?.endDateTo)"
+        matEndDate
+        class="cursor-pointer"
+      />
+    </mat-date-range-input>
+    @if (taskFiltersHelperService.isDateRangeFilterActive(filters()?.endDateFrom, filters()?.endDateTo)) {
+      <button
+        (click)="clearDateRangeFilter($event, 'endDateFrom', 'endDateTo')"
+        [attr.aria-label]="'task-filters.clearDateRange' | translate"
+        type="button"
+        matIconSuffix
+        class="inline-flex cursor-pointer items-center justify-center text-slate-500 hover:text-slate-800"
+      >
+        <mat-icon fontIcon="close" />
+      </button>
+    }
+    <mat-datepicker-toggle
+      [for]="endDatePicker"
+      matIconSuffix
+    ></mat-datepicker-toggle>
+    <mat-date-range-picker #endDatePicker></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-form-field
+    (click)="createDatePicker.open()"
+    [proffeoFilterCountBadge]="
+      taskFiltersHelperService.isDateRangeFilterActive(filters()?.createdDateFrom, filters()?.createdDateTo) ? 1 : 0
+    "
+    [class.col-span-4]="isMobile()"
+    [class.col-span-3]="!isMobile()"
+    class="cursor-pointer"
+  >
+    <mat-label>{{ 'task-filters.createDate' | translate }}</mat-label>
+    <mat-date-range-input
+      [max]="today()"
+      [rangePicker]="createDatePicker"
+    >
+      <input
+        (dateChange)="updateFiltersField('createdDateFrom', $event.value)"
+        [placeholder]="'task-filters.dateFrom' | translate"
+        [value]="taskFiltersHelperService.parseDateFromFilter(filters()?.createdDateFrom)"
+        matStartDate
+        class="cursor-pointer"
+      />
+      <input
+        (dateChange)="updateFiltersField('createdDateTo', $event.value)"
+        [placeholder]="'task-filters.dateTo' | translate"
+        [value]="taskFiltersHelperService.parseDateFromFilter(filters()?.createdDateTo)"
+        matEndDate
+        class="cursor-pointer"
+      />
+    </mat-date-range-input>
+    @if (taskFiltersHelperService.isDateRangeFilterActive(filters()?.createdDateFrom, filters()?.createdDateTo)) {
+      <button
+        (click)="clearDateRangeFilter($event, 'createdDateFrom', 'createdDateTo')"
+        [attr.aria-label]="'task-filters.clearDateRange' | translate"
+        type="button"
+        matIconSuffix
+        class="inline-flex cursor-pointer items-center justify-center text-slate-500 hover:text-slate-800"
+      >
+        <mat-icon fontIcon="close" />
+      </button>
+    }
+    <mat-datepicker-toggle
+      [for]="createDatePicker"
+      matIconSuffix
+    ></mat-datepicker-toggle>
+    <mat-date-range-picker #createDatePicker></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-form-field
+    (click)="editDatePicker.open()"
+    [proffeoFilterCountBadge]="
+      taskFiltersHelperService.isDateRangeFilterActive(filters()?.editDateFrom, filters()?.editDateTo) ? 1 : 0
+    "
+    [class.col-span-4]="isMobile()"
+    [class.col-span-3]="!isMobile()"
+    class="cursor-pointer"
+  >
+    <mat-label>{{ 'task-filters.editDate' | translate }}</mat-label>
+    <mat-date-range-input
+      [max]="today()"
+      [rangePicker]="editDatePicker"
+    >
+      <input
+        (dateChange)="updateFiltersField('editDateFrom', $event.value)"
+        [placeholder]="'task-filters.dateFrom' | translate"
+        [value]="taskFiltersHelperService.parseDateFromFilter(filters()?.editDateFrom)"
+        matStartDate
+        class="cursor-pointer"
+      />
+      <input
+        (dateChange)="updateFiltersField('editDateTo', $event.value)"
+        [placeholder]="'task-filters.dateTo' | translate"
+        [value]="taskFiltersHelperService.parseDateFromFilter(filters()?.editDateTo)"
+        matEndDate
+        class="cursor-pointer"
+      />
+    </mat-date-range-input>
+    @if (taskFiltersHelperService.isDateRangeFilterActive(filters()?.editDateFrom, filters()?.editDateTo)) {
+      <button
+        (click)="clearDateRangeFilter($event, 'editDateFrom', 'editDateTo')"
+        [attr.aria-label]="'task-filters.clearDateRange' | translate"
+        type="button"
+        matIconSuffix
+        class="inline-flex cursor-pointer items-center justify-center text-slate-500 hover:text-slate-800"
+      >
+        <mat-icon fontIcon="close" />
+      </button>
+    }
+    <mat-datepicker-toggle
+      [for]="editDatePicker"
+      matIconSuffix
+    ></mat-datepicker-toggle>
+    <mat-date-range-picker #editDatePicker></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-form-field
+    (click)="onSelectLocationsClick($event)"
+    [proffeoFilterCountBadge]="filters()?.location?.length"
+    [matTooltip]="taskFiltersHelperService.locationsDisplayValue()"
+    [matTooltipDisabled]="!taskFiltersHelperService.locationsDisplayValue()"
+    class="col-span-2 cursor-pointer"
+  >
+    <mat-label>{{ 'task-filters.locations' | translate }}</mat-label>
+    <input
+      [value]="taskFiltersHelperService.locationsDisplayValue()"
+      matInput
+      readonly
+      class="truncate cursor-pointer"
+    />
+  </mat-form-field>
+  <proffeo-filter-multi-select-menu
+    (selectionChange)="updateFiltersField('industry', $event)"
+    (emptyValueChange)="updateFiltersField('noIndustry', $event)"
+    [options]="industriesOptions()"
+    [selected]="filters()?.industry ?? []"
+    [enableEmptyValueCheckbox]="true"
+    [emptyValueSelected]="filters()?.noIndustry ?? false"
+    fieldLabel="task-filters.industry"
+    class="col-span-2 flex"
+  />
+
+  <proffeo-filter-multi-select-menu
+    (selectionChange)="updateFiltersField('taskStatus', $event)"
+    [options]="statusOptions()"
+    [selected]="filters()?.taskStatus ?? []"
+    fieldLabel="task-filters.status"
+    class="col-span-2 flex"
+  />
+
+  <proffeo-filter-multi-select-menu
+    (selectionChange)="updateFiltersField('taskPriority', $event)"
+    [options]="priorityOptions()"
+    [selected]="filters()?.taskPriority ?? []"
+    fieldLabel="task-filters.priority"
+    class="col-span-2 flex"
+  />
+
+  <div class="col-span-2 flex w-full gap-0">
+    <proffeo-filter-multi-select-menu
+      (selectionChange)="updateFiltersField('user', $event)"
+      (emptyValueChange)="updateFiltersField('noUsers', $event)"
+      [options]="usersOptions()"
+      [selected]="filters()?.user ?? []"
+      [enableEmptyValueCheckbox]="true"
+      [emptyValueSelected]="filters()?.noUsers ?? false"
+      fieldLabel="task-filters.users"
+      class="flex min-w-0"
+    />
+
+    <button
+      (click)="taskFiltersHelperService.toggleMyTasksFilter()"
+      [matTooltip]="'task-filters.myTasks' | translate"
+      [attr.aria-label]="'task-filters.myTasks' | translate"
+      type="button"
+      class="border border-slate-200 hover:border-slate-400 w-[var(--mat-form-field-container-height)] shrink-0 rounded bg-white flex items-center justify-center aspect-square cursor-pointer"
+    >
+      <mat-icon fontIcon="person"></mat-icon>
+    </button>
+  </div>
+
+  <mat-form-field
+    (click)="onSelectGroupsClick($event)"
+    [proffeoFilterCountBadge]="(filters()?.group ?? []).length + (filters()?.noGroup ? 1 : 0)"
+    [matTooltip]="taskFiltersHelperService.groupsDisplayValue()"
+    [matTooltipDisabled]="!taskFiltersHelperService.groupsDisplayValue()"
+    class="col-span-2 cursor-pointer"
+  >
+    <mat-label>{{ 'task-filters.groups' | translate }}</mat-label>
+    <input
+      [value]="taskFiltersHelperService.groupsDisplayValue()"
+      matInput
+      readonly
+      class="cursor-pointer"
+    />
+  </mat-form-field>
+
+  <mat-form-field
+    (click)="onSelectUserRoleClick($event)"
+    [proffeoFilterCountBadge]="(filters()?.userRole ?? []).length"
+    [matTooltip]="taskFiltersHelperService.userRoleDisplayValue()"
+    [matTooltipDisabled]="!taskFiltersHelperService.userRoleDisplayValue()"
+    class="cursor-pointer col-span-2"
+  >
+    <mat-label>{{ 'task-filters.user-role' | translate }}</mat-label>
+    <input
+      [value]="taskFiltersHelperService.userRoleDisplayValue()"
+      matInput
+      readonly
+      class="truncate cursor-pointer"
+    />
+  </mat-form-field>
+
+  <proffeo-filter-multi-select-menu
+    (selectionChange)="updateFiltersField('createdBy', $event)"
+    [options]="usersOptions()"
+    [selected]="filters()?.createdBy ?? []"
+    fieldLabel="task-filters.createdBy"
+    class="col-span-2 flex min-w-0"
+  />
+
+  <proffeo-filter-multi-select-menu
+    (selectionChange)="updateFiltersField('taskTypeIds', $event)"
+    [options]="taskTypesOptions()"
+    [selected]="filters()?.taskTypeIds ?? []"
+    fieldLabel="task-filters.taskType"
+    class="col-span-2 flex min-w-0"
+  />
+
+  <ng-template
+    #tagOptionTemplate
+    let-option
+  >
+    <proffeo-tag [tag]="option.context" />
+  </ng-template>
+
+  <proffeo-filter-multi-select-menu
+    (selectionChange)="updateFiltersField('projectTagIds', $event)"
+    [options]="tagsOptions()"
+    [selected]="filters()?.projectTagIds ?? []"
+    [optionTemplate]="tagOptionTemplate"
+    fieldLabel="task-filters.tags"
+    class="col-span-2 flex"
+  />
+</div>

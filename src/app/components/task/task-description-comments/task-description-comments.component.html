@@ -1,0 +1,153 @@
+<div class="flex w-full flex-col rounded-md border border-black/10 bg-white shadow-sm">
+  <mat-accordion class="w-full">
+    <mat-expansion-panel
+      (closed)="onPanelClosed()"
+      (opened)="onPanelOpened()"
+      class="!shadow-none border-0"
+    >
+      <mat-expansion-panel-header class="px-4 py-3 hover:bg-slate-50/80">
+        <mat-panel-title class="flex w-full items-center gap-3">
+          <mat-icon
+            fontIcon="verified_user"
+            class="text-accent shrink-0"
+          ></mat-icon>
+          <span class="text-base font-semibold text-slate-900">
+            {{ 'task-description-comments.title' | translate }}
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="flex flex-col gap-5 px-4 pb-4 pt-0">
+        <div class="relative flex flex-col gap-4 pl-1">
+          <div
+            aria-hidden="true"
+            class="timeline-rail-line pointer-events-none absolute bottom-3 left-[0.6875rem] top-3 w-0.5 bg-slate-200"
+          ></div>
+
+          @if (commentRows().length === 0) {
+            <p class="pl-8 text-sm text-slate-500">
+              {{ 'task-description-comments.empty' | translate }}
+            </p>
+          } @else {
+            @for (row of commentRows(); track row.comment.id) {
+              <div class="relative z-10 flex gap-3">
+                <div class="flex w-6 shrink-0 justify-center pt-1">
+                  <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-accent ring-4 ring-white"></span>
+                </div>
+                <div class="flex min-w-0 flex-1 gap-3">
+                  <proffeo-avatar
+                    [readonly]="true"
+                    [size]="AvatarSize.MINI"
+                    [user]="row.user()"
+                    class="shrink-0"
+                  ></proffeo-avatar>
+                  <div [class]="row.cardClass + ' flex min-w-0 flex-1 flex-col gap-2 rounded-lg px-3 py-2.5'">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="text-sm font-semibold text-slate-900">
+                        {{ row.user()?.fullName ?? ('task-description-comments.unknown-user' | translate) }}
+                      </span>
+                      <span
+                        [class]="
+                          row.badgeClass +
+                          ' inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wide'
+                        "
+                      >
+                        <mat-icon
+                          [fontIcon]="row.badgeIcon"
+                          class="!h-3.5 !w-3.5 !text-[0.875rem] leading-none"
+                        ></mat-icon>
+                        {{ row.badgeKey | translate }}
+                      </span>
+                      <span class="ml-auto text-xs text-slate-500">
+                        {{ row.relativeTime }}
+                      </span>
+                    </div>
+                    @if (row.comment.content) {
+                      <p [class]="row.contentClass + ' text-sm whitespace-pre-wrap'">
+                        {{ row.comment.content }}
+                      </p>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <mat-form-field
+            appearance="outline"
+            subscriptSizing="dynamic"
+            class="w-full rounded-lg bg-sky-50/60"
+          >
+            <mat-label>{{ 'task-description-comments.composer-label' | translate }}</mat-label>
+            <textarea
+              (input)="onDraftInput($event)"
+              [disabled]="isSubmitting()"
+              [value]="draftContent()"
+              matInput
+              rows="4"
+            ></textarea>
+            <div class="flex justify-end pr-1 pb-1">
+              <button
+                [matTooltip]="'task-description-comments.attachment-not-available' | translate"
+                type="button"
+                mat-icon-button
+                disabled
+                matTooltipPosition="above"
+                class="!text-slate-500"
+              >
+                <mat-icon fontIcon="attach_file"></mat-icon>
+              </button>
+            </div>
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          @if (showAccept()) {
+            <proffeo-button
+              (click)="onAcceptClicked()"
+              [disabled]="isSubmitting()"
+              [type]="ButtonType.ACCENT"
+              text="task-description-comments.accept"
+              fontIcon="check"
+            ></proffeo-button>
+          }
+          @if (showReject()) {
+            <proffeo-button
+              (click)="onRejectClicked()"
+              [disabled]="isSubmitting()"
+              text="task-description-comments.reject"
+              fontIcon="close"
+            ></proffeo-button>
+          }
+          @if (showRequestChange()) {
+            <proffeo-button
+              (click)="onRequestChangeClicked()"
+              [disabled]="isSubmitting()"
+              text="task-description-comments.request-change"
+              fontIcon="edit_note"
+            ></proffeo-button>
+          }
+          @if (showReadyForReview()) {
+            <proffeo-button
+              (click)="onReadyForReviewClicked()"
+              [disabled]="isSubmitting()"
+              [type]="ButtonType.ACCENT"
+              text="task-description-comments.ready-for-review"
+              fontIcon="done_all"
+            ></proffeo-button>
+          }
+          @if (showSendReview()) {
+            <proffeo-button
+              (click)="onSendReviewClicked()"
+              [disabled]="isSubmitting()"
+              text="task-description-comments.send-review"
+              fontIcon="send"
+            ></proffeo-button>
+          }
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

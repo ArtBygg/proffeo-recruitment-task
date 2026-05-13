@@ -1,0 +1,66 @@
+<mat-form-field
+  #menuTrigger="matMenuTrigger"
+  (menuOpened)="onMenuOpened()"
+  (menuClosed)="onMenuClosed()"
+  (click)="$event.preventDefault()"
+  [proffeoFilterCountBadge]="countFilterSelectedValues()"
+  [matTooltip]="displayValue()"
+  [matTooltipDisabled]="!displayValue()"
+  [matMenuTriggerFor]="dropdownMenu"
+  class="cursor-pointer min-w-0 w-full"
+>
+  <mat-label>{{ fieldLabel() | translate }}</mat-label>
+  <input
+    [value]="displayValue()"
+    matInput
+    readonly
+    class="cursor-pointer truncate"
+  />
+  <mat-icon
+    [class.rotate-180]="menuOpen()"
+    matSuffix
+    fontIcon="arrow_drop_down"
+    class="transition-transform duration-200"
+  ></mat-icon>
+</mat-form-field>
+<mat-menu #dropdownMenu="matMenu">
+  <div
+    (click)="$event.stopPropagation()"
+    class="flex flex-col w-full min-w-[200px]"
+  >
+    <mat-checkbox
+      (click)="toggleSelectAll()"
+      [checked]="allSelected()"
+      [indeterminate]="someSelected()"
+      class="flex items-center cursor-pointer hover:bg-gray-100"
+    >
+      {{ 'task-filters.selectAll' | translate }}
+    </mat-checkbox>
+    @if (enableEmptyValueCheckbox()) {
+      <mat-checkbox
+        (click)="toggleEmptyValueFilter()"
+        [checked]="emptyValueSelected()"
+        class="flex items-center cursor-pointer hover:bg-gray-100"
+      >
+        {{ 'task-filters.emptyValue' | translate }}
+      </mat-checkbox>
+    }
+    <div class="border-b border-slate-200"></div>
+    @for (option of options(); track option.value) {
+      <mat-checkbox
+        (click)="toggleOption(option.value)"
+        [checked]="isSelected(option.value)"
+        class="flex items-center cursor-pointer hover:bg-gray-100"
+      >
+        @if (optionTemplate(); as tmpl) {
+          <ng-container
+            [ngTemplateOutlet]="tmpl"
+            [ngTemplateOutletContext]="{ $implicit: option, option }"
+          />
+        } @else {
+          {{ option.label | translate }}
+        }
+      </mat-checkbox>
+    }
+  </div>
+</mat-menu>

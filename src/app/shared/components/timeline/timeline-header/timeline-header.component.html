@@ -1,0 +1,33 @@
+<div class="grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1">
+  <div class="row-span-2 min-w-0">
+    <div class="flex min-w-0 flex-col gap-1">
+      <div class="flex min-w-0 flex-wrap items-center gap-1 text-sm font-medium text-slate-900">
+        <ng-content select="[timelineHeaderTitle]">{{ userLabel() }}</ng-content>
+      </div>
+
+      @if (dateTime()) {
+        <span class="hidden text-xs text-slate-500 whitespace-nowrap sm:block">
+          {{ dateTime() | date: 'MMM d, y · hh:mm a' }}
+        </span>
+      }
+
+      <div class="text-xs text-slate-500">
+        <ng-content select="[timelineHeaderSubtitle]"></ng-content>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex min-w-0 justify-end text-right sm:hidden">
+    @if (dateTime()) {
+      <span class="text-xs text-slate-500 whitespace-nowrap">
+        {{ dateTime() | date: 'MMM d, y · hh:mm a' }}
+      </span>
+    }
+  </div>
+
+  <div class="flex min-w-0 justify-end text-right">
+    <div class="max-w-full whitespace-normal break-words">
+      <ng-content select="[timelineHeaderRight]"></ng-content>
+    </div>
+  </div>
+</div>

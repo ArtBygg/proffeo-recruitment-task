@@ -1,0 +1,120 @@
+<div class="flex flex-col w-full p-4 gap-6">
+  <!-- Date selection row -->
+  <div class="flex flex-row gap-4 max-sm:justify-center">
+    <date-range-selector
+      [(selectedTimeMode)]="selectedTimeMode"
+      (onDateRangeSelected)="onDateRangeSelected($event)"
+      [selectedDateRange]="dateRange()"
+    />
+    <time-period-selector [(selectedTimeMode)]="selectedTimeMode" />
+  </div>
+
+  <!-- Scroller -->
+  <div class="flex w-full items-center justify-center overflow-x-hidden">
+    @if (selectedTimeMode() === SelectedTimeReportTypeEnum.RANGE) {
+      <date-range-input
+        [(selectedTimeMode)]="selectedTimeMode"
+        [dateRangeSelected]="dateRange()"
+      />
+    } @else {
+      <timeline-scroller
+        [(selectedYear)]="selectedYear"
+        [(selectedMonth)]="selectedMonth"
+        [(selectedWeek)]="selectedWeek"
+        [(selectedDay)]="selectedDay"
+        [selectedTimeMode]="selectedTimeMode()"
+      />
+    }
+  </div>
+
+  <!-- Filters -->
+  <div class="flex flex-col gap-2">
+    <div class="flex w-full items-center justify-between">
+      <p class="font-semibold">{{ 'time-reports-filters.filters' | translate }}</p>
+    </div>
+    <div class="flex w-full gap-2 items-center max-sm:justify-center flex-wrap">
+      <proffeo-dropdown-with-search
+        (valueChange)="selectedDates.set($event)"
+        [placeholder]="'time-reports-filters.filters-select-date'"
+        [value]="selectedDates()"
+        [dropdownItems]="availableDates()"
+        [multiple]="true"
+        [translateLabels]="false"
+        toggleMatIconName="calendar_month"
+      />
+      <proffeo-dropdown-with-search
+        (valueChange)="selectedUsers.set($event)"
+        [placeholder]="'time-reports-filters.filters-select-user'"
+        [value]="selectedUsers()"
+        [dropdownItems]="availableUsers()"
+        [multiple]="true"
+        [translateLabels]="false"
+        toggleMatIconName="person"
+      />
+      @if (hasActiveFilters()) {
+        <proffeo-button
+          (click)="clearFilters()"
+          [text]="'time-reports-filters.clear-filters'"
+        />
+      }
+    </div>
+  </div>
+
+  <!-- Add Report Button and Time Counter -->
+  <div class="flex max-sm:hidden items-center justify-end">
+    <proffeo-button
+      (click)="addTimeReport()"
+      [text]="'task-details-modal-add-time-report'"
+      [type]="ButtonType.ACCENT"
+      fontIcon="add"
+    />
+  </div>
+
+  <!-- Reports list -->
+  <div class="flex w-full flex-col gap-4">
+    <div class="flex items-center justify-between gap-4">
+      <p class="text-lg font-bold text-slate-500">
+        {{ 'time-reports.total-time-tracked' | translate }}
+      </p>
+      <div class="flex items-center justify-end gap-2">
+        <p class="text-2xl">{{ totalDuration() | intlDuration }}</p>
+      </div>
+    </div>
+
+    @if (groupedReports()[0]?.length > 0) {
+      @for (session of groupedReports(); track $index) {
+        @if (session.length >= 1) {
+          <!-- Date header -->
+          <div class="flex w-full items-center justify-between py-1">
+            <p class="text-base font-semibold">
+              {{ session[0]?.date | date: 'EEEE' }},
+              <span class="font-medium">{{ session[0]?.date | date: 'd MMM y' }}</span>
+            </p>
+            <div class="flex items-center gap-1.5">
+              <div class="flex items-center">
+                <p class="text-base font-medium">
+                  {{ calculateDurationInSession(session) | intlDuration }}
+                </p>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Reports list -->
+        @for (report of session; track $index) {
+          <task-time-report-card
+            (editReport)="onEditTimeReportCardClick($event)"
+            (deleteReport)="onDeleteTimeReportCardClick($event)"
+            [report]="report"
+          />
+        }
+      }
+    } @else {
+      <div class="flex w-full items-center justify-center p-4">
+        <p class="font-semibold text-slate-600">
+          {{ 'time-reports.no-reports-found' | translate }}
+        </p>
+      </div>
+    }
+  </div>
+</div>

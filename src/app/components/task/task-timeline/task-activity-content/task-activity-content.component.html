@@ -1,0 +1,38 @@
+@switch (activity().taskActivityType) {
+  @case (TaskActivityType.TaskCreated) {
+    <proffeo-task-created-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskLocationChanged) {
+    <proffeo-location-changed-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskBudgetEstimationChanged) {
+    <proffeo-budget-estimation-changed-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskTimeEstimationChanged) {
+    <proffeo-time-estimation-changed-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskStatusChanged) {
+    <proffeo-status-changed-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskPriorityChanged) {
+    <proffeo-priority-changed-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskProgressChanged) {
+    <proffeo-progress-changed-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskIndustryChanged) {
+    <proffeo-industry-changed-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskParticipantsAssigned) {
+    <proffeo-participants-assigned-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskTimeReportAdded) {
+    <proffeo-time-report-added-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskDescriptionChanged) {
+    <proffeo-task-description-changed-activity [activity]="activity()" />
+  }
+  @case (TaskActivityType.TaskFileAdded) {
+    <proffeo-file-added-activity [activity]="activity()" />
+  }
+}

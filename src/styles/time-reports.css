@@ -1,0 +1,39 @@
+.time-report-panel {
+  .mat-date-range-input-wrapper {
+    min-width: 76px !important;
+    max-width: 76px !important;
+  }
+
+  .mat-date-range-input-container {
+    justify-content: center !important;
+  }
+
+  .mat-button-toggle-checked {
+    .mat-button-toggle-label-content {
+      background-color: theme('colors.slate.500') !important;
+      color: white !important;
+    }
+  }
+
+  .mat-button-toggle-group .mat-button-toggle.mat-button-toggle-checked .mat-button-toggle-label-content {
+    color: white !important;
+  }
+
+  .mat-button-toggle-label-content {
+    padding: 0 16px !important;
+    background-color: transparent !important;
+    color: #1e293b !important;
+    line-height: 34px !important;
+  }
+
+  /* For Webkit-based browsers (Chrome, Safari and Opera) */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}

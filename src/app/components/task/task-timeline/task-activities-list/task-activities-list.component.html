@@ -1,0 +1,25 @@
+@if (activities().length === 0) {
+  <div class="flex h-full w-full items-center justify-center text-slate-500">
+    <p>{{ 'project-tasks.details.no-data.activities' | translate }}</p>
+  </div>
+} @else {
+  <div class="flex h-full w-full flex-col gap-1.5 lg:pr-3">
+    @for (row of timelineRows(); track row.id) {
+      @switch (row.type) {
+        @case ('date') {
+          <div class="flex w-full items-center justify-between">
+            <span class="flex-10 h-[1px] bg-secondary opacity-[15%]"></span>
+            <span class="px-4 timeline-date my-2 text-sm font-medium opacity-75">
+              {{ row.date | date: 'dd MMM yyyy' }}
+            </span>
+            <span class="flex-11 h-[1px] bg-secondary opacity-[15%]"></span>
+          </div>
+        }
+        @case ('activity') {
+          <proffeo-task-activity [groupedTaskActivities]="row.activities"></proffeo-task-activity>
+        }
+      }
+    }
+    <span class="min-h-5"></span>
+  </div>
+}

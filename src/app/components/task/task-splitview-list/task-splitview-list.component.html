@@ -1,0 +1,64 @@
+@if (!isMobile() || !activeTask()) {
+  <proffeo-task-list-toolbar class="block mb-2" />
+}
+@if (isMobile()) {
+  <proffeo-button
+    (click)="onStartTaskCreation()"
+    [type]="ButtonType.ACCENT"
+    [cta]="true"
+    fontIcon="add"
+    class="fixed z-[10] right-5 bottom-5 button"
+  ></proffeo-button>
+}
+
+<div class="flex w-full gap-5 min-h-dvh">
+  <div
+    [ngClass]="{
+      'max-w-full w-full lg:w-full max-h-full gap-2! flex!': !activeTask(),
+      'max-w-[350px]': activeTask()
+    }"
+    class="hidden lg:flex flex-col min-w-[200px] gap-2 w-1/5 lg:w-[32%] lg:min-w-[290px] grow p-1"
+  >
+    <div
+      [ngClass]="{ 'overflow-y-auto max-h-[calc(100dvh-80px)]': activeTask() }"
+      class="flex flex-col gap-2 w-full p-1"
+    >
+      @if (isLoading()) {
+        {{ 'loading-data' | translate }}
+      } @else {
+        @if (allTasks().content.length) {
+          @for (task of allTasks().content; track task().id) {
+            <proffeo-task-splitview-list-item
+              (taskTypeSelected)="onTaskTypeSelected($event)"
+              (statusChanged)="onStatusChanged($event)"
+              (priorityChanged)="onPriorityChanged($event)"
+              (taskStartDateSelected)="onTaskStartDateSelected($event)"
+              (taskEndDateSelected)="onTaskEndDateSelected($event)"
+              (taskProgressSelected)="onTaskProgressSelected($event)"
+              (industryClicked)="onIndustryClicked($event)"
+              (locationClicked)="onLocationClicked($event)"
+              (changeGroupClicked)="onChangeGroupClicked($event)"
+              (changeUsersClicked)="onChangeUsersClicked($event)"
+              [task]="task()"
+              [compactMode]="!!activeTask()"
+              [isSelected]="activeTask()?.id === task().id"
+              [hasChildren]="task().subtasksCount && task().subtasksCount > 0"
+              [taskTypes]="activeCompanyTaskTypes()"
+            ></proffeo-task-splitview-list-item>
+          }
+        } @else {
+          <div class="text-center text-gray-500 py-10">
+            {{ 'project-tasks.list.no-tasks' | translate }}
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  @if (activeTask()) {
+    <proffeo-task-details-content
+      animate.enter="fade-in"
+      class="w-[50%] xl:w-[60%] grow"
+    ></proffeo-task-details-content>
+  }
+</div>

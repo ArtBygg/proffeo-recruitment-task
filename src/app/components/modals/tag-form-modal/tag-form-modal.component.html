@@ -1,0 +1,83 @@
+<proffeo-modal
+  [title]="
+    mode === 'edit'
+      ? ('project-tags.modals.edit-modal-title' | translate)
+      : ('project-tags.modals.create-modal-title' | translate)
+  "
+>
+  <div class="flex flex-col w-full h-full gap-2">
+    <form
+      [formGroup]="projectTagForm"
+      class="flex flex-col w-full gap-4"
+    >
+      <mat-form-field class="example-full-width">
+        <mat-label>{{ 'project-tags.modals.form-label-name' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="name"
+        />
+        @if (projectTagForm.controls.name.hasError('required')) {
+          <mat-error>
+            <small class="text-error text-sm">
+              {{ 'ui-forms-this-field-is-required' | translate }}
+            </small>
+          </mat-error>
+        } @else if (projectTagForm.controls.name.hasError('maxlength')) {
+          <mat-error>
+            <small class="text-error text-sm">
+              {{ 'ui-forms-the-maximum-value-is' | translate }}
+            </small>
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>{{ 'project-tags.modals.form-label-description' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="description"
+        />
+        @if (projectTagForm.controls.description.hasError('maxlength')) {
+          <mat-error>
+            <small class="text-error text-sm">
+              {{ 'ui-forms-the-maximum-value-is' | translate }}
+              {{ projectTagForm.controls.description.errors?.['maxlength'].requiredLength }}
+            </small>
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>{{ 'project-tags.modals.form-label-color' | translate }}</mat-label>
+        <input
+          (input)="onHexColorInput($event)"
+          matInput
+          type="color"
+          formControlName="hexColor"
+          class="relative top-1"
+        />
+      </mat-form-field>
+      @if (projectTagForm.value.hexColor && projectTagForm.value.name) {
+        <div class="flex w-full items-center gap-2">
+          <p class="pl-1 text-sm font-medium">{{ 'project-tags.modals.preview' | translate }}:</p>
+          <proffeo-tag [tag]="projectTagForm.value"></proffeo-tag>
+        </div>
+      }
+    </form>
+  </div>
+  <div
+    modal-actions
+    class="flex w-full justify-end gap-2"
+  >
+    <proffeo-button
+      text="close"
+      matDialogClose
+    ></proffeo-button>
+    <proffeo-button
+      (click)="save()"
+      [type]="ButtonType.ACCENT"
+      [disabled]="projectTagForm.invalid"
+      text="save-and-close"
+    ></proffeo-button>
+  </div>
+</proffeo-modal>

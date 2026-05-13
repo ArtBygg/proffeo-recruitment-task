@@ -1,0 +1,9 @@
+@use '@angular/material' as mat;
+
+:host {
+  ::ng-deep .mdc-text-field {
+    padding: 0;
+  }
+
+  @include mat.form-field-overrides((container-vertical-padding: 0));
+}

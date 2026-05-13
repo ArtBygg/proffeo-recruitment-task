@@ -1,0 +1,84 @@
+<div class="grid grid-cols-2 grid-rows-2 gap-2">
+  <div class="flex min-w-0 flex-1 inline-flex">
+    <mat-form-field class="w-full min-w-0">
+      <mat-label>{{ 'task-filters.sortBy' | translate }}</mat-label>
+      <mat-select
+        (selectionChange)="setOrderBy($event.value)"
+        [value]="orderBy()"
+      >
+        <mat-select-trigger>
+          {{ taskFiltersHelperService.getSortByLabel(orderBy()) }}
+        </mat-select-trigger>
+        @for (sortField of sortByOptions(); track sortField) {
+          <mat-option [value]="sortField">{{ taskFiltersHelperService.getSortByLabel(sortField) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button
+      (click)="toggleSortDir()"
+      [attr.aria-label]="'task-filters.sortDirection' | translate"
+      type="button"
+      class="flex aspect-square shrink-0 items-center justify-center rounded border border-slate-200 bg-white"
+    >
+      <mat-icon [fontIcon]="order() === SortDirection.ASC ? 'arrow_upward' : 'arrow_downward'"></mat-icon>
+    </button>
+  </div>
+
+  <div class="flex justify-end gap-2">
+    <button
+      (click)="taskFiltersHelperService.toggleMyTasksFilter()"
+      [attr.aria-label]="'task-filters.myTasks' | translate"
+      [matTooltip]="'task-filters.myTasks' | translate"
+      [proffeoFilterCountBadge]="myTasksFilterBadgeCount()"
+      type="button"
+      class="flex aspect-square h-full items-center justify-center rounded border border-slate-200 bg-white"
+    >
+      <mat-icon fontIcon="person"></mat-icon>
+    </button>
+    <button
+      (click)="clearFilters()"
+      [attr.aria-label]="'project-tasks.filters.actions.clear' | translate"
+      [matTooltip]="'project-tasks.filters.actions.clear' | translate"
+      [proffeoFilterCountBadge]="activeFiltersCount()"
+      type="button"
+      class="flex aspect-square h-full items-center justify-center rounded border border-slate-200 bg-white"
+    >
+      <mat-icon fontIcon="filter_list_off"></mat-icon>
+    </button>
+    <button
+      (click)="emitOpenFiltersPanel()"
+      [attr.aria-label]="'task-filters.filters' | translate"
+      [matTooltip]="'task-filters.filters' | translate"
+      type="button"
+      class="flex aspect-square h-full items-center justify-center rounded border border-slate-200 bg-white"
+    >
+      <mat-icon fontIcon="filter_list"></mat-icon>
+    </button>
+  </div>
+
+  <mat-form-field
+    (click)="onSelectLocationsClick()"
+    [matTooltip]="taskFiltersHelperService.locationsDisplayValue()"
+    [matTooltipDisabled]="!taskFiltersHelperService.locationsDisplayValue()"
+    [proffeoFilterCountBadge]="locationsFilterBadgeCount()"
+    class="min-w-0 cursor-pointer"
+  >
+    <mat-label>{{ 'task-filters.locations' | translate }}</mat-label>
+    <input
+      [value]="taskFiltersHelperService.locationsDisplayValue()"
+      matInput
+      readonly
+      class="cursor-pointer truncate"
+    />
+  </mat-form-field>
+  <proffeo-filter-multi-select-menu
+    (emptyValueChange)="updateFiltersField('noIndustry', $event)"
+    (selectionChange)="updateFiltersField('industry', $event)"
+    [emptyValueSelected]="filters()?.noIndustry ?? false"
+    [options]="industriesOptions()"
+    [selected]="filters()?.industry ?? []"
+    [enableEmptyValueCheckbox]="true"
+    fieldLabel="task-filters.industry"
+    class="flex min-w-0"
+  />
+</div>

@@ -1,0 +1,32 @@
+<proffeo-modal [title]="title | translate">
+  <div class="flex h-full w-full flex-col">
+    <div class="flex-grow overflow-auto">
+      <div class="max-h-[60vh] overflow-y-auto p-4 md:max-h-[50vh]">
+        @for (location of locations; track $index) {
+          <proffeo-single-location-item
+            (locationSelected)="selectedLocation = $event"
+            [location]="location"
+            [isReadonly]="isReadonly"
+            [selectedLocation]="selectedLocation"
+          ></proffeo-single-location-item>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div
+    modal-actions
+    class="flex w-full justify-end gap-2"
+  >
+    <proffeo-button
+      matDialogClose
+      text="close"
+      class=""
+    ></proffeo-button>
+    <proffeo-button
+      (click)="save()"
+      [type]="ButtonType.ACCENT"
+      text="save-and-close"
+    ></proffeo-button>
+  </div>
+</proffeo-modal>

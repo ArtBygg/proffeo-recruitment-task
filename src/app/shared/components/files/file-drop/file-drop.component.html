@@ -1,0 +1,102 @@
+<div>
+  <div
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    (click)="fileInput.click()"
+    [ngClass]="{
+      'bg-primary-100': dropZoneActive,
+      'rounded-2xl border border-dashed': mode() === 'filedrop'
+    }"
+    class="group cursor-pointer transition-all duration-200 ease-in-out"
+  >
+    <input
+      #fileInput
+      (cancel)="cancelHandler($event)"
+      (change)="fileBrowseHandler($event)"
+      type="file"
+      id="fileDropRef"
+      multiple
+      class="hidden"
+    />
+
+    @if (mode() === 'ngContent') {
+      <div class="flex h-full w-full items-center">
+        <ng-content></ng-content>
+      </div>
+    } @else {
+      @if (mode() === 'filedrop') {
+        <div
+          [ngClass]="{
+            'border-accent bg-accent/50 shadow-lg': dropZoneActive,
+            'border-gray-300 bg-gray-50': !dropZoneActive
+          }"
+          class="flex w-full items-center bg-white justify-center gap-3.5 rounded-2xl border-dashed p-2 md:p-4 transition-all duration-300 lg:h-[104px] lg:gap-5 lg:px-4 lg:py-8"
+        >
+          <mat-icon
+            [ngClass]="{
+              'text-accent drop-shadow-lg pointer-events-none': dropZoneActive,
+              'text-gray-400': !dropZoneActive
+            }"
+            fontIcon="attach_file_add"
+            class="material-symbols-outlined icon-xl font-medium transition-all duration-300"
+          ></mat-icon>
+          <div
+            [ngClass]="{
+              'text-accent-900 pointer-events-none': dropZoneActive,
+              'text-gray-600': !dropZoneActive
+            }"
+            class="flex flex-col gap-1 transition-all duration-300"
+          >
+            <div class="w-full flex-col gap-1 hidden sm:flex">
+              <p class="font-medium">
+                {{ 'files-drag-and-drop-title' | translate }}
+              </p>
+              <p class="font-medium">
+                {{ 'files-drag-and-drop-or' | translate }}
+                <span class="font-semibold underline">
+                  {{ 'files-drag-and-drop-upload-button' | translate }}
+                </span>
+              </p>
+            </div>
+            <p class="font-medium flex sm:hidden">
+              {{ 'files-drag-and-drop-upload-button' | translate }}
+            </p>
+          </div>
+        </div>
+      }
+
+      @if (mode() === 'thumbnail') {
+        <div class="flex flex-col items-center justify-center gap-2 p-2 cursor-pointer">
+          <div class="flex flex-row items-center justify-center">
+            <proffeo-button
+              [iconSize]="IconSize.BASE"
+              fontIcon="photo_camera"
+              class="p-auto"
+            ></proffeo-button>
+          </div>
+        </div>
+      }
+
+      @if (mode() === 'icon') {
+        <div class="flex items-center justify-center p-2">
+          <mat-icon
+            [ngClass]="{
+              'text-accent drop-shadow-lg': dropZoneActive
+            }"
+            fontIcon="attach_file"
+            class="cursor-pointer text-3xl transition-all duration-300"
+          ></mat-icon>
+        </div>
+      }
+
+      @if (mode() === 'button') {
+        <button
+          class="bg-primary cursor-pointer rounded-full px-4 py-2 text-center font-semibold transition-transform hover:scale-90"
+        >
+          {{ 'files-drag-and-drop-upload-button' | translate }}
+        </button>
+      }
+    }
+  </div>
+</div>

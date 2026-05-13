@@ -1,0 +1,89 @@
+<div
+  [class.scroll-horizontal]="scrollDirection === 'horizontal'"
+  [class.scroll-vertical]="scrollDirection === 'vertical'"
+  [class.h-full]="fillHeight()"
+  [class.overflow-auto]="true"
+  class="table-wrapper w-full rounded-lg border border-gray-200 bg-white shadow-sm"
+>
+  <table
+    (matSortChange)="sortData($event)"
+    [dataSource]="sortedData()"
+    [matSortActive]="currentSortColumn()"
+    [matSortDirection]="getMatSortDirection()"
+    [matSortDisableClear]="true"
+    mat-table
+    matSort
+    class="min-w-max table-auto bg-white"
+  >
+    @for (column of sortedColumns(); track column.key) {
+      <ng-container
+        [matColumnDef]="column.key"
+        [sticky]="column.isIdentifier"
+      >
+        @if (column.sortable) {
+          <th
+            *matHeaderCellDef
+            [mat-sort-header]="column.key"
+            [style.max-width]="column.maxWidth"
+            [style.min-width]="column.minWidth"
+            mat-header-cell
+            sortActionDescription="sort by {{ column.label }}"
+            class="whitespace-nowrap border-r px-2 text-base font-semibold text-white"
+          >
+            {{ column.label }}
+          </th>
+        } @else {
+          <th
+            *matHeaderCellDef
+            [style.max-width]="column.maxWidth"
+            [style.min-width]="column.minWidth"
+            mat-header-cell
+            class="whitespace-nowrap border-r px-2 text-base font-semibold text-white"
+          >
+            {{ column.label }}
+          </th>
+        }
+
+        <td
+          *matCellDef="let element"
+          [style.max-width]="column.maxWidth"
+          [style.min-width]="column.minWidth"
+          mat-cell
+          class="border-r p-2 text-base text-gray-900"
+        >
+          @if (element.skeleton) {
+            <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+          } @else {
+            <span>{{ getCellValue(element, column) }}</span>
+          }
+        </td>
+      </ng-container>
+    }
+
+    <tr
+      *matHeaderRowDef="displayedColumns(); sticky: true"
+      mat-header-row
+      class="mat-header-row border-b-2 bg-gray-600 text-white"
+    ></tr>
+
+    <tr
+      *matRowDef="let row; columns: displayedColumns()"
+      (click)="selectRow(row)"
+      [class.bg-blue-200]="selectedRow() === row"
+      mat-row
+      class="border-b border-gray-100 transition-colors duration-150 hover:bg-blue-50 cursor-pointer"
+    ></tr>
+
+    <tr
+      *matNoDataRow
+      mat-row
+    >
+      <td
+        [attr.colspan]="displayedColumns().length"
+        class="py-8 text-center text-gray-500"
+      >
+        {{ 'placeholders.no-results-found' | translate }}
+      </td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,60 @@
+@switch (mode()) {
+  @case (TimeReportingType.MANUAL) {
+    <div class="flex justify-center mb-4">
+      <proffeo-time-picker
+        [minuteStep]="minuteStep()"
+        [formControl]="manualTimeControl()"
+      ></proffeo-time-picker>
+    </div>
+
+    <div class="mb-4">
+      <proffeo-time-buttons (timeSelected)="onQuickTimeSelected($event)"></proffeo-time-buttons>
+    </div>
+
+    @if (manualTimeControl()?.touched && manualTimeControl()?.hasError('invalidManualTime')) {
+      <mat-error class="text-sm font-medium w-full text-right">
+        {{ 'ui-forms-time-duration-is-required' | translate }}
+      </mat-error>
+    }
+  }
+
+  @case (TimeReportingType.RANGE) {
+    @if (timeRangeForm(); as rangeForm) {
+      <form
+        [formGroup]="rangeForm"
+        class="flex-col"
+      >
+        <div class="flex justify-center relative mt-8 mb-6 text-4xl text-slate-400">
+          <span>{{ hoursDisplay }} : {{ minutesDisplay }}</span>
+        </div>
+
+        <!-- Time pickers -->
+        <div class="flex justify-center gap-3 items-center mb-2">
+          <proffeo-time-picker
+            (timeUpdated)="onFirstTimePickerUpdated()"
+            [minuteStep]="minuteStep()"
+            [formControlName]="TimeRangeFormName.FROM_TIME"
+          ></proffeo-time-picker>
+
+          <span class="font-medium text-xl text-slate-400">To</span>
+
+          <proffeo-time-picker
+            #secondTimePicker
+            [minuteStep]="minuteStep()"
+            [formControlName]="TimeRangeFormName.TO_TIME"
+          ></proffeo-time-picker>
+        </div>
+      </form>
+
+      @if (rangeForm.touched && rangeForm.hasError('invalidTimeRange')) {
+        <mat-error class="text-sm font-medium text-right">
+          {{ 'time-reports-form-modal-the-time-range-is-not-valid' | translate }}
+        </mat-error>
+      }
+    }
+  }
+
+  @case (TimeReportingType.TIMER) {
+    <!-- handled in modal, not in form -->
+  }
+}

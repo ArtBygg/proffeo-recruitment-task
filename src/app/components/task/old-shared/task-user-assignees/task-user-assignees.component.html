@@ -1,0 +1,42 @@
+<div class="flex items-center">
+  <div class="relative z-30">
+    <proffeo-avatar
+      (click)="onIndustryClick()"
+      [user]="projectIndustry()?.administrator()"
+      [size]="avatarSize()"
+      [ngIcon]="!projectIndustry()?.administrator"
+      [borderType]="avatarBorderType.IndustryAdmin"
+    ></proffeo-avatar>
+  </div>
+  @if (projectIndustry() && showIndustryAdmin()) {
+    <div [ngClass]="avatarsOverlapping() ? 'relative z-20 -ml-2' : 'relative z-20 ml-1'">
+      <proffeo-avatar
+        (click)="onGroupAdminClick()"
+        [user]="projectGroupAdmin()?.user()"
+        [size]="avatarSize()"
+        [ngIcon]="!projectGroupAdmin()?.user"
+        [borderType]="avatarBorderType.GroupAdmin"
+      ></proffeo-avatar>
+    </div>
+  }
+  @if (projectGroupAdmin() && showGroupAdmin()) {
+    <div [ngClass]="avatarsOverlapping() ? '-ml-2' : ''">
+      @if (taskNotAdminUsers()?.length > 0) {
+        <proffeo-group-avatars
+          (avatarClick)="onUserClick()"
+          [groupUsers]="taskNotAdminUsers()"
+          [showNumberOnly]="showNumberOnly()"
+          [showAvatarsCount]="avatarsLimit()"
+          [avatarSize]="avatarSize()"
+          [baseZIndex]="15"
+        ></proffeo-group-avatars>
+      } @else {
+        <proffeo-avatar
+          (click)="onUserClick()"
+          [size]="avatarSize()"
+          [ngIcon]="true"
+        ></proffeo-avatar>
+      }
+    </div>
+  }
+</div>

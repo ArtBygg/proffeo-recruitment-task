@@ -1,0 +1,7 @@
+<span
+  [matTooltip]="tag()?.description"
+  [style.background-color]="getTagBackgroundColor"
+  class="w-fit inline-flex truncate max-w-40 text-sm rounded-2xl px-2 py-0.5 md:text-base font-medium"
+>
+  {{ tag().name }}
+</span>

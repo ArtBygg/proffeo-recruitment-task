@@ -1,0 +1,8 @@
+<div class="flex gap-1 items-center">
+  <div class="flex gap-[5px] items-center text-sm">
+    <span>{{ 'task-details-modal-assigned-participants' | translate }}</span>
+    @if (users()) {
+      <proffeo-group-avatars [groupUsers]="users()"></proffeo-group-avatars>
+    }
+  </div>
+</div>

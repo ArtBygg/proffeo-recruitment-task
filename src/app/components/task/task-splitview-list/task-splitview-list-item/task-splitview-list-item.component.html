@@ -1,0 +1,521 @@
+<!--COMPACT MODE! - WIDOK NA LISCIE SPLITVIEW OBOK DETALI-->
+@if (compactMode()) {
+  <div
+    (click)="onTaskClick()"
+    [class]="`${TASK_STATUS_DISPLAY[task().status].borderLeftClass} relative flex w-full cursor-pointer items-center bg-white gap-3 p-2 shadow-sm border-l-[6px]!`"
+    [class.border-active]="isSelected()"
+    [class.border-hover]="!isSelected()"
+  >
+    <!--JEŚLI BORDER JEST INACTIVE TO ZAMIENIAMY KLASE BORDER-ACTIVE NA BORDER-HOVER-->
+    <div class="flex w-full flex-col pr-1">
+      <div class="flex w-full justify-between gap-2">
+        <p class="line-clamp-1 font-medium">{{ task().name }}</p>
+        <mat-icon
+          (click)="$event.stopPropagation()"
+          [matMenuTriggerFor]="taskItemActions"
+          fontIcon="more_vert"
+          class="h-6! w-6! text-[24px]!"
+        ></mat-icon>
+      </div>
+      <div class="flex gap-2 justify-between min-h-12 max-h-12 align-center mt-3">
+        <div class="hidden lg:flex items-center w-[45%] grow gap-1">
+          @if (task().subtasksCount > 0) {
+            <div
+              (click)="showSubtasks.set(!showSubtasks()); $event.stopPropagation()"
+              [ngClass]="{ 'bg-accent text-white': showSubtasks() }"
+              class="flex items-center gap-1 border-default border-2! border-slate-200 px-1.5 py-0.5"
+            >
+              <mat-icon
+                [ngClass]="{ 'text-white! opacity-100': showSubtasks() }"
+                fontIcon="subdirectory_arrow_right"
+                class="icon-sm opacity-50"
+              ></mat-icon>
+              <p class="text-sm">{{ task().subtasksCount }}</p>
+            </div>
+          }
+          <div class="flex">
+            @if (task().location?.()?.name) {
+              <mat-icon
+                fontIcon="location_on"
+                class="h-[18px]! w-[18px]! text-[18px]! opacity-50"
+              />
+
+              <p class="text-sm w-full line-clamp-2">{{ task().location?.()?.name }}</p>
+            }
+          </div>
+        </div>
+
+        @if (avatarUrl() && !imgError()) {
+          <img
+            (error)="imgError.set(true)"
+            [src]="avatarUrl()"
+            class="object-cover h-full aspect-square max-sm:hidden min-h-12 max-h-12 min-w-12 max-w-12"
+          />
+        }
+      </div>
+
+      <div class="flex items-center gap-2">
+        @if (task().priority !== TaskPriority.NORMAL) {
+          <proffeo-task-priority-select
+            (click)="$event.stopPropagation()"
+            (prioritySelected)="priorityChanged.emit({ priority: $event, task: task() })"
+            [taskPriority]="task().priority"
+            [readonly]="false"
+            [small]="false"
+          ></proffeo-task-priority-select>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (showSubtasks() && hasChildren()) {
+    <!--      SUBTASKI TOGGLE-->
+    <div class="flex flex-col gap-3 lg:gap-2 w-full mt-2 ld:mt-1">
+      @for (sub of subtasks(); track sub.id) {
+        <div
+          [style.marginLeft]="calculatedIndent()"
+          class="flex w-full items-center"
+        >
+          <proffeo-task-splitview-list-item
+            (taskSelectedClick)="taskSelectedClick.emit($event)"
+            (taskTypeSelected)="taskTypeSelected.emit($event)"
+            (statusChanged)="statusChanged.emit($event)"
+            (priorityChanged)="priorityChanged.emit($event)"
+            (taskStartDateSelected)="taskStartDateSelected.emit($event)"
+            (taskEndDateSelected)="taskEndDateSelected.emit($event)"
+            (taskProgressSelected)="taskProgressSelected.emit($event)"
+            (industryClicked)="industryClicked.emit($event)"
+            (locationClicked)="locationClicked.emit($event)"
+            [task]="sub"
+            [isSubtask]="true"
+            [subtaskDepth]="subtaskDepth() + 1"
+            [compactMode]="true"
+            [hasChildren]="(sub.subtasksCount ?? 0) > 0"
+            [taskTypes]="taskTypes()"
+            class="w-full"
+          ></proffeo-task-splitview-list-item>
+        </div>
+      }
+    </div>
+  }
+} @else {
+  <!-- DESKTOP / RESPONSYWKA PELNEJ LISTY -->
+
+  <div class="flex flex-col gap-2 lg:gap-2 rounded-md">
+    <div class="flex w-full group">
+      @if (isSubtask()) {
+        <div
+          [style.min-width]="calculatedIndentWidth()"
+          class="flex items-center justify-center"
+        >
+          <mat-icon
+            fontIcon="subdirectory_arrow_right"
+            class="opacity-50 icon-xs"
+          ></mat-icon>
+        </div>
+      }
+      <button
+        (click)="onTaskClick()"
+        [class]="`${TASK_STATUS_DISPLAY[task().status].borderLeftClass} flex w-full border-hover duration-500 rounded-md border-l-[6px]!`"
+      >
+        <div class="flex p-2 bg-white max-sm:hidden max-w-[90%]">
+          @if (!imgError()) {
+            <img
+              (error)="imgError.set(true)"
+              [src]="avatarUrl()"
+              class="object-cover h-full aspect-square min-w-20 max-w-20"
+            />
+          } @else {
+            <div class="flex h-full min-w-20 max-w-20 items-center justify-center rounded-l-md bg-gray-100">
+              <mat-icon
+                fontIcon="photo_camera"
+                class="text-gray-400 text-[30px]"
+              ></mat-icon>
+            </div>
+          }
+        </div>
+        <div
+          class="py-2 px-3 grid gap-2.5 grid-cols-1 h-full items-center bg-white w-full md:rounded-l-none! cursor-pointer rounded-md sm:grid-cols-[minmax(0,1fr)_85px_85px_24px] md:grid-cols-[minmax(0,1fr)_60px_70px_110px_85px_24px] lg:grid-cols-[minmax(0,1fr)_70px_80px_110px_80px_90px_90px_24px] xl:grid-cols-[minmax(0,1fr)_90px_70px_130px_110px_80px_90px_90px_24px]"
+        >
+          <div class="flex flex-col gap-1.5 w-full">
+            <div class="flex gap-2 justify-between items-center">
+              <!--            TYTUŁ-->
+              <p class="line-clamp-1 text-start w-full">
+                {{ task().name }}
+              </p>
+              <p class="font-light text-xs hidden whitespace-nowrap max-sm:block">
+                {{ task().taskType().code + '-' + task().taskNumber }}
+              </p>
+            </div>
+
+            <div class="flex w-full truncate gap-1">
+              @for (tag of tags(); track tag) {
+                <proffeo-tag
+                  [tag]="tag"
+                  class="max-sm:hidden"
+                ></proffeo-tag>
+              }
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+              @if (!isMobile()) {
+                @if (task().subtasksCount > 0) {
+                  <div
+                    (click)="showSubtasks.set(!showSubtasks()); $event.stopPropagation()"
+                    [ngClass]="{ 'bg-accent text-white': showSubtasks() }"
+                    class="flex items-center gap-1 border-default border-2! border-slate-200 px-1.5 py-0.5"
+                  >
+                    <mat-icon
+                      [ngClass]="{ 'text-white! opacity-100': showSubtasks() }"
+                      fontIcon="subdirectory_arrow_right"
+                      class="h-[18px]! w-[18px]! text-[18px]! opacity-50"
+                    ></mat-icon>
+                    <p class="text-sm">{{ task().subtasksCount }}</p>
+                  </div>
+                }
+                <proffeo-task-status-select
+                  (click)="$event.stopPropagation()"
+                  (statusSelected)="statusChanged.emit({ status: $event, task: task() })"
+                  [mode]="TaskStatusSelectEnum.DOTS"
+                  [taskStatus]="task().status"
+                  [small]="true"
+                  [readonly]="false"
+                ></proffeo-task-status-select>
+                @if (task().priority !== TaskPriority.NORMAL) {
+                  <proffeo-task-priority-select
+                    (click)="$event.stopPropagation()"
+                    (prioritySelected)="priorityChanged.emit({ priority: $event, task: task() })"
+                    [taskPriority]="task().priority"
+                    [readonly]="true"
+                  ></proffeo-task-priority-select>
+                }
+                @if (task().location?.()?.name) {
+                  <div class="items-center gap-1">
+                    <mat-icon
+                      fontIcon="location_on"
+                      class="icon-sm opacity-50"
+                    ></mat-icon>
+                    <span class="text-start truncate w-full">
+                      {{ task().location().name }}
+                    </span>
+                  </div>
+                }
+                <div class="flex items-center gap-1">
+                  <proffeo-task-type-select
+                    (taskTypeSelected)="taskTypeSelected.emit({ type: $event, task: task() })"
+                    [small]="true"
+                    [readonly]="true"
+                    [activeTaskType]="task().taskType()"
+                    [taskTypes]="taskTypes()"
+                    [taskNumber]="task().taskNumber"
+                  ></proffeo-task-type-select>
+                </div>
+              }
+              <div class="hidden max-sm:flex justify-between gap-4 w-full">
+                <p class="line-clamp-2 text-left text-xs font-light">
+                  {{ task().description | stripHtml }}
+                </p>
+
+                <div>
+                  @if (!imgError()) {
+                    <img
+                      (error)="imgError.set(true)"
+                      [src]="avatarUrl()"
+                      class="object-cover h-full aspect-square max-w-12"
+                    />
+                  } @else {
+                    <div class="flex h-full min-w-12 min-h-12 items-center justify-center bg-gray-100">
+                      <mat-icon
+                        fontIcon="photo_camera"
+                        class="text-gray-400 text-[30px]"
+                      ></mat-icon>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+            <div class="hidden max-sm:flex justify-between w-full gap-2 my-2">
+              <div class="flex gap-2">
+                <div class="flex gap-2 items-center flex-wrap">
+                  @if (task().subtasksCount > 0) {
+                    <div
+                      (click)="showSubtasks.set(!showSubtasks()); $event.stopPropagation()"
+                      [ngClass]="{ 'bg-accent text-white': showSubtasks() }"
+                      class="flex items-center gap-1 border-default border-2! border-slate-200 px-1.5 py-0.5"
+                    >
+                      <mat-icon
+                        [ngClass]="{ 'text-white! opacity-100': showSubtasks() }"
+                        fontIcon="subdirectory_arrow_right"
+                        class="h-[18px]! w-[18px]! text-[18px]! opacity-50"
+                      ></mat-icon>
+                      <p class="text-sm">{{ task().subtasksCount }}</p>
+                    </div>
+                  }
+
+                  <div>
+                    <proffeo-task-status-select
+                      (click)="$event.stopPropagation()"
+                      (statusSelected)="statusChanged.emit({ status: $event, task: task() })"
+                      [mode]="TaskStatusSelectEnum.DOTS"
+                      [taskStatus]="task().status"
+                      [small]="true"
+                      [readonly]="true"
+                    ></proffeo-task-status-select>
+                  </div>
+
+                  @if (task().location?.()?.name) {
+                    <div class="max-sm:flex items-center gap-1 hidden">
+                      <mat-icon
+                        fontIcon="location_on"
+                        class="icon-sm opacity-50"
+                      ></mat-icon>
+                      <span class="text-sm text-start truncate w-full">
+                        {{ task().location().name }}
+                      </span>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="flex gap-2">
+                @if (task().priority !== TaskPriority.NORMAL) {
+                  <proffeo-task-priority-select
+                    (click)="$event.stopPropagation()"
+                    (prioritySelected)="priorityChanged.emit({ priority: $event, task: task() })"
+                    [taskPriority]="task().priority"
+                    [readonly]="true"
+                  ></proffeo-task-priority-select>
+                }
+                <mat-icon
+                  (click)="$event.stopPropagation()"
+                  [matMenuTriggerFor]="taskItemActions"
+                  fontIcon="more_vert"
+                  class="max-sm:flex! hidden! h-6! w-6! text-[24px]!"
+                ></mat-icon>
+              </div>
+            </div>
+          </div>
+
+          <!--        USER AVATARY-->
+          <div class="gap-1 items-center w-full hidden xl:flex">
+            <proffeo-task-user-assignees
+              (changeIndustry)="industryClicked.emit(task())"
+              (changeGroup)="changeGroupClicked.emit(task())"
+              (changeUsers)="changeUsersClicked.emit(task())"
+              (click)="$event.stopPropagation()"
+              [projectIndustry]="task().projectIndustry()"
+              [projectGroupAdmin]="task().projectGroupAdministrator()"
+              [taskUsers]="taskUsers()"
+              [avatarsOverlapping]="true"
+              [avatarsLimit]="2"
+            ></proffeo-task-user-assignees>
+          </div>
+
+          <!--        BRANZA-->
+          <div class="hidden md:flex items-center gap-1 w-full">
+            <proffeo-task-industry-select
+              (industryClicked)="onIndustryClicked(task())"
+              [projectIndustry]="task().projectIndustry()?.industry()"
+              [isReadonly]="true"
+              [isSmallText]="true"
+            ></proffeo-task-industry-select>
+          </div>
+
+          <!--        LOKACJA-->
+          <div class="flex items-center w-full max-sm:hidden">
+            <proffeo-location-select
+              (locationClicked)="locationClicked.emit(task())"
+              [isReadonly]="true"
+              [location]="task().location()"
+              class="w-full min-w-0"
+            ></proffeo-location-select>
+          </div>
+
+          <!--        TIMER / ESTYMACJA-->
+          <div class="flex items-center gap-1 w-full max-sm:hidden">
+            <proffeo-task-timer
+              [mode]="taskTimerMode.readonly"
+              [timeSpan]="
+                task().statistics?.summaryTime
+                  ? { totalSeconds: convertDurationToSeconds(task().statistics.summaryTime) }
+                  : null
+              "
+              [estimation]="task().estimation?.time"
+            ></proffeo-task-timer>
+          </div>
+
+          <!--        PROGRESS-->
+          <div class="flex items-center gap-1 w-full max-md:hidden">
+            <proffeo-percentage-select
+              (newPercentageValue)="taskProgressSelected.emit({ progress: $event, task: task() })"
+              (click)="$event.stopPropagation()"
+              [value]="task().percentageOfProgress ?? 0"
+              [displayMode]="percentageDisplayMode.ICON_WITH_TEXT"
+              [iconType]="'clock_loader_60'"
+              [isReadonly]="false"
+            ></proffeo-percentage-select>
+          </div>
+
+          <!--        START DATE-->
+          <div class="flex items-center gap-1 w-full max-lg:hidden">
+            <proffeo-task-date-select
+              (dateChange)="taskStartDateSelected.emit({ date: $event, task: task() })"
+              (click)="$event.stopPropagation()"
+              [currentDate]="task().startDate"
+              [fontIcon]="'calendar_check'"
+              [maxDate]="task().endDate"
+              [isSmall]="true"
+              [shortYear]="true"
+            ></proffeo-task-date-select>
+          </div>
+
+          <!--        END-DATE-->
+          <div class="flex items-center gap-1 w-full max-lg:hidden">
+            <proffeo-task-date-select
+              (dateChange)="taskEndDateSelected.emit({ date: $event, task: task() })"
+              (click)="$event.stopPropagation()"
+              [currentDate]="task().endDate"
+              [fontIcon]="'calendar_add_on'"
+              [minDate]="task().startDate"
+              [isSmall]="true"
+              [shortYear]="true"
+            ></proffeo-task-date-select>
+          </div>
+
+          <div class="flex items-center max-sm:hidden">
+            <mat-icon
+              (click)="$event.stopPropagation()"
+              [matMenuTriggerFor]="taskItemActions"
+              fontIcon="more_vert"
+              class="h-6! w-6! text-[24px]!"
+            ></mat-icon>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    @if (showSubtasks() && hasChildren()) {
+      <!--      SUBTASKI TOGGLE-->
+      <div class="flex flex-col gap-2 lg:gap-2 w-full">
+        @for (sub of subtasks(); track sub.id) {
+          <div class="flex w-full items-center">
+            <proffeo-task-splitview-list-item
+              (taskSelectedClick)="taskSelectedClick.emit($event)"
+              (taskTypeSelected)="taskTypeSelected.emit($event)"
+              (statusChanged)="statusChanged.emit($event)"
+              (priorityChanged)="priorityChanged.emit($event)"
+              (taskStartDateSelected)="taskStartDateSelected.emit($event)"
+              (taskEndDateSelected)="taskEndDateSelected.emit($event)"
+              (taskProgressSelected)="taskProgressSelected.emit($event)"
+              (industryClicked)="industryClicked.emit($event)"
+              (locationClicked)="locationClicked.emit($event)"
+              [task]="sub"
+              [isSubtask]="true"
+              [subtaskDepth]="subtaskDepth() + 1"
+              [compactMode]="false"
+              [hasChildren]="(sub.subtasksCount ?? 0) > 0"
+              [taskTypes]="taskTypes()"
+              class="w-full"
+            ></proffeo-task-splitview-list-item>
+          </div>
+        }
+      </div>
+    }
+  </div>
+}
+
+<mat-menu #taskItemActions="matMenu">
+  <button
+    (click)="openTimeReportModal()"
+    class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+  >
+    <mat-icon
+      fontIcon="timer"
+      class="group-hover:text-white!"
+    ></mat-icon>
+    <p>
+      {{ 'time-reports-form-modal-add-time-report' | translate }}
+    </p>
+  </button>
+
+  <proffeo-file-drop
+    (filesAdded)="onFilesAdded($event)"
+    mode="ngContent"
+  >
+    <div
+      class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+    >
+      <mat-icon
+        fontIcon="photo_camera"
+        class="text-gray-400 text-[30px]"
+      />
+      <p>{{ 'task-menu.add-file' | translate }}</p>
+    </div>
+  </proffeo-file-drop>
+
+  <button
+    (click)="onCopyLink()"
+    class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+  >
+    <mat-icon
+      fontIcon="content_copy"
+      class="group-hover:text-white!"
+    ></mat-icon>
+    <p>{{ 'task-menu.copy-link' | translate }}</p>
+  </button>
+
+  <button
+    (click)="onCopyTaskNumber()"
+    class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+  >
+    <mat-icon
+      fontIcon="content_copy"
+      class="group-hover:text-white!"
+    ></mat-icon>
+    <p>{{ 'task-menu.copy-number' | translate }}</p>
+  </button>
+
+  <button
+    (click)="onGeneratePdf()"
+    class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+  >
+    <mat-icon
+      fontIcon="picture_as_pdf"
+      class="group-hover:text-white!"
+    ></mat-icon>
+    <p>{{ 'task-menu.generate-pdf' | translate }}</p>
+  </button>
+
+  @if (task().isLocked) {
+    <button
+      (click)="onUnlockTask()"
+      class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+    >
+      <mat-icon
+        fontIcon="lock"
+        class="group-hover:text-white!"
+      ></mat-icon>
+      <p>{{ 'task-menu.unlock-task' | translate }}</p>
+    </button>
+  } @else {
+    <button
+      (click)="onLockTask()"
+      class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+    >
+      <mat-icon
+        fontIcon="lock"
+        class="group-hover:text-white!"
+      ></mat-icon>
+      <p>{{ 'task-menu.lock-task' | translate }}</p>
+    </button>
+  }
+
+  <button
+    (click)="onDeleteTask()"
+    class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+  >
+    <mat-icon
+      fontIcon="delete"
+      class="group-hover:text-white!"
+    ></mat-icon>
+    <p>{{ 'task-menu.delete-task' | translate }}</p>
+  </button>
+</mat-menu>

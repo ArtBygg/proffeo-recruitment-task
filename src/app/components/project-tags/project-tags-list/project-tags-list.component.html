@@ -1,0 +1,125 @@
+<div class="!table-fixed">
+  <table
+    [dataSource]="tags()"
+    [class.min-w-full]="!this.isMobile()"
+    mat-table
+    class="mat-elevation-z8"
+  >
+    @if (isMobile()) {
+      <colgroup>
+        <col style="width: auto" />
+        <col style="width: 12px" />
+      </colgroup>
+    } @else {
+      <colgroup>
+        <col style="width: 15%" />
+        <col style="width: auto" />
+        <col style="width: 12px" />
+      </colgroup>
+    }
+    <ng-container matColumnDef="name">
+      <th
+        *matHeaderCellDef
+        mat-header-cell
+      >
+        <p class="text-sm font-semibold px-3">
+          {{ 'project-tags.list-headers.tag' | translate | uppercase }}
+        </p>
+      </th>
+      <td
+        *matCellDef="let tag"
+        mat-cell
+      >
+        <proffeo-tag
+          [tag]="tag"
+          class="px-3"
+        ></proffeo-tag>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th
+        *matHeaderCellDef
+        mat-header-cell
+      >
+        <p class="flex justify-center text-sm font-semibold">
+          {{ 'project-tags.list-headers.description' | translate | uppercase }}
+        </p>
+      </th>
+      <td
+        *matCellDef="let tag"
+        mat-cell
+      >
+        <p class="flex justify-center">{{ tag.description || '-' }}</p>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th
+        *matHeaderCellDef
+        mat-header-cell
+      ></th>
+      <td
+        *matCellDef="let tag"
+        mat-cell
+      >
+        <div class="flex items-center justify-end">
+          <mat-icon
+            [matMenuTriggerFor]="matTagMenu"
+            fontIcon="more_vert"
+            class="cursor-pointer"
+          ></mat-icon>
+          <mat-menu #matTagMenu>
+            <div>
+              <div
+                (click)="openEditProjectTagModal(tag)"
+                class="flex cursor-pointer w-full gap-1 items-center px-4 py-2 group hover:bg-accent transition-default"
+              >
+                <mat-icon
+                  fontIcon="edit"
+                  class="group-hover:text-white!"
+                ></mat-icon>
+                <p class="group-hover:text-white">
+                  {{ 'project-tags.list-actions.edit' | translate }}
+                </p>
+              </div>
+              <div
+                (click)="openProjectTagDeleteConfirmationModal(tag)"
+                class="flex cursor-pointer w-full gap-1 items-center px-4 py-2 group hover:bg-accent transition-default"
+              >
+                <mat-icon
+                  fontIcon="delete"
+                  class="group-hover:text-white!"
+                ></mat-icon>
+                <p class="group-hover:text-white">
+                  {{ 'project-tags.list-actions.delete' | translate }}
+                </p>
+              </div>
+            </div>
+          </mat-menu>
+        </div>
+      </td>
+    </ng-container>
+    <tr
+      *matHeaderRowDef="displayedColumns()"
+      mat-header-row
+      class="!bg-white"
+    ></tr>
+    <tr
+      *matRowDef="let row; columns: displayedColumns()"
+      mat-row
+      class="!bg-white transition-default hover:!bg-slate-50"
+    ></tr>
+    <tr
+      *matNoDataRow
+      class="mat-row"
+    >
+      <td
+        [attr.colspan]="displayedColumns().length"
+        class="mat-cell font-medium"
+      >
+        {{ 'placeholders.no-results-found' | translate }}
+      </td>
+    </tr>
+  </table>
+</div>

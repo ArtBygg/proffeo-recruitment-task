@@ -1,0 +1,14 @@
+<label
+  [ngClass]="{ 'opacity-25': valueAccessor.disabled$ | async }"
+  class="container cursor-pointer block relative"
+>
+  <input
+    (change)="valueAccessor.valueChange(value())"
+    [checked]="value() === (valueAccessor.value$ | async) || checked()"
+    [disabled]="valueAccessor.disabled$ | async"
+    [name]="name()"
+    [value]="[valueAccessor.value$ | async]"
+    type="radio"
+  />
+  <span class="custom-radio"></span>
+</label>

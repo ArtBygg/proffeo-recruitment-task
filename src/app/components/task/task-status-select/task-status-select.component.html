@@ -1,0 +1,44 @@
+@let isRectanglesMode = mode() === TaskStatusSelectEnum.RECTANGLES;
+@let statusSelected = selectedStatus();
+
+<div
+  [matMenuTriggerFor]="taskStatusSelectMenu"
+  [class]="
+    'flex items-center gap-2 rounded-md whitespace-nowrap' +
+    (isRectanglesMode ? TASK_STATUS_DISPLAY[statusSelected].colorClass + ' px-2 py-0.5 ' : '')
+  "
+  [ngClass]="readonly() ? 'pointer-events-none' : 'hover-opacity'"
+  [class.h-[24px]]="small()"
+>
+  @if (isRectanglesMode) {
+    <span
+      [class.md\:text-sm]="small()"
+      [class.font-medium]="!small()"
+      class="text-white w-full text-sm md:text-base text-nowrap capitalize truncate"
+    >
+      {{ TASK_STATUS_DISPLAY[statusSelected].translationKey | translate }}
+    </span>
+  } @else {
+    <span [class]="`w-3 h-3 rounded-full ${TASK_STATUS_DISPLAY[statusSelected].colorClass}`"></span>
+    <p class="font-medium max-sm:text-sm capitalize">
+      {{ TASK_STATUS_DISPLAY[statusSelected].translationKey | translate }}
+    </p>
+  }
+</div>
+
+<mat-menu #taskStatusSelectMenu="matMenu">
+  <div class="flex flex-col w-full">
+    @for (menuItem of taskStatusOrder; track menuItem) {
+      <div
+        (click)="selectStatus(menuItem)"
+        [class.bg-gray-100]="statusSelected === menuItem"
+        class="flex items-center py-2 px-4 gap-2 hover-opacity"
+      >
+        <span [class]="`w-3 h-3 rounded-full ${TASK_STATUS_DISPLAY[menuItem].colorClass}`"></span>
+        <p class="font-medium capitalize">
+          {{ TASK_STATUS_DISPLAY[menuItem].translationKey | translate }}
+        </p>
+      </div>
+    }
+  </div>
+</mat-menu>

@@ -1,0 +1,35 @@
+<button
+  [disabled]="disabled()"
+  [matTooltip]="tooltip() || ''"
+  [ngClass]="{
+    'bg-white border-secondary/20 hover:bg-secondary/5 shadow-md hover:ring-1 hover:ring-secondary/20':
+      type() === ButtonType.PRIMARY,
+    'bg-secondary border-secondary/10 hover:bg-secondary/70 shadow-md hover:ring-1 hover:ring-secondary/20':
+      type() === ButtonType.SECONDARY,
+    'bg-accent border-secondary/10 hover:bg-accent/70 shadow-md hover:ring-1 hover:ring-secondary/20':
+      type() === ButtonType.ACCENT,
+    'pointer-events-none opacity-50 cursor-not-allowed': disabled(),
+    'max-md:scale-85 p-2.5 aspect-square': cta(),
+    'px-5 py-2 gap-1.5': !cta() && text(),
+    'p-2': !text() && !cta()
+  }"
+  type="button"
+  matTooltipPosition="above"
+  class="max-md:text-sm flex items-center justify-center rounded-full border font-medium cursor-pointer transition-all"
+>
+  @if (fontIcon()) {
+    <mat-icon
+      [class]="iconSize()"
+      [ngClass]="{
+        'material-symbols-filled': iconType() === IconType.FILLED,
+        'text-white!': type() === ButtonType.SECONDARY || type() === ButtonType.ACCENT,
+        'icon-md': !cta() && !iconSize(),
+        'icon-lg': cta() && !iconSize()
+      }"
+      [fontIcon]="fontIcon()"
+    ></mat-icon>
+  }
+  <p [ngClass]="type() === ButtonType.PRIMARY ? '' : 'text-white'">
+    {{ text() | translate }}
+  </p>
+</button>

@@ -1,0 +1,69 @@
+<div class="relative flex h-full flex-col p-0">
+  <div class="flex w-full items-center justify-between px-4 py-2 text-center">
+    <proffeo-label class="text-slate text-lg font-semibold">
+      {{ 'task-details-modal-last-activity' | translate }}
+    </proffeo-label>
+    <div class="relative inline-flex px-2 py-2">
+      <button
+        [matMenuTriggerFor]="activityFilterMenu"
+        type="button"
+        class="inline-flex h-8 w-8 min-w-8 cursor-pointer items-center justify-center rounded border-2 border-slate-300 bg-transparent text-slate-500 hover:bg-slate-50"
+      >
+        @if (selectedFiltersCount() > 0) {
+          <span
+            class="bg-accent absolute right-0 top-0 z-10 flex h-4 w-4 items-center justify-center rounded-full border border-white text-[10px] text-white"
+          >
+            {{ selectedFiltersCount() }}
+          </span>
+        }
+        <mat-icon
+          fontIcon="filter_list"
+          class="h-[25px] w-[25px] text-[25px]"
+        ></mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-menu #activityFilterMenu="matMenu">
+    <proffeo-activity-filter-menu (filtersChange)="filters.set($event)"></proffeo-activity-filter-menu>
+  </mat-menu>
+
+  <proffeo-task-activities-list [activities]="filteredActivities()"></proffeo-task-activities-list>
+
+  <div class="z-[1] flex w-full items-center justify-center p-4">
+    <div class="flex w-full flex-col items-center gap-2 rounded-md border border-black/10 bg-white">
+      <form
+        [formGroup]="commentForm"
+        class="flex w-full items-center gap-2 p-2"
+      >
+        <proffeo-file-drop
+          (filesAdded)="onFilesAdded($event)"
+          mode="icon"
+        ></proffeo-file-drop>
+
+        <textarea
+          #commentInput
+          (keyup)="updateCommentInputHeight()"
+          [placeholder]="'write-a-comment' | translate"
+          formControlName="commentText"
+          autofocus
+          rows="1"
+          class="flex min-h-[23px] w-full resize-none items-center"
+        ></textarea>
+        <mat-icon
+          (click)="onSendComment()"
+          fontIcon="send"
+          class="material-symbols-outlined h-[25px] w-[25px] cursor-pointer text-[25px] text-blue-400"
+        ></mat-icon>
+      </form>
+      @if (files().length) {
+        <div class="w-full bg-white p-2">
+          <proffeo-file-preview-list
+            (removeFile)="onRemoveFile($event)"
+            [files]="files()"
+          ></proffeo-file-preview-list>
+        </div>
+      }
+    </div>
+  </div>
+</div>

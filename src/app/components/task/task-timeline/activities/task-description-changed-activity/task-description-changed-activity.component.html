@@ -1,0 +1,16 @@
+<div class="flex gap-1 items-center">
+  <button
+    [matMenuTriggerFor]="descriptionMenu"
+    [attr.aria-label]="'task-activity-description-changed-view-full' | translate"
+    type="button"
+    class="inline-block max-w-full cursor-pointer border-0 bg-transparent p-0 text-left font-inherit text-slate-500 text-sm hover:underline truncate"
+  >
+    {{ 'task-activity-description-changed' | translate }}: {{ descriptionPlainText() }}
+  </button>
+  <mat-menu #descriptionMenu="matMenu">
+    <div
+      [innerHTML]="activity()?.data?.to"
+      class="w-full max-h-[50vh] overflow-auto p-4 text-sm text-slate-700"
+    ></div>
+  </mat-menu>
+</div>

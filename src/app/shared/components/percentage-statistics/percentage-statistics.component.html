@@ -1,0 +1,32 @@
+<div
+  [class.hover-action]="hoverAction()"
+  class="percentage-statistics-container flex"
+>
+  @switch (percentageLevel) {
+    @case (statisticPercentageOptions.LOW_LEVEL) {
+      <div class="icon flex items-end ml-2 w-1 bg-red-200 rounded overflow-hidden">
+        <div
+          [ngClass]="heightClass"
+          class="flex w-full bg-red-600"
+        ></div>
+      </div>
+    }
+    @case (statisticPercentageOptions.MEDIUM_LEVEL) {
+      <div class="icon flex items-end ml-2 w-1 h-4 bg-orange-200 rounded overflow-hidden">
+        <div
+          [ngClass]="heightClass"
+          class="flex w-full bg-orange-400"
+        ></div>
+      </div>
+    }
+    @case (statisticPercentageOptions.HIGH_LEVEL) {
+      <div class="icon flex items-end ml-2 w-1 h-4 bg-green-100 rounded overflow-hidden">
+        <div
+          [ngClass]="heightClass"
+          class="flex w-full bg-green-400"
+        ></div>
+      </div>
+    }
+  }
+  <span class="text-container text-sm pl-1">{{ value() ?? 0 }} %</span>
+</div>

@@ -1,0 +1,19 @@
+.layout-menu-container * {
+  --mat-select-placeholder-text-color: white;
+  --mat-select-enabled-arrow-color: white !important;
+}
+
+.menu-item {
+  height: 42px;
+  padding: 8px;
+  gap: 0.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-darkGray-600);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,15 @@
+@use '@angular/material' as mat;
+@use '../_theme-colors' as theme;
+
+@mixin table-tokens() {
+  @include mat.table-overrides(
+    (
+      background-color: var(--mat-sys-surface-container),
+      header-headline-color: var(--mat-sys-on-surface),
+      header-headline-weight: 500,
+      row-item-outline-color: var(--color-slate-200),
+      row-item-label-text-color: var(--mat-sys-on-surface),
+      row-item-label-text-size: 14px
+    )
+  );
+}

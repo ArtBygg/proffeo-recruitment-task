@@ -1,0 +1,159 @@
+@if (readonly()) {
+  <!-- READONLY MODE -->
+  <div class="flex flex-col gap-3">
+    @if (preselectedCompanyName) {
+      <div class="flex items-center gap-2 p-3 bg-slate-50 rounded-md border border-slate-200">
+        <mat-icon
+          fontIcon="business"
+          class="text-slate-500"
+        ></mat-icon>
+        <span class="text-sm text-slate-700">{{ preselectedCompanyName }}</span>
+      </div>
+    }
+
+    @if (preselectedProjectName) {
+      <div class="flex items-center gap-2 p-3 bg-slate-50 rounded-md border border-slate-200">
+        <mat-icon
+          fontIcon="folder"
+          class="text-slate-500"
+        ></mat-icon>
+        <span class="text-sm text-slate-700">{{ preselectedProjectName }}</span>
+      </div>
+    }
+
+    @if (preselectedTaskName) {
+      <div class="flex items-center gap-2 p-3 bg-slate-50 rounded-md border border-slate-200">
+        <mat-icon
+          fontIcon="task"
+          class="text-slate-500"
+        ></mat-icon>
+        <span class="text-sm text-slate-700">{{ preselectedTaskName }}</span>
+      </div>
+    }
+
+    @if (showLocationPicker()) {
+      <div
+        (click)="openLocationModal()"
+        class="flex items-center gap-2 p-3 bg-white rounded-md border border-slate-300 cursor-pointer hover:border-slate-400 transition-colors"
+      >
+        <mat-icon
+          fontIcon="location_on"
+          class="text-slate-500"
+        ></mat-icon>
+        @if (selectedLocationDisplay()) {
+          <span class="text-sm text-slate-700 flex-1">{{ selectedLocationDisplay() }}</span>
+          <mat-icon
+            (click)="$event.stopPropagation(); clearLocation()"
+            fontIcon="close"
+            class="text-slate-400 hover:text-slate-600 text-[18px] w-[18px] h-[18px]"
+          ></mat-icon>
+        } @else {
+          <span class="text-sm text-slate-400 flex-1">{{ 'select-location' | translate }}</span>
+        }
+        <mat-icon
+          fontIcon="chevron_right"
+          class="text-slate-400"
+        ></mat-icon>
+      </div>
+    }
+  </div>
+} @else {
+  <!-- FULL EDIT MODE -->
+  <div class="flex flex-col gap-4">
+    <!-- Company -->
+    @if (companyItems().length > 0) {
+      <div>
+        <proffeo-dropdown
+          [dropdownItems]="companyItems()"
+          [formControl]="companyControl"
+          [placeholder]="'time-reports-form-modal-select-company' | translate"
+          [translateLabels]="false"
+          widthTwClass="w-full"
+        ></proffeo-dropdown>
+
+        @if (companyControl.hasError('required') && companyControl.touched) {
+          <mat-error class="text-sm mt-1">
+            {{ 'ui-forms-this-field-is-required' | translate }}
+          </mat-error>
+        }
+      </div>
+    }
+
+    <!-- Project -->
+    @if (projectItems().length > 0) {
+      <div>
+        <proffeo-dropdown
+          [dropdownItems]="projectItems()"
+          [formControl]="projectControl"
+          [placeholder]="'projects-menu-select-a-project' | translate"
+          [translateLabels]="false"
+          widthTwClass="w-full"
+        ></proffeo-dropdown>
+
+        @if (projectControl.hasError('required') && projectControl.touched) {
+          <mat-error class="text-sm mt-1">
+            {{ 'ui-forms-this-field-is-required' | translate }}
+          </mat-error>
+        }
+      </div>
+    } @else if (companyControl.value) {
+      <div class="text-slate-400 text-sm py-2">
+        {{ 'loading-projects' | translate }}
+      </div>
+    }
+
+    <!-- Task -->
+    @if (taskItems().length > 0 || taskControl.value) {
+      <div>
+        <proffeo-dropdown-with-search
+          [dropdownItems]="taskItems()"
+          [formControl]="taskControl"
+          [placeholder]="'select-task' | translate"
+          [translateLabels]="false"
+          widthTwClass="w-full"
+        ></proffeo-dropdown-with-search>
+
+        @if (taskControl.hasError('required') && taskControl.touched) {
+          <mat-error class="text-sm mt-1">
+            {{ 'ui-forms-this-field-is-required' | translate }}
+          </mat-error>
+        }
+      </div>
+    } @else if (projectControl.value) {
+      <div class="text-slate-400 text-sm py-2">
+        @if (tasksLoading()) {
+          {{ 'loading-tasks' | translate }}
+        } @else {
+          {{ 'no-tasks-available' | translate }}
+        }
+      </div>
+    }
+
+    <!-- Location -->
+    @if (showLocationPicker()) {
+      <div
+        (click)="openLocationModal()"
+        class="flex items-center gap-2 p-3 bg-white rounded-md border border-slate-300 cursor-pointer hover:border-slate-400 transition-colors"
+      >
+        <mat-icon
+          fontIcon="location_on"
+          class="text-slate-500"
+        ></mat-icon>
+        @if (selectedLocationDisplay()) {
+          <span class="text-sm text-slate-700 flex-1">{{ selectedLocationDisplay() }}</span>
+          <mat-icon
+            (click)="$event.stopPropagation(); clearLocation()"
+            fontIcon="close"
+            class="text-slate-400 hover:text-slate-600 text-[18px] w-[18px] h-[18px]"
+          ></mat-icon>
+        } @else {
+          <span class="text-sm text-slate-400 flex-1">{{ 'select-location' | translate }}</span>
+        }
+        <mat-icon
+          fontIcon="chevron_right"
+          class="text-slate-400"
+        ></mat-icon>
+      </div>
+    }
+  </div>
+}

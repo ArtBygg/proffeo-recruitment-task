@@ -1,0 +1,70 @@
+<div class="relative px-4">
+  <proffeo-input
+    [formControl]="searchControl"
+    [placeholder]="'placeholders.search-input' | translate"
+    matIconName="search"
+  ></proffeo-input>
+</div>
+
+<div class="flex-grow h-full">
+  <div class="flex items-center mt-2">
+    <div class="w-full flex items-center border-b border-slate-300">
+      <proffeo-checkbox
+        [formControl]="selectAllControl"
+        [label]="'placeholders.select-all' | translate"
+      ></proffeo-checkbox>
+    </div>
+  </div>
+
+  @for (user of filteredUsers(); track user?.id; let isLast = $last) {
+    <div class="flex items-center">
+      <div
+        [ngClass]="isLast ? '' : 'border-b border-slate-300'"
+        class="flex flex-column items-center w-full py-1 border-b border-black/10 bg-lightGray-50"
+      >
+        <proffeo-checkbox
+          (valueChange)="selectUser($event, user)"
+          [disabled]="userControls?.get(user?.id!)?.disabled"
+          [formControl]="userControls?.get(user?.id)"
+        ></proffeo-checkbox>
+        <proffeo-avatar
+          [user]="user"
+          [size]="AvatarSize.EXTRA_SMALL"
+        />
+        <div class="flex flex-col ml-2 py-2 w-full truncate">
+          <p>{{ user?.firstName }} {{ user?.lastName }}</p>
+          <!--            @if (permissionContext) {-->
+
+          <!--              <app-user-role-display-->
+          <!--                [context]="permissionContext"-->
+          <!--                [userId]="user.id">-->
+          <!--              </app-user-role-display>-->
+
+          <!--            }-->
+        </div>
+
+        <div class="px-3 cursor-pointer">
+          <mat-icon
+            [matMenuTriggerFor]="matMenu"
+            fontIcon="more_vert"
+            class="cursor-pointer"
+          ></mat-icon>
+          <mat-menu #matMenu>
+            <div class="flex h-full w-full flex-col">
+              <div
+                (click)="selectUserRoles(user, [])"
+                class="flex cursor-pointer w-full gap-1 items-center px-4 py-2 hover:bg-lightGray-300 transition-colors"
+              >
+                <mat-icon
+                  fontIcon="edit"
+                  class="text-slate-500 text-[22px]"
+                />
+                <p>{{ 'user-list.select-roles' | translate }}</p>
+              </div>
+            </div>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  }
+</div>

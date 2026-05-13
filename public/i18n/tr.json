@@ -1,0 +1,59 @@
+{
+  "Analytics": "Analitik",
+  "dashboards-language": "Dil",
+  "layout-language": "Dil",
+  "Project": "Proje",
+  "welcome-back": "Hoşgeldin",
+  "task-details-pdf-create-title": "PDF Oluştur",
+  "task-details-pdf-create-description": "Oluşturulan PDF belgesine hangi bölümlerin ve detayların dahil edileceğini seçin.",
+  "task-details-pdf-create-cancel-text": "İptal",
+  "task-details-pdf-create-generate-text": "PDF Oluştur",
+  "task-details-pdf-create-select-all": "Tümünü seç",
+  "task-details-pdf-create-task-details": "Görev detayları",
+  "task-details-pdf-create-task-details-expl": "Görev hakkında temel bilgiler: durum, öncelik, tarihler ve atanan kullanıcılar.",
+  "task-details-pdf-create-task-description": "Görev açıklaması",
+  "task-details-pdf-create-task-description-expl": "Görevin tam metin açıklaması.",
+  "task-details-pdf-create-timeline": "Zaman çizelgesi",
+  "task-details-pdf-create-timeline-expl": "Görevin aktivite geçmişi ve durum değişiklikleri.",
+  "task-details-pdf-create-attachments": "Ekler",
+  "task-details-pdf-create-attachments-expl": "Göreve eklenen resimler ve dosyalar.",
+  "task-details-modal-activity-comment": "mesaj eklendi",
+  "time-reports-filters": {
+    "search": "Ara"
+  },
+  "task-description-comments": {
+    "title": "İnceleme ve onay",
+    "composer-label": "İnceleme yorumu veya teknik geri bildirim ekleyin",
+    "empty": "Henüz yorum yok",
+    "unknown-user": "Bilinmeyen kullanıcı",
+    "attachment-not-available": "Ekler henüz kullanılamıyor",
+    "toast-error": "İnceleme gönderilemedi",
+    "accept": "Kabul et",
+    "reject": "Reddet",
+    "request-change": "Değişiklik iste",
+    "acknowledge": "Onayla",
+    "send-review": "İncelemeyi gönder",
+    "action": {
+      "accept": "Kabul edildi",
+      "reject": "Reddedildi",
+      "request-changes": "Değişiklik istendi",
+      "acknowledge": "Onaylandı",
+      "save": "Yorum"
+    }
+  },
+  "task-description-acceptance-panel": {
+    "title": "Açıklama kabulü",
+    "accepted": "Kabul edildi",
+    "pending": "Kabul bekleniyor",
+    "accept-description": "Açıklamayı kabul et",
+    "no-participants": "Bu göreve atanmış katılımcı yok.",
+    "toast-error": "Açıklama kabul edilemedi"
+  },
+  "project-tasks": {
+    "list": {
+      "column-headers": {
+        "acceptance-requested": "Kabul talep edildi"
+      }
+    }
+  }
+}

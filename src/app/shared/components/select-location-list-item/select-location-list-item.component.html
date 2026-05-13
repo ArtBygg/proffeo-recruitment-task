@@ -1,0 +1,58 @@
+<div class="flex items-center justify-between gap-3 rounded-lg hover:bg-gray-100">
+  <div class="flex items-center">
+    @if (sublocationsVisible) {
+      <mat-icon
+        (click)="toggleSublocations(); $event.stopPropagation()"
+        fontIcon="keyboard_arrow_up"
+        class="text-slate-500 cursor-pointer w-[20px] h-[30px] text-[30px] mr-2"
+      />
+    }
+
+    @if (!sublocationsVisible && location().childrenCount() > 0) {
+      <mat-icon
+        (click)="toggleSublocations(); $event.stopPropagation()"
+        fontIcon="keyboard_arrow_down"
+        class="text-slate-500 cursor-pointer w-[20px] h-[30px] text-[30px] mr-2"
+      />
+    }
+    <proffeo-radio
+      (change)="selectLocation(location())"
+      [checked]="location().id === selectedLocation()?.id"
+      [id]="location().id"
+      [value]="location().id"
+      name="location"
+      class="mr-2"
+    ></proffeo-radio>
+    <span [ngClass]="{ 'font-semibold': isPartOfSelectedLocation(location()) }">{{ location().name }}</span>
+  </div>
+  <div class="flex items-center">
+    <div>
+      @if (location()?.childrenCount() > 0) {
+        <div
+          (click)="toggleSublocations()"
+          [ngClass]="sublocationsVisible ? 'border-slate-400 border-opacity-50' : 'border-slate-200'"
+          class="cursor-pointer flex gap-1 items-center px-1.5 py-0.5 border-2 rounded-md hover:border-slate-400"
+        >
+          <mat-icon
+            fontIcon="subdirectory_arrow_right"
+            class="icon-sm"
+          ></mat-icon>
+          <p class="font-medium text-sm">{{ location()?.childrenCount() }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+@if (sublocationsVisible) {
+  <div class="pl-[28px]">
+    @for (location of locationChildren(); track location?.id) {
+      <div class="pb-2">
+        <proffeo-select-location-list-item
+          (locationSelected)="selectLocation($event)"
+          [location]="location"
+          [selectedLocation]="selectedLocation()"
+        ></proffeo-select-location-list-item>
+      </div>
+    }
+  </div>
+}

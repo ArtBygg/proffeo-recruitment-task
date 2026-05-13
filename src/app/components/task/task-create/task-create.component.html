@@ -1,0 +1,123 @@
+<form
+  [formGroup]="createTaskForm()"
+  class="flex flex-col w-full gap-5"
+>
+  @if (firstStep()) {
+    <div class="flex w-full flex-col items-center justify-center gap-5">
+      <p class="text-base font-medium">{{ 'task-create-select-task-type' | translate }}</p>
+      <div class="w-full md:w-1/2 grid grid-cols-1 gap-2.5">
+        @for (type of taskTypes(); track type.id) {
+          <button
+            (click)="selectTaskType(type.id)"
+            class="flex w-full border-hover bg-white px-2 py-4 items-center justify-center hover:bg-slate-50 transition-default"
+          >
+            <p>{{ type.code + ' ' + type.name }}</p>
+          </button>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 w-full gap-5">
+      <mat-form-field class="flex flex-col gap-1.5 w-full">
+        <mat-label>{{ 'task-create-location' | translate }}</mat-label>
+        <input
+          (click)="onLocationClicked()"
+          [value]="selectedLocation()?.name || ''"
+          matInput
+          readonly
+          class="cursor-pointer"
+        />
+      </mat-form-field>
+      <mat-form-field class="flex flex-col gap-1.5 w-full">
+        <mat-label>{{ 'task-create-task-industry' | translate }}</mat-label>
+        <mat-select
+          formControlName="industryId"
+          class="w-full"
+        >
+          @for (projectIndustry of projectIndustries(); track projectIndustry.id) {
+            <mat-option [value]="projectIndustry.industry().id">{{ projectIndustry.industry().name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="flex flex-col gap-5 w-full">
+      <mat-form-field class="flex flex-col gap-1.5 w-full">
+        <mat-label class="!text-xl">{{ 'task-create-task-title' | translate }}</mat-label>
+        <textarea
+          (focus)="isTitleFocused.set(true)"
+          (blur)="isTitleFocused.set(false)"
+          [maxlength]="MAX_TITLE_LENGTH"
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="1"
+          matInput
+          formControlName="name"
+          class="!text-xl"
+        ></textarea>
+        @if (createTaskForm().controls.name.hasError('required')) {
+          <mat-error>{{ 'project-tasks.create.title-required-error' | translate }}</mat-error>
+        }
+        @if (isTitleFocused()) {
+          <mat-hint>{{ (createTaskForm().controls.name.value?.length || 0) + '/' + MAX_TITLE_LENGTH }}</mat-hint>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col gap-1.5 w-full">
+        <mat-label>{{ 'task-create-description' | translate }}</mat-label>
+        <textarea
+          formControlName="description"
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="5"
+          matInput
+        ></textarea>
+      </mat-form-field>
+
+      <div class="flex flex-col w-full gap-3">
+        <proffeo-file-drop (filesAdded)="onFilesAdded($event)"></proffeo-file-drop>
+
+        <div class="flex gap-1.5 items-center w-full overflow-x-auto">
+          @for (file of files(); track $index) {
+            <div class="flex relative p-1.5 items-center justify-center">
+              <div class="flex w-14 h-14 items-center justify-center border border-slate-200 rounded-md bg-white">
+                <span
+                  (click)="onRemoveFile(file)"
+                  class="flex w-6 h-6 rounded-full bg-accent items-center justify-center aspect-square absolute right-0 top-0 cursor-pointer transition-default hover:bg-accent/75"
+                >
+                  <mat-icon
+                    fontIcon="delete"
+                    class="text-white! icon-sm"
+                  ></mat-icon>
+                </span>
+                @if (isImage(file)) {
+                  <img
+                    [src]="getBlobUrl(file)"
+                    class="w-14 h-14 rounded-md"
+                  />
+                } @else {
+                  <div class="w-14 h-14 flex items-center justify-center rounded-md text-slate-500">
+                    <mat-icon
+                      fontIcon="description"
+                      class="icon-md"
+                    ></mat-icon>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      @let filesSizeError = this.createTaskForm().controls.files.getError('filesMaxSizeExceeded');
+      @if (filesSizeError) {
+        <mat-error>
+          {{
+            'ui-forms-files-max-size-exceeded'
+              | translate
+                : {
+                    actualSize: filesSizeError.actualSizeInMB,
+                    maxSize: filesSizeError.maxSizeInMB
+                  }
+          }}
+        </mat-error>
+      }
+    </div>
+  }
+</form>

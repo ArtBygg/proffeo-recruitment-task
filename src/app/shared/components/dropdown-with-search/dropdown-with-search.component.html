@@ -1,0 +1,103 @@
+<div
+  [matMenuTriggerFor]="dropdownMenu"
+  [class]="
+    'rounded-md border border-opacity-10 items-center flex gap-2 justify-between bg-white w-full border-black px-3 py-2 ' +
+    widthTwClass()
+  "
+  [class.hide-arrow]="hideArrow()"
+>
+  <div class="flex gap-2 w-full items-center justify-between text-xs md:text-base">
+    @if (getSelectedItems()?.length > 0) {
+      @if (getSelectedItems()[0]?.iconName) {
+        <mat-icon
+          [fontIcon]="getSelectedItems()[0]?.iconName"
+          [ngClass]="getSelectedItems()[0]?.iconColor"
+          class="text-[16px] min-w-[16px] min-h-[16px]"
+        ></mat-icon>
+      } @else if (toggleMatIconName()) {
+        <mat-icon
+          [fontIcon]="toggleMatIconName()"
+          class="text-[16px] min-w-[16px] min-h-[16px]"
+        ></mat-icon>
+      }
+      <p class="truncate text-font {{ widthTwClass() }}">
+        @if (translateLabels()) {
+          {{ getSelectedItems()[0]?.label | translate }}
+        } @else {
+          {{ getSelectedItems()[0]?.label }}
+        }
+        @if (getSelectedItems()?.length > 1) {
+          (+{{ getSelectedItems().length - 1 }})
+        }
+      </p>
+    } @else {
+      @if (toggleMatIconName()) {
+        <mat-icon
+          [fontIcon]="toggleMatIconName()"
+          class="opacity-50 text-[16px] min-w-[16px] min-h-[16px]"
+        ></mat-icon>
+      }
+      <p class="opacity-50 whitespace-nowrap">{{ placeholder() | translate }}</p>
+    }
+    <mat-icon fontIcon="arrow_drop_down"></mat-icon>
+  </div>
+
+  <mat-menu
+    #dropdownMenu="matMenu"
+    class="dropdown-menu"
+  >
+    <div
+      (click)="$event.stopPropagation()"
+      class="flex flex-col w-full gap-2 pt-2"
+    >
+      @if (dropdownItems().length > 0) {
+        <div class="flex px-2">
+          <proffeo-input
+            (valueChange)="searchInputChange($event)"
+            [placeholder]="'placeholders.search-input' | translate"
+            matIconName="search"
+          ></proffeo-input>
+        </div>
+
+        @if (multiple()) {
+          <div class="px-3">
+            <mat-checkbox
+              (change)="selectAll($event.checked)"
+              [checked]="isAllSelected()"
+              [indeterminate]="isSomeSelected()"
+              class="w-full"
+            >
+              {{ 'ui-forms-select-all' | translate }}
+            </mat-checkbox>
+          </div>
+        }
+
+        <div class="max-h-64 overflow-y-auto">
+          @for (item of filteredDropdownItems(); track item.value) {
+            @if (multiple()) {
+              <div class="px-3">
+                <mat-checkbox
+                  (change)="selectItem(item.value, $event.checked)"
+                  [checked]="isSelected(item.value)"
+                  class="w-full"
+                >
+                  {{ item.label }}
+                </mat-checkbox>
+              </div>
+            } @else {
+              <div
+                (click)="selectSingleItem(item.value)"
+                [class.bg-blue-50]="isSelected(item.value)"
+                class="px-3 py-2 cursor-pointer hover:bg-gray-100"
+              >
+                {{ item.label }}
+              </div>
+            }
+          }
+        </div>
+      } @else {
+        <p class="px-3 pb-2 text-font-600">{{ 'layout-search-no-results-found' | translate }}</p>
+      }
+    </div>
+  </mat-menu>
+</div>

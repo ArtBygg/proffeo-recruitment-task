@@ -1,0 +1,53 @@
+{
+  "tabWidth": 2,
+  "singleQuote": true,
+  "semi": true,
+  "arrowParens": "avoid",
+  "trailingComma": "none",
+  "bracketSameLine": false,
+  "printWidth": 120,
+  "bracketSpacing": true,
+  "useTabs": false,
+  "endOfLine": "crlf",
+  "quoteProps": "as-needed",
+  "htmlWhitespaceSensitivity": "ignore",
+  "singleAttributePerLine": true,
+
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-organize-attributes",
+    "prettier-plugin-css-order",
+    "prettier-plugin-organize-imports"
+  ],
+
+  "overrides": [
+    {
+      "files": ["*.component.html", "*.html"],
+      "options": {
+        "parser": "angular",
+        "attributeGroups": [
+          "$ANGULAR_STRUCTURAL_DIRECTIVE",
+          "$ANGULAR_ELEMENT_REF",
+          "$ANGULAR_TWO_WAY_BINDING",
+          "$ANGULAR_OUTPUT",
+          "$ANGULAR_INPUT",
+          "$ANGULAR_ANIMATION",
+          "$DEFAULT",
+          "$CLASS",
+          "$STYLE"
+        ]
+      }
+    },
+    {
+      "files": ["*.css", "*.scss"],
+      "options": { "parser": "css" }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "options": { "parser": "typescript" }
+    }
+  ],
+  "cssDeclarationSorterOrder": "smacss",
+  "tailwindAttributes": ["class", "className"],
+  "tailwindFunctions": ["clsx", "cva", "twMerge"]
+}

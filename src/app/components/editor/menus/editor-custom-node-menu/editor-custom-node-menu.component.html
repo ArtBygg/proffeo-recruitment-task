@@ -1,0 +1,59 @@
+<tiptap-bubble-menu
+  [editor]="editor()"
+  [shouldShow]="shouldShowMenu"
+  [tippyOptions]="{ maxWidth: '90vw', duration: 100, delay: 0 }"
+  pluginKey="customNodeMenu"
+>
+  <div
+    role="toolbar"
+    class="editor-menu p-1.5 shadow border rounded"
+  >
+    <div class="flex space-x-1 px-1">
+      <button
+        (click)="setAlignment('left')"
+        [class.active]="isAlignLeft"
+        [attr.aria-pressed]="isAlignLeft"
+        [disabled]="!editor().can().setTextAlign('left')"
+        type="button"
+        matTooltip="Align Left"
+        aria-label="Align Left"
+        class="editor-menu-item"
+      >
+        <mat-icon
+          fontIcon="align_horizontal_left"
+          class="w-[18px] h-[18px] text-[18px] text-slate-500 material-symbols-outlined"
+        ></mat-icon>
+      </button>
+      <button
+        (click)="setAlignment('center')"
+        [class.active]="isAlignCenter"
+        [attr.aria-pressed]="isAlignCenter"
+        [disabled]="!editor().can().setTextAlign('center')"
+        type="button"
+        matTooltip="Align Center"
+        aria-label="Align Center"
+        class="editor-menu-item"
+      >
+        <mat-icon
+          fontIcon="align_horizontal_center"
+          class="w-[18px] h-[18px] text-[18px] text-slate-500 material-symbols-outlined"
+        ></mat-icon>
+      </button>
+      <button
+        (click)="setAlignment('right')"
+        [class.active]="isAlignRight"
+        [attr.aria-pressed]="isAlignRight"
+        [disabled]="!editor().can().setTextAlign('right')"
+        type="button"
+        matTooltip="Align Right"
+        aria-label="Align Right"
+        class="editor-menu-item"
+      >
+        <mat-icon
+          fontIcon="align_horizontal_right"
+          class="w-[18px] h-[18px] text-[18px] text-slate-500 material-symbols-outlined"
+        ></mat-icon>
+      </button>
+    </div>
+  </div>
+</tiptap-bubble-menu>

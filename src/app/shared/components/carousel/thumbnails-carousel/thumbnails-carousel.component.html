@@ -1,0 +1,60 @@
+<div
+  #emblaRoot
+  [id]="emblaId()"
+  class="embla-thumbs w-full max-w-full overflow-hidden py-2"
+>
+  <div class="embla-thumbs__container flex gap-2 items-center min-w-0">
+    @for (slide of files(); track $index; let i = $index) {
+      <div class="embla-thumbs__slide-wrapper shrink-0 relative group">
+        <div
+          (click)="onThumbnailClick(i)"
+          [class.active]="i === index() && showCurrentSlideIndicator()"
+          class="embla-thumbs__slide rounded-lg overflow-hidden border-2 border-slate-200 cursor-pointer transition-all hover:border-slate-300"
+        >
+          @if (slide.isImage()) {
+            <img
+              [src]="slide.previewUrl()"
+              [alt]="'Thumbnail ' + (i + 1)"
+              class="w-full h-full object-cover pointer-events-none"
+            />
+          } @else if (slide.isVideo()) {
+            <video
+              [src]="slide.previewUrl()"
+              muted
+              playsinline
+              class="w-full h-full object-cover pointer-events-none"
+            ></video>
+            <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+              <mat-icon class="text-white!">play_circle</mat-icon>
+            </div>
+          } @else if (slide.isPdf()) {
+            <div class="flex flex-col items-center justify-center w-full h-full bg-slate-50 text-slate-700">
+              <mat-icon class="text-red-500 text-4xl">picture_as_pdf</mat-icon>
+              <p class="text-xs!">PDF</p>
+            </div>
+          } @else {
+            <div class="flex flex-col items-center justify-center w-full h-full bg-slate-50 text-slate-500">
+              <mat-icon>insert_drive_file</mat-icon>
+              <p class="text-xs!">File</p>
+            </div>
+          }
+        </div>
+        @if (allowDelete()) {
+          <button
+            (click)="onDeleteClick($event, slide, i)"
+            type="button"
+            aria-label="Delete image"
+            class="absolute -top-2 -right-2 w-6 h-6 flex items-center justify-center bg-error hover:bg-error/80 border-none rounded-full cursor-pointer z-50 transition-all md:opacity-0 md:group-hover:opacity-100 p-0"
+          >
+            <mat-icon
+              fontIcon="close"
+              class="!text-white !text-base !font-bold !leading-none !w-4 !h-4 !flex !items-center !justify-center"
+            ></mat-icon>
+          </button>
+        }
+      </div>
+    } @empty {
+      <span class="text-slate-500">{{ 'files.no-images-to-display' | translate }}</span>
+    }
+  </div>
+</div>

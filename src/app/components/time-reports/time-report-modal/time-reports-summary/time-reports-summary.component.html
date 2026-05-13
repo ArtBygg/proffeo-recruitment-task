@@ -1,0 +1,69 @@
+<mat-expansion-panel
+  (expandedChange)="isExpanded = $event"
+  [expanded]="showExpanded()"
+  [hideToggle]="true"
+>
+  <mat-expansion-panel-header matRipple>
+    <mat-panel-title class="flex flex-col items-end">
+      @if (allReportsTotalTime > 0) {
+        <div class="w-full text-right text-slate-800">
+          <span class="text-2xl">
+            {{ 'my-hours-selected' | translate }} : {{ filteredReportsTotalTimeTimeDuration }}
+          </span>
+        </div>
+      }
+      <div class="w-full text-right text-slate-800">
+        <span
+          [ngClass]="{ 'text-slate-400': allReportsTotalTime > 0 }"
+          class="text-2xl"
+        >
+          {{ 'my-hours-total' | translate }}:
+          {{ allReportsTotalTime > 0 ? totalTimeTimeDuration : filteredReportsTotalTimeTimeDuration }}
+        </span>
+      </div>
+      <div
+        class="text-slate-500 mx-auto mt-2 flex w-fit items-center gap-1 rounded-md bg-slate-200 px-4 text-center text-lg font-semibold"
+      >
+        <mat-icon
+          fontIcon="notes"
+          class="text-[25px] h-[25px] w-[25px]"
+        ></mat-icon>
+        <span>{{ isExpanded ? ('labels-hide' | translate) : ('labels-show-more' | translate) }}</span>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <div class="flex w-full items-center justify-between py-1 pr-2 text-slate-600">
+    <span class="text-xl">{{ 'time-report-hour-type-ordinary-auto' | translate }}:</span>
+    <span>{{ totalAuto }}</span>
+  </div>
+  <mat-divider></mat-divider>
+
+  <div class="flex w-full items-center justify-between py-1 pr-2 text-slate-600">
+    <span class="text-xl">{{ 'time-report-hour-type-ordinary-hours' | translate }}:</span>
+    <span>{{ totalOrdinaryHours }}</span>
+  </div>
+  <mat-divider></mat-divider>
+
+  <div class="flex w-full items-center justify-between py-1 pr-2 text-slate-600">
+    <span class="text-xl">{{ 'time-report-hour-type-bank_plus' | translate }}:</span>
+    <span>{{ totalBankHoursPlus }}</span>
+  </div>
+  <mat-divider></mat-divider>
+
+  <div class="flex w-full items-center justify-between py-1 pr-2 text-slate-600">
+    <span class="text-xl">{{ 'time-report-hour-type-bank_minus' | translate }}:</span>
+    <span>{{ totalBankHoursMinus }}</span>
+  </div>
+  <mat-divider></mat-divider>
+
+  <div class="flex w-full items-center justify-between py-1 pr-2 text-slate-600">
+    <span class="text-xl">{{ 'time-report-hour-type-overtime_50' | translate }}:</span>
+    <span>{{ totalOverTime50 }}</span>
+  </div>
+
+  <div class="flex w-full items-center justify-between py-1 pr-2 text-slate-600">
+    <span class="text-xl">{{ 'time-report-hour-type-overtime_100' | translate }}:</span>
+    <span>{{ totalOverTime100 }}</span>
+  </div>
+</mat-expansion-panel>

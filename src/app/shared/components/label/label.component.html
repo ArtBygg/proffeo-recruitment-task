@@ -1,0 +1,14 @@
+<div
+  [class.text-slate-500]="isPlaceholder()"
+  [class.text-slate-800]="!isPlaceholder()"
+  [class.font-medium]="!textBold()"
+  [class.font-bold]="textBold()"
+  class="flex gap-1"
+>
+  <span class="truncate">
+    <ng-content></ng-content>
+  </span>
+  @if (required()) {
+    <span class="text-lg text-primary">*</span>
+  }
+</div>

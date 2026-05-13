@@ -1,0 +1,50 @@
+@if (srcUrl()) {
+  <div
+    [ngClass]="{ 'h-24 w-24': !miniMode(), 'h-18 w-18': miniMode() }"
+    @fadeOut
+    class="relative flex items-center shadow-lg"
+  >
+    @if (isImage()) {
+      <img
+        [src]="srcUrl()"
+        [ngClass]="{ 'h-24 w-24': !miniMode(), 'h-18 w-18': miniMode() }"
+        alt="Image"
+      />
+    } @else {
+      <div
+        [ngClass]="{ 'h-24 w-24': !miniMode(), 'h-18 w-18': miniMode() }"
+        class="flex flex-col items-center justify-center border border-slate-200"
+      >
+        @if (isPdf()) {
+          <mat-icon
+            fontIcon="description"
+            class="text-4xl text-primary"
+          ></mat-icon>
+        }
+
+        @if (isVideo()) {
+          <mat-icon
+            fontIcon="movie"
+            class="text-4xl text-secondary"
+          ></mat-icon>
+        }
+        <div
+          [ngClass]="{ 'w-24': !miniMode(), 'w-18': miniMode() }"
+          class="px-2 text-slate-500 text-sm mt-2 text-center truncate"
+        >
+          {{ file().name }}
+        </div>
+      </div>
+    }
+
+    <div
+      (click)="removeFileEvent.emit(file())"
+      class="absolute right-1 top-1 flex items-center justify-center bg-primary text-white hover:text-rose-800 rounded-full p-1 transition-all cursor-pointer"
+    >
+      <mat-icon
+        fontIcon="close"
+        class="text-md"
+      ></mat-icon>
+    </div>
+  </div>
+}

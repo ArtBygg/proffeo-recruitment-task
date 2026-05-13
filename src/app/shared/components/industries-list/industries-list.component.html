@@ -1,0 +1,124 @@
+<div class="flex flex-col gap-2 lg:hidden">
+  @if (industries()?.length > 0) {
+    @for (industry of industries(); track industry?.id) {
+      <div class="flex w-full items-center p-4 rounded-md bg-white border border-slate-200 gap-4">
+        <div class="flex items-center justify-center w-10 h-10 aspect-square bg-slate-500 rounded-full">
+          <mat-icon
+            fontIcon="construction"
+            class="text-white!"
+          ></mat-icon>
+        </div>
+        <div class="flex w-full justify-between">
+          <div class="flex flex-col gap-1 w-full">
+            <div class="flex w-full items-center justify-between">
+              <p class="font-medium">{{ industry?.name }}</p>
+              <mat-icon
+                [matMenuTriggerFor]="matIndustriesMenu"
+                fontIcon="more_vert"
+                class="cursor-pointer"
+              ></mat-icon>
+              <mat-menu #matIndustriesMenu>
+                <div class="flex h-full w-full flex-col">
+                  <div
+                    (click)="editIndustry.emit(industry)"
+                    class="flex cursor-pointer w-full gap-1 items-center px-4 py-2 group hover:bg-accent transition-default"
+                  >
+                    <mat-icon
+                      fontIcon="edit"
+                      class="group-hover:text-white!"
+                    ></mat-icon>
+                    <p class="group-hover:text-white">
+                      {{ 'company-industries.list-actions.edit' | translate }}
+                    </p>
+                  </div>
+                  <div
+                    (click)="deleteIndustry.emit(industry)"
+                    class="flex cursor-pointer w-full gap-1 items-center px-4 py-2 group hover:bg-accent transition-default"
+                  >
+                    <mat-icon
+                      fontIcon="delete"
+                      class="group-hover:text-white!"
+                    ></mat-icon>
+                    <p class="group-hover:text-white">
+                      {{ 'company-industries.list-actions.delete' | translate }}
+                    </p>
+                  </div>
+                </div>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  } @else {
+    <div class="flex w-full p-4 items-center justify-center">
+      <p class="font-medium">{{ 'placeholders.no-results-found' | translate }}</p>
+    </div>
+  }
+</div>
+
+<div class="hidden lg:flex w-full">
+  @if (industries()?.length > 0) {
+    <div class="flex flex-col w-full">
+      <div class="flex w-full items-center rounded-t-md py-3 px-5 border-b border-slate-200 justify-between">
+        <div class="flex min-w-[170px] max-w-[170px] px-2 items-center">
+          <p class="text-sm font-semibold">
+            {{ 'company-industries.table-headers.name' | translate | uppercase }}
+          </p>
+        </div>
+        <div class="flex min-w-[50px] max-w-[50px] px-2 items-center justify-center"></div>
+      </div>
+      @for (industry of industries(); track industry.id) {
+        <div
+          class="flex w-full items-center py-3 px-5 border-b border-slate-200 justify-between hover:bg-slate-50 transition-150 transition-all"
+        >
+          <div class="flex min-w-[230px] max-w-[230px] px-2 items-center">
+            <p class="text-sm truncate">{{ industry?.name }}</p>
+          </div>
+          <div class="flex min-w-[50px] max-w-[50px] px-2 items-center justify-center">
+            <mat-icon
+              [matMenuTriggerFor]="matUserMenu"
+              fontIcon="more_vert"
+              class="cursor-pointer"
+            ></mat-icon>
+            <mat-menu
+              #matUserMenu
+              cdkMenu
+            >
+              <div class="flex h-full w-full flex-col">
+                <div
+                  (click)="editIndustry.emit(industry)"
+                  class="flex cursor-pointer w-full gap-1.5 items-center px-4 py-2 group hover:bg-accent transition-default"
+                >
+                  <mat-icon
+                    fontIcon="edit"
+                    class="group-hover:text-white!"
+                  ></mat-icon>
+                  <p class="group-hover:text-white">
+                    {{ 'company-industries.list-actions.edit' | translate }}
+                  </p>
+                </div>
+                <div
+                  (click)="deleteIndustry.emit(industry)"
+                  class="flex cursor-pointer w-full gap-1 items-center px-4 py-2 group hover:bg-accent transition-default"
+                >
+                  <mat-icon
+                    fontIcon="delete"
+                    class="group-hover:text-white!"
+                  ></mat-icon>
+                  <p class="group-hover:text-white">
+                    {{ 'company-industries.list-actions.delete' | translate }}
+                  </p>
+                </div>
+              </div>
+            </mat-menu>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="flex w-full p-4 items-center justify-center">
+      <p class="font-medium">{{ 'placeholders.no-results-found' | translate }}</p>
+    </div>
+  }
+</div>

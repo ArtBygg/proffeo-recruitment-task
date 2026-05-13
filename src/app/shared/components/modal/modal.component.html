@@ -1,0 +1,34 @@
+<div class="h-full w-full flex-col justify-between">
+  <div class="flex flex-row items-center justify-between gap-2 border-b border-slate-200 px-6 py-4">
+    <div class="flex min-w-0 flex-1 flex-col gap-2">
+      @if (!hideDefaultTitle()) {
+        <div class="line-clamp-2 font-semibold">{{ title() }}</div>
+      }
+      <ng-content select="[modal-header]"></ng-content>
+    </div>
+    <div class="flex items-center justify-end gap-2">
+      <ng-content select="[header-button]"></ng-content>
+
+      <button
+        mat-dialog-close
+        class="m-0 flex items-center border-none bg-transparent p-0"
+      >
+        <mat-icon
+          fontIcon="close"
+          class="material-symbols-outlined h-[25px] w-[25px] cursor-pointer text-[25px] text-slate-500"
+        ></mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div
+    mat-dialog-content
+    class="flex h-full w-full px-4 py-2"
+  >
+    <ng-content></ng-content>
+  </div>
+
+  <div class="flex w-full border-t border-slate-200 px-4 py-2 max-md:px-2">
+    <ng-content select="[modal-actions]"></ng-content>
+  </div>
+</div>

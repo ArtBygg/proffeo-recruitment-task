@@ -1,0 +1,20 @@
+<mat-checkbox
+  (click)="$event.stopPropagation()"
+  (change)="toggleAll()"
+  [checked]="allSelected()"
+  [indeterminate]="indeterminate()"
+  class="block w-full font-semibold"
+>
+  {{ 'activity-filters.select-all' | translate }}
+</mat-checkbox>
+<hr class="border-slate-200" />
+@for (filter of filterConfigs; track filter.value) {
+  <mat-checkbox
+    (click)="$event.stopPropagation()"
+    (change)="setFilter(filter.value, $event.checked)"
+    [checked]="filters()[filter.value]"
+    class="block w-full"
+  >
+    {{ filter.translationKey | translate }}
+  </mat-checkbox>
+}

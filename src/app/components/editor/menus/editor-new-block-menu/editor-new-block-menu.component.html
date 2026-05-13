@@ -1,0 +1,97 @@
+<tiptap-floating-menu [editor]="editor()">
+  <div
+    role="toolbar"
+    class="editor-menu p-1.5 shadow border rounded"
+  >
+    <button
+      (click)="editor().chain().focus().toggleHeading({ level: 1 }).run()"
+      [class.active]="editor().isActive('heading', { level: 1 })"
+      type="button"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_h1"
+        class="text-[18px] w-[18px] h-[18px] text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+
+    <button
+      (click)="editor().chain().focus().toggleHeading({ level: 2 }).run()"
+      [class.active]="editor().isActive('heading', { level: 2 })"
+      type="button"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_h2"
+        class="text-[18px] w-[18px] h-[18px] text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+
+    <button
+      (click)="toggleBulletList()"
+      [disabled]="!editor().can().toggleBulletList()"
+      type="button"
+      matTooltip="Bullet List"
+      aria-label="Bullet List"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_list_bulleted"
+        class="text-[18px] w-[18px] h-[18px] text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+    <button
+      (click)="toggleOrderedList()"
+      [disabled]="!editor().can().toggleOrderedList()"
+      type="button"
+      matTooltip="Ordered List"
+      aria-label="Ordered List"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_list_numbered"
+        class="text-[18px] w-[18px] h-[18px] text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+    <button
+      (click)="editor().chain().focus().toggleTaskList().run()"
+      [disabled]="!editor().can().toggleTaskList()"
+      type="button"
+      matTooltip="Task List"
+      aria-label="Task List"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="checklist"
+        class="text-[18px] w-[18px] h-[18px] text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+
+    <button
+      (click)="editor().chain().focus().toggleBlockquote().run()"
+      [disabled]="!editor().can().toggleBlockquote()"
+      type="button"
+      matTooltip="Blockquote"
+      aria-label="Blockquote"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_quote"
+        class="text-[18px] w-[18px] h-[18px] text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+
+    <button
+      (click)="editor().chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()"
+      type="button"
+      aria-label="Add table"
+      matTooltip="Add table"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="table_view"
+        class="text-[18px] w-[18px] h-[18px] text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+  </div>
+</tiptap-floating-menu>

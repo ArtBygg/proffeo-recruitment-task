@@ -1,0 +1,151 @@
+@use '@angular/material' as mat;
+@use './_theme-colors' as theme;
+@use 'material/form-field' as form-field;
+@use 'material/table' as table;
+@use 'material/drag-and-drop' as drag-and-drop;
+@use 'material/button' as button;
+@use 'material/dialog' as dialog;
+@use 'material/select' as select;
+
+/*powielane te ponizej - juz sa w  _theme-colors.scss */
+$primary: #f7f8fc;
+$secondary: #1e293b;
+$tertiary: #d5203e;
+
+/* te nazwy sa nieprecyzyjne */
+$white: #ffffff;
+$black-text: #0f0e0e;
+$primary-accent: #f43f5e;
+$outline-color: #d2d3d6;
+$stepper-icon-bg: #f43f5e75;
+$font: #334155;
+$border-width: 2px;
+
+/* PONIZEJ bledne stare podejscie z !important, przy pracy z odpowiednim komponentem usunac lub
+ przerobic na tokeny z API overrides */
+:root,
+:host {
+  --mat-select-trigger-text-size: 14px !important;
+  --mat-sys-body-large-size: 14px !important;
+  --mdc-checkbox-unselected-icon-color: $secondary !important;
+  --mat-datepicker-calendar-period-button-text-color: $secondary !important;
+  --mat-datepicker-calendar-period-button-icon-color: $secondary !important;
+  --mat-datepicker-calendar-header-text-color: $secondary !important;
+  --mat-stepper-header-height: 40px !important;
+  --mat-stepper-header-selected-state-label-text-color: $font;
+  --mat-datepicker-calendar-container-background-color: white;
+  --mat-datepicker-calendar-navigation-button-icon-color: $secondary;
+  --mat-full-pseudo-checkbox-unselected-icon-color: $secondary;
+  --mat-ripple-color: transparent !important;
+  --mat-sys-on-surface-variant: black !important;
+  --mdc-switch-selected-icon-color: black !important;
+  --mat-sys-primary-container: $font;
+  --mat-stepper-header-icon-background-color: #f43f5e75 !important;
+  --mat-stepper-header-done-state-icon-background-color: $primary !important;
+  --mat-button-protected-label-text-color: $font;
+  --mat-button-text-label-text-color: $secondary !important;
+  --mat-button-outlined-outline-color: #d2d3d6 !important;
+  --mat-button-outlined-label-text-color: $secondary !important;
+  --mat-button-protected-container-shape: calc(infinity * 1px) !important;
+  --mat-button-outlined-container-shape: calc(infinity * 1px) !important;
+  --mat-button-outlined-outline-width: $border-width !important;
+  --mat-sys-label-large-weight: 600 !important;
+  --mat-card-outlined-outline-color: #d2d3d6 !important;
+  --mat-mdc-form-field-floating-label-scale: 1000 !important;
+  --mat-select-enabled-arrow-color: var(--color-slate-800);
+  --mat-select-focused-arrow-color: var(--color-slate-800);
+  --mat-select-placeholder-text-color: var(--color-slate-800);
+  --mat-card-outlined-outline-width: $border-width !important;
+  --mat-form-field-container-text-font: Geist;
+  --mat-sys-corner-extra-large: 0.375rem !important;
+  --mat-slider-inactive-track-color: #d2d3d6 !important;
+
+  /* zmienne zawierajace wartosci dla tokenow */
+  --material-container-height: 42px;
+
+  /* do przerobienia na tokeny */
+  .mat-mdc-button-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* do przerobienia na tokeny */
+  .time-report-panel-filters {
+    .mat-mdc-select-arrow-wrapper {
+      display: none;
+    }
+  }
+
+  /* do przerobienia - na zmienne zawierajace dany kolor */
+  @include mat.theme-overrides(
+    (
+      primary: #f43f5e,
+      on-primary: $white,
+      primary-container: $primary,
+      on-primary-container: #fff,
+      inverse-primary: #f43f5e,
+      primary-fixed: $primary,
+      primary-fixed-dim: $primary,
+      on-primary-fixed: $black-text,
+      on-primary-fixed-variant: $black-text,
+      secondary: $secondary,
+      on-secondary: $primary,
+      secondary-container: $secondary,
+      on-secondary-container: $primary,
+      secondary-fixed: $primary,
+      secondary-fixed-dim: $primary,
+      on-secondary-fixed: $black-text,
+      on-secondary-fixed-variant: $black-text,
+      tertiary: $tertiary,
+      on-tertiary: $black-text,
+      tertiary-container: $primary,
+      on-tertiary-container: $black-text,
+      tertiary-fixed: $primary,
+      tertiary-fixed-dim: $primary,
+      on-tertiary-fixed: $black-text,
+      on-tertiary-fixed-variant: $black-text,
+      background: $primary,
+      on-background: $black-text,
+      surface: $primary,
+      surface-dim: $primary,
+      surface-bright: $primary,
+      surface-container-lowest: $primary,
+      surface-container-low: $white,
+      surface-container: $white,
+      surface-container-high: $primary,
+      surface-container-highest: $primary,
+      on-surface: $black-text,
+      shadow: $primary,
+      scrim: $primary,
+      surface-tint: $black-text,
+      inverse-surface: $black-text,
+      inverse-on-surface: $primary,
+      outline: $black-text,
+      outline-variant: $primary,
+      neutral: $white,
+      neutral10: $black-text,
+      error: #ef4444,
+      error-container: $primary,
+      on-error: $white,
+      on-error-container: $black-text,
+      surface-variant: $primary,
+      on-surface-variant: $white,
+      neutral-variant: $primary,
+      neutral-variant20: $black-text,
+      inverse-secondary: $primary,
+      inverse-tertiary: $primary
+    )
+  );
+}
+
+html {
+  color-scheme: light;
+  @include mat.theme(
+    (color: (primary: theme.$primary-palette, tertiary: theme.$tertiary-palette), typography: Geist, density: 0)
+  );
+  @include form-field.mat-form-field-tokens();
+  @include table.table-tokens();
+  @include button.mat-button-tokens();
+  @include dialog.mat-dialog-tokens();
+}

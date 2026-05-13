@@ -1,0 +1,32 @@
+:host ::ng-deep .task-details-subtasks-panel.mat-expansion-panel.mat-expanded {
+  margin-top: 0;
+  margin-bottom: 12px;
+  box-shadow: none;
+}
+:host ::ng-deep .mat-expansion-panel.mat-expansion-panel-animations-enabled {
+  .mat-expansion-panel-header {
+    background-color: var(--mat-sys-surface-container);
+    transition: height 225ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+:host ::ng-deep .mat-expansion-panel-body {
+  padding: 16px 24px;
+}
+
+:host ::ng-deep .task-details-subtasks-panel .mat-expansion-panel-body {
+  padding: 0;
+}
+
+:host ::ng-deep .mat-expansion-panel-content {
+  transition: height 225ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.attachments-mobile-subtasks-grid {
+  @media (max-width: 767px) {
+    display: grid;
+    grid-template-rows: 1fr auto 1fr;
+    justify-items: center;
+    min-height: 0;
+  }
+}

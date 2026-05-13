@@ -1,0 +1,77 @@
+<div class="flex flex-col w-full gap-1.5 task-activity px-2">
+  @if (groupContainsTimelineEvent()) {
+    <div class="flex w-full items-center justify-center">
+      <div class="flex w-full items-center justify-center flex-col gap-1">
+        @for (taskActivity of groupedTaskTimelineEvents(); track taskActivity.id) {
+          <div class="w-full flex flex-row items-center justify-center gap-1.5">
+            <div class="flex w-full min-w-0 items-center justify-center gap-1.5 px-2 hover:bg-slate-100 rounded-lg">
+              @if (taskActivity.user?.()) {
+                <span class="flex-shrink-0 text-nowrap text-slate-500 text-sm ml-auto">
+                  {{ taskActivity.user?.()?.firstName }} {{ taskActivity.user?.()?.lastName }} -
+                </span>
+              }
+
+              <proffeo-task-activity-content
+                [activity]="taskActivity"
+                class="inline-block min-w-0 truncate"
+              ></proffeo-task-activity-content>
+              @if (taskActivity.date && taskActivity.taskActivityType !== TaskActivityType.TaskMessageAdded) {
+                <span class="flex-shrink-0 text-nowrap text-slate-500 text-sm bg-transparent ml-auto">
+                  {{ taskActivity.date | date: 'HH:mm' }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (groupedTaskActivities()[0].taskActivityType === TaskActivityType.TaskMessageAdded) {
+    <div
+      [class.ml-auto]="groupedTaskActivities()[0].user?.()?.id === currentUserId()"
+      class="flex gap-1.5 w-4/5 h-full"
+    >
+      @if (groupedTaskActivities()[0].user?.()?.id !== currentUserId()) {
+        <proffeo-avatar
+          [user]="groupedTaskActivities()[0].user?.()"
+          size="mini"
+        ></proffeo-avatar>
+      }
+      <div
+        [ngClass]="groupedTaskActivities()[0].user?.()?.id === currentUserId() ? 'bg-slate-200' : 'bg-slate-100'"
+        class="flex flex-col w-full px-3 pb-3 pt-1 rounded-lg border border-black/10"
+      >
+        <div class="flex justify-between items-center w-full pb-2">
+          @if (groupedTaskActivities()[0].user?.()) {
+            <div class="flex items-center gap-[0.6rem]">
+              <span class="text-slate text-sm">
+                {{ groupedTaskActivities()[0].user?.()?.firstName }}
+                {{ groupedTaskActivities()[0].user?.()?.lastName }}
+              </span>
+            </div>
+          }
+
+          @if (groupedTaskActivities()[0].date) {
+            <span
+              #tooltip="matTooltip"
+              matTooltip="{{ groupedTaskActivities()[0].date | date: 'dd/MM/yyyy, HH:mm' }}"
+              matTooltipPosition="left"
+              class="text-slate-500 text-sm"
+            >
+              {{ groupedTaskActivities()[0].date | date: 'HH:mm' }}
+            </span>
+          }
+        </div>
+
+        @for (taskActivity of groupedTaskActivities(); track taskActivity.id) {
+          <div>
+            @if (taskActivity.taskActivityType === TaskActivityType.TaskMessageAdded) {
+              <proffeo-message-added-activity [activity]="taskActivity" />
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

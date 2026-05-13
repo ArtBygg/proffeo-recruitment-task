@@ -1,0 +1,118 @@
+@if (mode() === taskTimerMode.column) {
+  <div class="flex flex-col">
+    <div class="flex items-center justify-center">
+      @if (!taskTimer?.isStarted) {
+        @if (iconSize() === 'large') {
+          <mat-icon
+            (click)="toggleTimer()"
+            fontIcon="play_circle"
+            class="icon-3xl material-symbols-outlined text-green-500! cursor-pointer"
+          ></mat-icon>
+        } @else {
+          <mat-icon
+            (click)="toggleTimer()"
+            fontIcon="play_circle"
+            class="icon-base material-symbols-outlined text-green-500! cursor-pointer"
+          ></mat-icon>
+        }
+      } @else {
+        <div class="flex items-center gap-2">
+          @if (iconSize() === 'large') {
+            <div
+              (click)="toggleTimer()"
+              class="flex items-center justify-center w-[60px] h-[60px] animate-pulse bg-red-600 rounded-full cursor-pointer"
+            >
+              <div class="w-[30px] h-[30px] bg-white rounded-sm"></div>
+            </div>
+          } @else {
+            <div
+              (click)="toggleTimer()"
+              class="flex items-center justify-center w-5 h-5 animate-pulse bg-white rounded-full border border-proffeo-red cursor-pointer"
+            >
+              <mat-icon
+                fontIcon="stop_circle"
+                class="text-red-600! material-symbols-filled"
+              ></mat-icon>
+            </div>
+          }
+          @if (passingTime$ | async; as timerTime) {
+            <span class="text-[45px]">{{ timerTime }}</span>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}
+
+@if (mode() === taskTimerMode.row) {
+  <div class="flex items-center gap-1">
+    @if (showIcon()) {
+      <div class="proffeo-col-xxs">
+        @if (!taskTimer?.isStarted) {
+          <mat-icon
+            (click)="toggleTimer()"
+            fontIcon="play_circle"
+            class="icon-base material-symbols-outlined text-green-500! cursor-pointer"
+          ></mat-icon>
+        } @else {
+          <div
+            (click)="toggleTimer()"
+            class="flex items-center justify-center w-[25px] h-[25px] animate-pulse bg-red-100 rounded-full border border-red-600 cursor-pointer"
+          >
+            <mat-icon
+              fontIcon="stop_circle"
+              class="icon-md material-symbols-filled text-red-600!"
+            ></mat-icon>
+          </div>
+        }
+      </div>
+    }
+
+    <ng-container *ngTemplateOutlet="timer"></ng-container>
+  </div>
+}
+
+@if (mode() === taskTimerMode.topBar && taskTimer) {
+  <div class="flex gap-3.5 items-center">
+    <div class="flex items-center justify-center w-5 h-5 animate-pulse bg-white rounded-full border border-proffeo-red">
+      <mat-icon
+        fontIcon="stop_circle"
+        class="icon-md material-symbols-filled text-red-600!"
+      ></mat-icon>
+    </div>
+    <div class="flex gap-1">
+      <p class="font-medium text-white hidden sm:flex text-sm">{{ 'timer.current-session' | translate }}:</p>
+      <div class="flex items-center w-[55px]">
+        @if (passingTime$ | async; as timerTime) {
+          <p class="font-medium text-white text-sm">{{ timerTime }}</p>
+        } @else {
+          <p class="font-medium text-white text-sm">00:00</p>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+@if (mode() === taskTimerMode.readonly) {
+  <div class="flex items-center w-full">
+    <p class="text-nowrap text-sm">
+      {{ timeSpanIso ? (timeSpanIso | intlDuration) : '00:00' }}
+      @if (estimation()) {
+        <span>/ {{ estimation() | intlDuration }}</span>
+      }
+    </p>
+  </div>
+}
+
+<ng-template #timer>
+  <div
+    (click)="toggleTimer()"
+    class="flex items-center cursor-pointer"
+  >
+    @if (passingTime$ | async; as timerTime) {
+      <span class="text-base">{{ timerTime }}</span>
+    } @else {
+      <span class="text-base">{{ alreadyUsedTimeSpanValue }}</span>
+    }
+  </div>
+</ng-template>

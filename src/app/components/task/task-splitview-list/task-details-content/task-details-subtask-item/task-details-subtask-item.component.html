@@ -1,0 +1,174 @@
+@if (!isMobile()) {
+  <div
+    [class]="`${TASK_STATUS_DISPLAY[subTask().status].borderLeftClass} flex w-full items-center gap-2.5 border-l-[6px]! border-default bg-white px-3 py-3 transition-default hover:bg-slate-50`"
+  >
+    <div class="flex w-full items-center gap-4 flex-wrap justify-between">
+      <div class="flex items-center">
+        <p class="font-medium truncate">{{ subTask().name }}</p>
+      </div>
+
+      <div class="flex gap-8">
+        <div class="flex items-center gap-4 justify-start">
+          <proffeo-task-status-select
+            (statusSelected)="statusChanged.emit($event)"
+            (click)="$event.stopPropagation()"
+            [mode]="TaskStatusSelectEnum.DOTS"
+            [taskStatus]="subTask().status"
+            [small]="true"
+            [readonly]="false"
+          ></proffeo-task-status-select>
+
+          <proffeo-task-priority-select
+            (click)="$event.stopPropagation()"
+            (prioritySelected)="priorityChanged.emit($event)"
+            [taskPriority]="subTask().priority"
+            [small]="false"
+            [readonly]="false"
+          ></proffeo-task-priority-select>
+        </div>
+
+        <div class="flex items-center gap-1">
+          <proffeo-task-timer
+            [mode]="taskTimerMode.readonly"
+            [timeSpan]="
+              subTask().statistics?.summaryTime
+                ? { totalSeconds: convertDurationToSeconds(subTask().statistics.summaryTime) }
+                : null
+            "
+            [estimation]="subTask().estimation?.time"
+          ></proffeo-task-timer>
+        </div>
+
+        <div class="flex items-center gap-1">
+          <proffeo-percentage-select
+            (newPercentageValue)="percentageChange.emit($event)"
+            [value]="subTask().percentageOfProgress ?? 0"
+            [displayMode]="percentageDisplayMode.ICON_WITH_TEXT"
+            [iconType]="'percent'"
+            [isReadonly]="false"
+          ></proffeo-percentage-select>
+        </div>
+
+        <div
+          (click)="$event.stopPropagation()"
+          [matMenuTriggerFor]="subtaskActions"
+          class="flex items-center justify-start cursor-pointer"
+        >
+          <mat-icon fontIcon="more_vert"></mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (isMobile()) {
+  <div
+    [class]="`border-l-[6px]! ${TASK_STATUS_DISPLAY[subTask().status].borderLeftClass}`"
+    class="border-hover relative box-border flex w-full max-w-none min-w-0 cursor-pointer flex-col gap-3 px-3 py-1.5"
+  >
+    <div class="flex w-full min-w-0 flex-col gap-1.5 py-2">
+      <div class="w-full min-w-0">
+        <p class="line-clamp-2 w-full font-medium break-words">
+          {{ subTask().name }}
+        </p>
+      </div>
+
+      <div class="flex w-full min-w-0 flex-wrap items-center justify-between gap-2">
+        <div>
+          <proffeo-task-status-select
+            (click)="$event.stopPropagation()"
+            [mode]="TaskStatusSelectEnum.DOTS"
+            [taskStatus]="subTask().status"
+            [small]="true"
+            [readonly]="true"
+          ></proffeo-task-status-select>
+        </div>
+
+        <div class="mt-0.5">
+          <proffeo-task-priority-select
+            (prioritySelected)="priorityChanged.emit($event)"
+            (click)="$event.stopPropagation()"
+            [taskPriority]="subTask().priority"
+            [small]="false"
+            [readonly]="false"
+          ></proffeo-task-priority-select>
+        </div>
+
+        @if (subTask().subtasksCount > 0) {
+          <div class="flex items-center gap-1">
+            <mat-icon
+              fontIcon="subdirectory_arrow_right"
+              class="icon-md opacity-50"
+            ></mat-icon>
+            <p class="text-sm">{{ subTask().subtasksCount }}</p>
+          </div>
+        }
+
+        <div class="flex items-center gap-1">
+          <proffeo-task-timer
+            [mode]="taskTimerMode.readonly"
+            [timeSpan]="
+              subTask().statistics?.summaryTime
+                ? { totalSeconds: convertDurationToSeconds(subTask().statistics.summaryTime) }
+                : null
+            "
+            [estimation]="subTask().estimation?.time"
+          ></proffeo-task-timer>
+        </div>
+
+        <div class="flex items-center gap-1">
+          <proffeo-percentage-select
+            (newPercentageValue)="percentageChange.emit($event)"
+            [value]="subTask().percentageOfProgress ?? 0"
+            [displayMode]="percentageDisplayMode.ICON_WITH_TEXT"
+            [iconType]="'percent'"
+            [isReadonly]="false"
+          ></proffeo-percentage-select>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<mat-menu #subtaskActions="matMenu">
+  <button
+    (click)="addTimeReport.emit(subTask())"
+    class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+  >
+    <mat-icon
+      fontIcon="timer"
+      class="group-hover:text-white!"
+    ></mat-icon>
+    <p>{{ 'task-menu.add-time-report' | translate }}</p>
+  </button>
+  <button
+    (click)="copySubtaskLink()"
+    class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+  >
+    <mat-icon
+      fontIcon="content_copy"
+      class="group-hover:text-white!"
+    ></mat-icon>
+    <p>{{ 'task-menu.copy-link' | translate }}</p>
+  </button>
+  <button
+    (click)="copySubtaskNumber()"
+    class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+  >
+    <mat-icon
+      fontIcon="content_copy"
+      class="group-hover:text-white!"
+    ></mat-icon>
+    <p>{{ 'task-menu.copy-number' | translate }}</p>
+  </button>
+  <button
+    (click)="deleteSubtask()"
+    class="group w-full py-3 gap-2 px-2 cursor-pointer flex items-center hover:bg-accent hover:text-white transition-150 transition-all"
+  >
+    <mat-icon
+      fontIcon="deleteTask"
+      class="group-hover:text-white!"
+    ></mat-icon>
+    <p>{{ 'task-menu.delete-task' | translate }}</p>
+  </button>
+</mat-menu>

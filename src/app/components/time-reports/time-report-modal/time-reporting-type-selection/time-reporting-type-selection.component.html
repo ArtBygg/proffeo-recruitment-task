@@ -1,0 +1,37 @@
+<div class="w-full text-center py-2">
+  <mat-button-toggle-group
+    (change)="setSelectionMode($event.value)"
+    [value]="initialValue()"
+    hideSingleSelectionIndicator="true"
+    class="w-full"
+  >
+    @if (isTimerVisible()) {
+      <mat-tooltip
+        [matTooltip]="
+          isActiveTimerFromDifferentTask() ? ('time-reports-form-modal-timer-disabled-tooltip' | translate) : undefined
+        "
+        class="flex"
+      >
+        <mat-button-toggle
+          [disabled]="isActiveTimerFromDifferentTask()"
+          value="{{ selectMode.TIMER }}"
+          class="custom-toggle-button"
+        >
+          {{ 'time-reports-form-modal-timer' | translate }}
+        </mat-button-toggle>
+      </mat-tooltip>
+    }
+    <mat-button-toggle
+      value="{{ selectMode.MANUAL }}"
+      class="custom-toggle-button"
+    >
+      {{ 'time-reports-form-modal-manual' | translate }}
+    </mat-button-toggle>
+    <mat-button-toggle
+      value="{{ selectMode.RANGE }}"
+      class="custom-toggle-button"
+    >
+      {{ 'time-reports-form-modal-range' | translate }}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>

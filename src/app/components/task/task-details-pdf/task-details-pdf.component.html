@@ -1,0 +1,465 @@
+<main class="w-full p-3 bg-slate-50 border border-slate-300 rounded-md">
+  <!-- Header -->
+  <section class="flex flex-col gap-2">
+    <h2 class="text-base text-slate-700 font-bold">{{ task()?.name }}</h2>
+    <div class="flex items-center gap-1">
+      <div class="flex items-center justify-center h-7 w-8 rounded bg-slate-500 text-white text-sm font-bold">
+        {{ task()?.taskType()?.code }}
+      </div>
+      <span class="text-sm text-slate-600">{{ task()?.taskNumber }}</span>
+    </div>
+  </section>
+
+  <!-- Select all sections -->
+  <div class="flex items-center mt-4 mb-1">
+    <mat-checkbox
+      (change)="setAllSections($event.checked)"
+      [checked]="selectAllSectionsChecked()"
+      [indeterminate]="selectAllSectionsIndeterminate()"
+    ></mat-checkbox>
+    <proffeo-label [textBold]="true">{{ 'task-details-pdf-create-select-all' | translate }}</proffeo-label>
+  </div>
+
+  <!-- TASK DETAILS section -->
+  <section class="my-3">
+    <mat-expansion-panel
+      [expanded]="sectionChecked()[PdfContentName.TASK_DETAILS]"
+      class="rounded-md bg-white"
+    >
+      <mat-expansion-panel-header
+        collapsedHeight="auto"
+        expandedHeight="auto"
+      >
+        <div class="flex items-center gap-2 w-full py-1">
+          <mat-checkbox
+            (change)="setSection(PdfContentName.TASK_DETAILS, $event.checked)"
+            [checked]="sectionChecked()[PdfContentName.TASK_DETAILS]"
+          ></mat-checkbox>
+          <div class="flex flex-col pr-2">
+            <proffeo-label [textBold]="true">{{ 'task-details-pdf-create-task-details' | translate }}</proffeo-label>
+            <span class="text-xs text-slate-400">{{ 'task-details-pdf-create-task-details-expl' | translate }}</span>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+
+      <div class="flex items-center my-2">
+        <mat-checkbox
+          (change)="setAllMenuItems($event.checked)"
+          [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+          [checked]="selectAllTaskDetailsChecked()"
+          [indeterminate]="selectAllTaskDetailsIndeterminate()"
+        ></mat-checkbox>
+        <proffeo-label>{{ 'task-details-pdf-create-select-all' | translate }}</proffeo-label>
+      </div>
+
+      <div
+        [ngClass]="isMobile() ? 'grid-cols-1' : 'grid-cols-2'"
+        class="grid border border-slate-300 rounded-lg overflow-hidden gap-[1px] bg-slate-300"
+      >
+        <!-- Location -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.LOCATION, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.LOCATION]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="location_on"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">{{ task()?.location() ? visibleLocationsNamePath : '-' }}</span>
+        </div>
+        <!-- Level -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.LEVEL, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.LEVEL]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="bar_chart"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">{{ task()?.level || '-' }}</span>
+        </div>
+        <!-- Total time -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.TOTAL_TIME, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.TOTAL_TIME]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="schedule"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">{{ task()?.taskTotalTrackedSeconds ? getTaskTotalTrackedTime : '-' }}</span>
+        </div>
+        <!-- Time estimation -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.TIME_ESTIMATION, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.TIME_ESTIMATION]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="hourglass_bottom"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">
+            {{ task()?.estimation ? (task().estimation.time ? (task().estimation.time | intlDuration) : '-') : '-' }}
+          </span>
+        </div>
+        <!-- Project -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.PROJECT, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.PROJECT]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="construction"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">{{ task()?.project()?.name || '-' }}</span>
+        </div>
+        <!-- Financial estimation -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.FINANCIAL_ESTIMATION, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.FINANCIAL_ESTIMATION]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="attach_money"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">
+            {{
+              task()?.estimation
+                ? task().estimation.financial
+                  ? task().estimation.financial.amount + ' ' + task().estimation.financial.currency
+                  : '-'
+                : '-'
+            }}
+          </span>
+        </div>
+        <!-- Status -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.STATUS, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.STATUS]"
+          ></mat-checkbox>
+          <div
+            [class]="task()?.status ? TASK_STATUS_DISPLAY[task().status].colorClass : ''"
+            class="h-3.5 w-3.5 rounded-full"
+          ></div>
+          <span class="text-xs">
+            {{ task()?.status ? (TASK_STATUS_DISPLAY[task().status].translationKey | translate) : '-' }}
+          </span>
+        </div>
+        <!-- Priority -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.PRIORITY, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.PRIORITY]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="flag"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">{{ task()?.priority || '-' }}</span>
+        </div>
+        <!-- Start date -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.START_DATE, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.START_DATE]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="calendar_month"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">
+            {{ 'task-details-pdf-create-start-date-label' | translate }}
+            {{ (task()?.startDate | date: 'dd.MM.yyyy') || '-' }}
+          </span>
+        </div>
+        <!-- End date -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.END_DATE, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.END_DATE]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="calendar_month"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">
+            {{ 'task-details-pdf-create-end-date-label' | translate }}
+            {{ (task()?.endDate | date: 'dd.MM.yyyy') || '-' }}
+          </span>
+        </div>
+        <!-- Admin -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.ADMIN, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.ADMIN]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="admin_panel_settings"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">
+            {{ task()?.projectGroupAdministrator() ? task().projectGroupAdministrator().user().fullName : '-' }}
+          </span>
+        </div>
+        <!-- Users -->
+        <div class="flex items-center gap-2 px-2 py-2 min-h-10 bg-slate-50">
+          <mat-checkbox
+            (change)="setMenuItem(MenuItem.USERS, $event.checked)"
+            [disabled]="!sectionChecked()[PdfContentName.TASK_DETAILS]"
+            [checked]="menuItemChecked()[MenuItem.USERS]"
+          ></mat-checkbox>
+          <mat-icon
+            fontIcon="group"
+            class="icon-xs text-slate-500 material-symbols-outlined"
+          ></mat-icon>
+          <span class="text-xs">
+            @if (projectUsers()?.length > 0) {
+              {{ formatProjectUsersNames(projectUsers()) }}
+            } @else {
+              -
+            }
+          </span>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </section>
+
+  <!-- TASK DESCRIPTION section -->
+  <section class="my-3">
+    <mat-expansion-panel
+      [expanded]="sectionChecked()[PdfContentName.TASK_DESCRIPTION]"
+      class="rounded-md bg-white"
+    >
+      <mat-expansion-panel-header
+        collapsedHeight="auto"
+        expandedHeight="auto"
+      >
+        <div class="flex items-center gap-2 w-full py-1">
+          <mat-checkbox
+            (change)="setSection(PdfContentName.TASK_DESCRIPTION, $event.checked)"
+            [checked]="sectionChecked()[PdfContentName.TASK_DESCRIPTION]"
+          ></mat-checkbox>
+          <div class="flex flex-col pr-2">
+            <proffeo-label [textBold]="true">
+              {{ 'task-details-pdf-create-task-description' | translate }}
+            </proffeo-label>
+            <span class="text-xs text-slate-400">
+              {{ 'task-details-pdf-create-task-description-expl' | translate }}
+            </span>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+      <div class="border border-slate-300 rounded-lg p-2 text-xs text-slate-600">
+        {{ task()?.description ? removeHtmlTags(task().description) || '-' : '-' }}
+      </div>
+    </mat-expansion-panel>
+  </section>
+
+  <!-- TASK TIMELINE section -->
+  <section class="my-3">
+    <mat-expansion-panel
+      [expanded]="sectionChecked()[PdfContentName.TASK_TIMELINE]"
+      class="rounded-md bg-white"
+    >
+      <mat-expansion-panel-header
+        collapsedHeight="auto"
+        expandedHeight="auto"
+      >
+        <div class="flex items-center gap-2 w-full py-2">
+          <mat-checkbox
+            (change)="setSection(PdfContentName.TASK_TIMELINE, $event.checked)"
+            [checked]="sectionChecked()[PdfContentName.TASK_TIMELINE]"
+          ></mat-checkbox>
+          <div class="flex flex-col pr-2">
+            <proffeo-label [textBold]="true">{{ 'task-details-pdf-create-timeline' | translate }}</proffeo-label>
+            <span class="text-xs text-slate-400">{{ 'task-details-pdf-create-timeline-expl' | translate }}</span>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+
+      <div class="py-2">
+        <mat-menu #activityFilterMenu="matMenu">
+          <proffeo-activity-filter-menu (filtersChange)="activityFilters.set($event)"></proffeo-activity-filter-menu>
+        </mat-menu>
+
+        <div class="w-full overflow-auto border border-slate-300 rounded-lg">
+          <table
+            [dataSource]="timelineRows()"
+            mat-table
+            matSort
+            class="w-full text-xs"
+          >
+            <ng-container matColumnDef="date">
+              <th
+                *matHeaderCellDef
+                mat-header-cell
+                class="px-3 py-2 w-[15%] font-bold text-center bg-slate-50"
+              >
+                {{ 'task-details-pdf-create-timeline-date' | translate }}
+              </th>
+              <td
+                *matCellDef="let row"
+                mat-cell
+                class="px-3 py-2 whitespace-nowrap"
+              >
+                @if (row.date) {
+                  {{ row.date | date: 'dd.MM.yyyy' }}
+                }
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="user">
+              <th
+                *matHeaderCellDef
+                mat-header-cell
+                class="px-3 py-2 w-[15%] font-bold text-center bg-slate-50"
+              >
+                {{ 'task-details-pdf-create-timeline-user' | translate }}
+              </th>
+              <td
+                *matCellDef="let row"
+                mat-cell
+                class="px-3 py-2 whitespace-nowrap"
+              >
+                @if (row.user) {
+                  {{ row.user.fullName }}
+                }
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="timeline">
+              <th
+                *matHeaderCellDef
+                mat-header-cell
+                class="px-3 py-2 font-semibold align-center bg-slate-50"
+              >
+                {{ 'task-details-pdf-create-timeline-timeline' | translate }}
+                <button
+                  [matMenuTriggerFor]="activityFilterMenu"
+                  [disabled]="!sectionChecked()[PdfContentName.TASK_TIMELINE]"
+                  mat-icon-button
+                >
+                  <mat-icon
+                    fontIcon="filter_list"
+                    class="icon-sm text-slate-500"
+                  ></mat-icon>
+                </button>
+              </th>
+              <td
+                *matCellDef="let row"
+                mat-cell
+                class="px-3 py-2"
+              >
+                <div class="flex items-center min-w-0">
+                  @if (row.activity.taskActivityType === TaskActivityType.TaskMessageAdded) {
+                    @if (row.activity?.data?.message) {
+                      <div class="text-sm text-slate-500 break-words">
+                        {{ 'task-details-modal-activity-comment' | translate }}: {{ row.activity.data.message }}
+                      </div>
+                    }
+                  } @else {
+                    <proffeo-task-activity-content [activity]="row.activity"></proffeo-task-activity-content>
+                  }
+                </div>
+              </td>
+            </ng-container>
+
+            <tr
+              *matHeaderRowDef="displayedColumns"
+              mat-header-row
+              class="border-b border-slate-300"
+            ></tr>
+            <tr
+              *matRowDef="let row; columns: displayedColumns"
+              mat-row
+              class="border-b border-slate-300 last:border-b-0"
+            ></tr>
+          </table>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </section>
+
+  <!-- TASK ATTACHMENTS section -->
+  <section class="my-3">
+    <mat-expansion-panel
+      [expanded]="sectionChecked()[PdfContentName.TASK_ATTACHMENTS]"
+      class="rounded-md bg-white"
+    >
+      <mat-expansion-panel-header
+        collapsedHeight="auto"
+        expandedHeight="auto"
+      >
+        <div class="flex items-center gap-2 w-full py-2">
+          <mat-checkbox
+            (change)="setSection(PdfContentName.TASK_ATTACHMENTS, $event.checked)"
+            [checked]="sectionChecked()[PdfContentName.TASK_ATTACHMENTS]"
+          ></mat-checkbox>
+          <div class="flex flex-col pr-2">
+            <proffeo-label [textBold]="true">{{ 'task-details-pdf-create-attachments' | translate }}</proffeo-label>
+            <span class="text-xs text-slate-400">{{ 'task-details-pdf-create-attachments-expl' | translate }}</span>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+
+      <div class="flex items-center mt-2">
+        <mat-checkbox
+          (change)="setAllAttachments($event.checked)"
+          [disabled]="!sectionChecked()[PdfContentName.TASK_ATTACHMENTS]"
+          [checked]="selectAllAttachmentsChecked()"
+          [indeterminate]="selectAllAttachmentsIndeterminate()"
+        ></mat-checkbox>
+        <proffeo-label>{{ 'task-details-pdf-create-select-all' | translate }}</proffeo-label>
+      </div>
+
+      <div
+        [ngClass]="isMobile() ? 'grid-cols-1' : 'grid-cols-2'"
+        class="grid gap-3 p-2 mt-1 border border-slate-300 rounded-lg"
+      >
+        @for (file of imageAttachments(); track file.id) {
+          <div
+            (click)="sectionChecked()[PdfContentName.TASK_ATTACHMENTS] && toggleAttachment(file.id)"
+            [ngClass]="
+              attachmentChecked()[file.id] && sectionChecked()[PdfContentName.TASK_ATTACHMENTS]
+                ? 'border-accent'
+                : 'border-slate-300'
+            "
+            class="relative p-2 border rounded-md cursor-pointer flex flex-col items-center gap-2"
+          >
+            <mat-checkbox
+              #attachmentCheckbox
+              [checked]="attachmentChecked()[file.id]"
+              [disabled]="!sectionChecked()[PdfContentName.TASK_ATTACHMENTS]"
+            ></mat-checkbox>
+            <div class="flex items-center justify-center w-full">
+              <img
+                [src]="file.fullviewUrl()"
+                alt="image"
+                class="object-cover max-h-52 w-auto rounded"
+              />
+            </div>
+            <span class="text-xs text-slate-500 text-center">{{ file.description }}</span>
+          </div>
+        }
+      </div>
+    </mat-expansion-panel>
+  </section>
+</main>

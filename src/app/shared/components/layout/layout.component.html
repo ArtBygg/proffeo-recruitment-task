@@ -1,0 +1,526 @@
+<div
+  class="h-dvh max-h-dvh min-h-dvh"
+  class="overflow-hidden layout-wrapper relative flex w-full flex-col md:flex-row"
+>
+  <div class="shrink-0">
+    @if (isMobile()) {
+      <proffeo-active-timer-bar></proffeo-active-timer-bar>
+    }
+
+    <div class="bg-secondary flex h-[60px] min-h-[60px] w-full items-center justify-between px-3 md:hidden">
+        <mat-icon
+          (click)="toggleMenu()"
+          [fontIcon]="expanded() ? 'menu_open' : 'menu'"
+          class="text-white!"
+        ></mat-icon>
+        <div class="flex w-full gap-1.5 items-center justify-center max-w-[80%]">
+          @if (activeCompany(); as company) {
+            <p class="font-medium text-white opacity-90 truncate max-w-[40%] sm:max-w-[50%]">
+              {{ company.name }}
+            </p>
+          }
+          @if (activeProject(); as project) {
+            <p class="font-medium text-white opacity-90 truncate max-w-[50%] sm:max-w-[75%]">- {{ project.name }}</p>
+          }
+        </div>
+        <mat-icon
+          [matMenuTriggerFor]="userMenu"
+          fontIcon="account_circle"
+          class="text-white!"
+        ></mat-icon>
+      </div>
+  </div>
+
+  <div class="layout-body flex flex-1 overflow-hidden">
+    @if (expanded()) {
+        <div class="layout-menu-container w-screen z-120 overflow-y-auto menu-wrapper bg-secondary p-5 md:hidden">
+          <div class="flex flex-col w-full gap-2 pb-3">
+            <div class="group flex h-[38px] cursor-pointer items-center gap-2">
+              <mat-icon
+                fontIcon="domain"
+                class="text-white! transition-all! opacity-75 group-hover:opacity-100"
+              ></mat-icon>
+              <mat-select
+                (selectionChange)="onCompanySelected($event.value)"
+                [value]="activeCompany()"
+                [compareWith]="compareCompanies"
+                placeholder="{{ 'menu-select-company-dropdown-placeholder' | translate }}"
+                class="w-full border-b border-white border-opacity-25 pb-1 text-white"
+              >
+                <mat-select-trigger>
+                  <div class="flex w-full items-center text-nowrap px-2">
+                    <p class="max-w-28 truncate text-white">
+                      {{ activeCompany()?.name }}
+                    </p>
+                  </div>
+                </mat-select-trigger>
+                @for (company of companies(); track company?.id) {
+                  <mat-option
+                    [value]="company"
+                    class="w-full"
+                  >
+                    <div class="flex w-full items-center truncate text-nowrap px-2">
+                      <p class="max-w-50 truncate">{{ company.name }}</p>
+                    </div>
+                  </mat-option>
+                }
+              </mat-select>
+            </div>
+
+            @if (projects()?.length > 0 && activeCompany()) {
+              <div class="group flex h-[38px] cursor-pointer items-center gap-2">
+                <mat-icon
+                  fontIcon="task_alt"
+                  class="text-white! transition-all! opacity-75 group-hover:opacity-100"
+                ></mat-icon>
+                <mat-select
+                  (selectionChange)="onProjectSelected($event.value)"
+                  [value]="activeProject()"
+                  [compareWith]="compareProjects"
+                  placeholder="{{ 'menu-select-project-dropdown-placeholder' | translate }}"
+                  class="w-full border-b border-white border-opacity-25 pb-1 text-white"
+                >
+                  <mat-select-trigger>
+                    <div class="flex w-full items-center text-nowrap px-2">
+                      <p class="max-w-28 truncate text-white!">
+                        {{ activeProject()?.name }}
+                      </p>
+                    </div>
+                  </mat-select-trigger>
+                  @for (project of projects(); track project?.id) {
+                    <mat-option
+                      [value]="project"
+                      class="w-full"
+                    >
+                      <div class="flex w-full items-center text-nowrap px-2">
+                        <p class="max-w-50 truncate">{{ project?.name }}</p>
+                      </div>
+                    </mat-option>
+                  }
+                </mat-select>
+              </div>
+            }
+          </div>
+
+          <!--        App Section-->
+          <div class="flex h-full w-full flex-col gap-5">
+            @if (dashboardMenuItems(); as dashboardMenu) {
+              <div class="flex flex-col justify-center gap-2">
+                <div class="flex h-[21px] w-full items-center justify-center gap-2 opacity-75">
+                  <div class="flex h-full w-full items-center justify-center gap-2">
+                    <span class="h-px w-full bg-white"></span>
+                    <p class="text-nowrap text-base font-medium text-white">
+                      {{ dashboardMenu.titleTranslationKey | translate }}
+                    </p>
+                    <span class="h-px w-full bg-white"></span>
+                  </div>
+                </div>
+                <div class="flex flex-col justify-center gap-2">
+                  @for (item of dashboardMenu.children; track $index) {
+                    <div
+                      (click)="!item.disabled && handleNavigationClick()"
+                      [ngClass]="{
+                        'cursor-pointer hover:opacity-100 opacity-75': !item.disabled,
+                        'opacity-25 cursor-default': item.disabled,
+                        'opacity-100': isMenuItemActive(item.link)
+                      }"
+                      [routerLink]="item.disabled ? null : item.link"
+                      [routerLinkActiveOptions]="{ exact: item.exactMatch ?? false }"
+                      [matTooltip]="item.disabled ? (item.disabledTooltipTranslationKey | translate) : ''"
+                      [matTooltipDisabled]="!item.disabled"
+                      routerLinkActive
+                      class="group flex h-[38px] cursor-pointer items-center gap-2"
+                    >
+                      <mat-icon
+                        [fontIcon]="item.icon"
+                        [class.opacity-100]="isMenuItemActive(item.link)"
+                        class="text-white! transition-all! opacity-75"
+                      ></mat-icon>
+                      <p class="truncate text-nowrap text-white">
+                        {{ item.titleTranslationKey | translate }}
+                      </p>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!--          Project section-->
+            @if (activeProjectMenuItems(); as projectMenu) {
+              <div class="flex flex-col justify-center gap-2">
+                <div class="flex h-[21px] w-full items-center justify-center gap-2 opacity-75">
+                  <div class="flex h-full w-full items-center justify-center gap-2">
+                    <span class="h-px w-full bg-white"></span>
+                    <p class="text-nowrap text-base font-medium text-white">
+                      {{ projectMenu.titleTranslationKey | translate }}
+                    </p>
+                    <span class="h-px w-full bg-white"></span>
+                  </div>
+                </div>
+                <div class="flex flex-col justify-center gap-2">
+                  @for (item of projectMenu.children; track $index) {
+                    <div
+                      (click)="handleNavigationClick()"
+                      [ngClass]="isMenuItemActive(item.link) ? 'font-semibold text-white opacity-100' : 'opacity-75'"
+                      [routerLink]="item?.link"
+                      [routerLinkActiveOptions]="{ exact: item.exactMatch ?? false }"
+                      routerLinkActive
+                      class="group flex h-[38px] cursor-pointer items-center gap-2 hover:opacity-100"
+                    >
+                      <span>
+                        <mat-icon
+                          [fontIcon]="item.icon"
+                          [class.opacity-100]="isMenuItemActive(item.link)"
+                          class="text-white! transition-all! opacity-75 group-hover:opacity-100"
+                        ></mat-icon>
+                      </span>
+                      <p class="truncate text-nowrap text-white">
+                        {{ item.titleTranslationKey | translate }}
+                      </p>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!--          Company Section-->
+            @if (activeCompanyMenuItems(); as companyMenu) {
+              <div class="flex flex-col justify-center gap-2">
+                <div class="flex h-[21px] w-full items-center justify-center gap-2 opacity-75">
+                  <div class="flex h-full w-full items-center justify-center gap-2">
+                    <span class="h-px w-full bg-white"></span>
+                    <p class="text-nowrap text-base font-medium text-white">
+                      {{ companyMenu.titleTranslationKey | translate }}
+                    </p>
+                    <span class="h-px w-full bg-white"></span>
+                  </div>
+                </div>
+                <div class="flex flex-col justify-center gap-2">
+                  @for (item of companyMenu.children; track $index) {
+                    <div
+                      (click)="handleNavigationClick()"
+                      [ngClass]="isMenuItemActive(item.link) ? 'opacity-100' : 'opacity-75'"
+                      [routerLink]="item?.link"
+                      [routerLinkActiveOptions]="{
+                        exact: item.exactMatch ?? false
+                      }"
+                      routerLinkActive
+                      class="group flex h-[38px] cursor-pointer items-center gap-2 hover:opacity-100"
+                    >
+                      <mat-icon
+                        [fontIcon]="item.icon"
+                        [class.opacity-100]="isMenuItemActive(item.link)"
+                        class="text-white! transition-all! opacity-75 group-hover:opacity-100"
+                      ></mat-icon>
+                      <p class="truncate text-nowrap text-white">
+                        {{ item.titleTranslationKey | translate }}
+                      </p>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- DESKTOP -->
+
+      <div
+        (mouseenter)="turnOffMenuAutoclose()"
+        (mouseleave)="triggerMenuAutoclose()"
+        [ngClass]="expanded() ? 'layout-menu-container w-[200px]' : 'scrollbar-hide w-14'"
+        class="menu-wrapper px-2 bg-secondary shadow-r hidden h-dvh flex-col gap-6 overflow-y-auto overflow-x-hidden border-r border-black/10 px-2 pl-3 md:flex transition-[width] duration-100 ease-out"
+      >
+        <div class="flex flex-col gap-5 py-5">
+          <span
+            (click)="toggleMenu()"
+            class="group cursor-pointer"
+          >
+            <mat-icon
+              [fontIcon]="expanded() ? 'menu_open' : 'menu'"
+              class="text-white! transition-all! opacity-75 group-hover:opacity-100"
+            ></mat-icon>
+          </span>
+          <div class="group flex h-[38px] items-center gap-2">
+            <mat-icon
+              fontIcon="domain"
+              class="text-white!"
+            ></mat-icon>
+            @if (expanded()) {
+              <mat-select
+                (selectionChange)="onCompanySelected($event.value)"
+                [value]="activeCompany()"
+                [compareWith]="compareCompanies"
+                [placeholder]="'menu-select-company-dropdown-placeholder' | translate"
+                class="w-full border-b border-white border-opacity-25 pb-1 text-white"
+              >
+                <mat-select-trigger>
+                  <div class="flex w-full items-center text-nowrap px-2">
+                    <p class="max-w-28 truncate text-white">
+                      {{ activeCompany()?.name }}
+                    </p>
+                  </div>
+                </mat-select-trigger>
+                @for (company of companies(); track company?.id) {
+                  <mat-option
+                    (mouseenter)="turnOffMenuAutoclose()"
+                    [value]="company"
+                    class="w-full"
+                  >
+                    <div class="flex w-full items-center truncate text-nowrap px-2">
+                      <p class="max-w-50 truncate">{{ company.name }}</p>
+                    </div>
+                  </mat-option>
+                }
+              </mat-select>
+            }
+          </div>
+
+          @if (projects()?.length > 0 && activeCompany()) {
+            <div class="group flex h-[38px] items-center gap-2">
+              <mat-icon
+                fontIcon="task_alt"
+                class="text-white!"
+              ></mat-icon>
+              @if (expanded()) {
+                <mat-select
+                  (selectionChange)="onProjectSelected($event.value)"
+                  [value]="activeProject()"
+                  [compareWith]="compareProjects"
+                  [placeholder]="'menu-select-project-dropdown-placeholder' | translate"
+                  class="w-full border-b border-white border-opacity-25 pb-1 text-white"
+                >
+                  <mat-select-trigger>
+                    <div class="flex w-full items-center text-nowrap px-2">
+                      <p class="max-w-28 truncate text-white">
+                        {{ activeProject()?.name }}
+                      </p>
+                    </div>
+                  </mat-select-trigger>
+                  @for (project of projects(); track project?.id) {
+                    <mat-option
+                      (mouseenter)="turnOffMenuAutoclose()"
+                      [value]="project"
+                      class="w-full"
+                    >
+                      <div class="flex w-full items-center text-nowrap px-2">
+                        <p class="max-w-50 truncate">{{ project?.name }}</p>
+                      </div>
+                    </mat-option>
+                  }
+                </mat-select>
+              }
+            </div>
+          }
+        </div>
+
+        <!--        App Section-->
+        <div class="flex h-full w-full flex-col gap-5">
+          @if (dashboardMenuItems(); as dashboardMenu) {
+            <div class="flex flex-col justify-center gap-2">
+              <div class="flex h-[21px] w-full items-center justify-center gap-2 opacity-75">
+                @if (expanded()) {
+                  <div class="flex h-full w-full items-center justify-center gap-2">
+                    <span class="h-px w-full bg-white"></span>
+                    <p class="text-nowrap text-base font-medium text-white">
+                      {{ dashboardMenu.titleTranslationKey | translate }}
+                    </p>
+                    <span class="h-px w-full bg-white"></span>
+                  </div>
+                }
+              </div>
+              <div class="flex flex-col justify-center gap-2">
+                @for (item of dashboardMenu.children; track $index) {
+                  <div
+                    [ngClass]="{
+                      'cursor-pointer hover:opacity-100 opacity-75': !item.disabled,
+                      'opacity-30 cursor-default': item.disabled,
+                      'opacity-100': isMenuItemActive(item.link)
+                    }"
+                    [routerLink]="item.disabled ? null : item.link"
+                    [routerLinkActiveOptions]="{ exact: item.exactMatch ?? false }"
+                    [matTooltip]="item.disabled ? (item.disabledTooltipTranslationKey | translate) : ''"
+                    [matTooltipDisabled]="!item.disabled"
+                    routerLinkActive
+                    class="group flex h-[38px] cursor-pointer items-center gap-2"
+                  >
+                    <mat-icon
+                      [fontIcon]="item.icon"
+                      [class.opacity-100]="isMenuItemActive(item.link)"
+                      class="text-white!"
+                    ></mat-icon>
+                    @if (expanded()) {
+                      <p class="truncate text-nowrap text-white">
+                        {{ item.titleTranslationKey | translate }}
+                      </p>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <!--          Project section-->
+          @if (activeProjectMenuItems(); as projectMenu) {
+            <div class="flex flex-col justify-center gap-2">
+              <div class="flex h-[21px] w-full items-center justify-center gap-2 opacity-75">
+                @if (expanded()) {
+                  <div class="flex h-full w-full items-center justify-center gap-2">
+                    <span class="h-px w-full bg-white"></span>
+                    <p class="text-nowrap text-base font-medium text-white">
+                      {{ projectMenu.titleTranslationKey | translate }}
+                    </p>
+                    <span class="h-px w-full bg-white"></span>
+                  </div>
+                }
+              </div>
+              <div class="flex flex-col justify-center gap-2">
+                @for (item of projectMenu.children; track $index) {
+                  <div
+                    [ngClass]="isMenuItemActive(item.link) ? 'opacity-100' : 'opacity-75'"
+                    [routerLink]="item?.link"
+                    [routerLinkActiveOptions]="{
+                      exact: item.exactMatch ?? false
+                    }"
+                    routerLinkActive
+                    class="group flex h-[38px] cursor-pointer items-center gap-2 hover:opacity-100"
+                  >
+                    <mat-icon
+                      [fontIcon]="item.icon"
+                      [class.opacity-100]="isMenuItemActive(item.link)"
+                      class="text-white!"
+                    ></mat-icon>
+                    @if (expanded()) {
+                      <p class="truncate text-nowrap text-white">
+                        {{ item.titleTranslationKey | translate }}
+                      </p>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <!--          Company Section-->
+          @if (activeCompanyMenuItems(); as companyMenu) {
+            <div class="flex flex-col justify-center gap-2">
+              <div class="flex h-[21px] w-full items-center justify-center gap-2 opacity-75">
+                @if (expanded()) {
+                  <div class="flex h-full w-full items-center justify-center gap-2">
+                    <span class="h-px w-full bg-white"></span>
+                    <p class="text-nowrap text-base font-medium text-white">
+                      {{ companyMenu.titleTranslationKey | translate }}
+                    </p>
+                    <span class="h-px w-full bg-white"></span>
+                  </div>
+                }
+              </div>
+              <div class="flex flex-col justify-center gap-2">
+                @for (item of companyMenu.children; track $index) {
+                  <div
+                    [ngClass]="isMenuItemActive(item.link) ? 'opacity-100' : 'opacity-75'"
+                    [routerLink]="item?.link"
+                    [routerLinkActiveOptions]="{
+                      exact: item.exactMatch ?? false
+                    }"
+                    routerLinkActive
+                    class="group flex h-[38px] cursor-pointer items-center gap-2 hover:opacity-100"
+                  >
+                    <mat-icon
+                      [fontIcon]="item.icon"
+                      [class.opacity-100]="isMenuItemActive(item.link)"
+                      class="text-white!"
+                    ></mat-icon>
+                    @if (expanded()) {
+                      <p class="truncate text-nowrap text-white">
+                        {{ item.titleTranslationKey | translate }}
+                      </p>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <div
+          class="bg-secondary sticky bottom-0 z-10 flex flex-col items-center gap-3 border-t border-white border-opacity-10 py-3"
+        >
+          <div
+            [matMenuTriggerFor]="userMenu"
+            class="flex gap-2 items-center group cursor-pointer"
+          >
+            <mat-icon
+              fontIcon="account_circle"
+              class="text-white!"
+            ></mat-icon>
+            @if (expanded()) {
+              <p class="truncate text-nowrap text-white opacity-75 group-hover:opacity-100">
+                {{ currentUser()?.fullName }}
+              </p>
+            }
+          </div>
+          <proffeo-lang-toggle [expanded]="expanded()"></proffeo-lang-toggle>
+        </div>
+      </div>
+    <proffeo-global-loader
+      cdkScrollable
+      class="app-content flex-1 overflow-y-auto bg-lightGray-default w-full"
+    >
+      <div class="flex flex-col h-full">
+        @if (!isMobile()) {
+          <proffeo-active-timer-bar></proffeo-active-timer-bar>
+        }
+        <router-outlet></router-outlet>
+      </div>
+    </proffeo-global-loader>
+  </div>
+</div>
+
+<mat-menu #userMenu="matMenu">
+  @if (currentUser(); as user) {
+    <div class="flex flex-col">
+      <div class="flex w-full flex-col gap-1 px-4 py-2">
+        <p class="font-semibold">{{ 'layout-user-signed-in-as' | translate }}</p>
+        <p>{{ user.email }}</p>
+      </div>
+      @if (isMobile()) {
+        <button
+          (click)="langToggle.openMenu($event)"
+          class="flex w-full items-center gap-2 px-4 py-2 hover:bg-accent hover:text-white cursor-pointer transition-default group"
+        >
+          <proffeo-lang-toggle
+            #langToggle
+            class="w-6"
+          ></proffeo-lang-toggle>
+          {{ 'layout-language' | translate }}
+        </button>
+      }
+      <button class="hidden w-full items-center gap-2 px-4 py-2 hover:bg-gray-200">
+        <mat-icon
+          fontIcon="person"
+          class="text-[20px]"
+        ></mat-icon>
+        {{ 'layout-user-my-profile' | translate }}
+      </button>
+      <button class="hidden w-full items-center gap-2 px-4 py-2 hover:bg-gray-200">
+        <mat-icon
+          fontIcon="settings"
+          class="text-[20px]"
+        ></mat-icon>
+        {{ 'layout-user-settings' | translate }}
+      </button>
+      <button
+        (click)="openChangePasswordModal()"
+        class="flex w-full items-center gap-2 px-4 py-2 hover:bg-accent hover:text-white cursor-pointer transition-default group"
+      >
+        <mat-icon
+          fontIcon="lock"
+          class="group-hover:text-white!"
+        ></mat-icon>
+        {{ 'change-password' | translate }}
+      </button>
+    </div>
+  }
+</mat-menu>

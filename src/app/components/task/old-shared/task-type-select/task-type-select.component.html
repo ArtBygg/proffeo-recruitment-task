@@ -1,0 +1,42 @@
+<div
+  (click)="readonly() ? null : $event.stopPropagation()"
+  class="flex items-center gap-1"
+>
+  @if (small()) {
+    <mat-icon
+      fontIcon="numbers"
+      class="icon-sm opacity-50"
+    ></mat-icon>
+  }
+  <p
+    [class.gap-1]="!readonly()"
+    class="truncate flex items-center"
+  >
+    <b>
+      @if (!readonly()) {
+        <button
+          [matMenuTriggerFor]="taskTypeSelect"
+          class="flex items-center justify-center px-1.5 py-1 border-slate-200 bg-slate-200 border cursor-pointer rounded-md hover:bg-gray-200 transition-default text-sm"
+        >
+          {{ selectedTaskType()?.code }}
+        </button>
+      } @else {
+        <span>{{ selectedTaskType()?.code }}</span>
+      }
+    </b>
+    <span>-{{ taskNumber() }}</span>
+  </p>
+</div>
+<mat-menu #taskTypeSelect="matMenu">
+  <div class="flex flex-col w-full">
+    @for (type of taskTypes(); track type.id) {
+      <div
+        (click)="selectTaskType(type)"
+        class="flex items-center py-1.5 px-3 gap-1.5 hover-opacity"
+      >
+        <span class="font-medium">{{ type.code }}</span>
+        <p class="font-medium">{{ type.name }}</p>
+      </div>
+    }
+  </div>
+</mat-menu>

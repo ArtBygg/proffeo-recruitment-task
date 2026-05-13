@@ -1,0 +1,50 @@
+<div
+  [ngClass]="getRingClass()"
+  [matTooltip]="matTooltip() ? matTooltip() : getDefaultTooltip()"
+  [matTooltipPosition]="'above'"
+  matTooltipClass="tooltip-with-arrow"
+  class="flex items-center justify-center overflow-hidden rounded-full"
+>
+  @if (user()?.avatarId || ngIcon()) {
+    @if (user()?.avatarId) {
+      <img
+        (click)="avatarClicked()"
+        [alt]="user()?.firstName + ' avatar'"
+        [src]="user() | userAvatar"
+        class="h-full w-full cursor-pointer object-cover"
+      />
+    } @else {
+      <div
+        (click)="avatarClicked()"
+        [ngClass]="getRingClass()"
+        class="relative flex h-full w-full cursor-pointer items-center justify-center bg-gradient-to-br from-gray-500 to-gray-600"
+      >
+        <mat-icon
+          [ngClass]="getIconClass()"
+          [fontIcon]="ngIconName()"
+          class="flex-0 white-icon material-symbols-filled"
+        ></mat-icon>
+      </div>
+    }
+  } @else {
+    <div
+      (click)="avatarClicked()"
+      [class]="getRingClass() + ' ' + getTextSizeClass()"
+      class="flex h-8 w-8 cursor-pointer items-center justify-center from-gray-400 to-gray-500 bg-gradient-to-br text-white"
+    >
+      @if (avatarNumber() > 0) {
+        <p>+{{ avatarNumber() }}</p>
+      } @else {
+        @if (user()) {
+          <p>{{ user().firstName | slice: 0 : 1 }}{{ user().lastName | slice: 0 : 1 }}</p>
+        } @else {
+          <mat-icon
+            [ngClass]="getIconClass()"
+            fontIcon="person"
+            class="flex-0 white-icon material-symbols-filled"
+          ></mat-icon>
+        }
+      }
+    </div>
+  }
+</div>

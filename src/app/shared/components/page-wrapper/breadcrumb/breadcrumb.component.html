@@ -1,0 +1,16 @@
+<nav class="flex w-full min-w-0 items-center text-font-300 font-medium text-sm overflow-hidden">
+  @for (crumb of breadcrumbs(); track crumb.url; let last = $last) {
+    @if (!last) {
+      <a
+        [routerLink]="crumb.url"
+        class="breadcrumb-item shrink hover:text-primary-500 bg-darkGray-100 hover:bg-darkGray-200 pl-2 pr-2 py-1 min-w-0 truncate cursor-pointer"
+      >
+        {{ crumb.label | translate }}
+      </a>
+    } @else {
+      <span class="breadcrumb-item shrink min-w-0 pl-2 pr-2 py-1 bg-darkGray-100 truncate text-font-400">
+        {{ crumb.label | translate }}
+      </span>
+    }
+  }
+</nav>

@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+@tailwind components;
+
+@layer components {
+  .avatarWrapper {
+    @apply flex w-full h-full justify-center cursor-pointer items-center;
+  }
+}
+
+.hover-grow:hover {
+  transition: transform 0.1s ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+    transition: transform 0.1s ease-in-out;
+  }
+}
+
+:host ::ng-deep .mat-icon.white-icon {
+  color: #ffffff !important;
+}
+
+.mat-icon.white-icon {
+  color: #ffffff !important;
+}

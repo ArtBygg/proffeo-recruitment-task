@@ -1,0 +1,53 @@
+<div
+  #containerRef
+  (click)="toggleEditing(true)"
+  [style.line-height]="0"
+  tiptapNodeViewWrapper
+  tiptapDraggable
+  class="overflow-visible relative inline-block select-none"
+>
+  <img
+    #imgRef
+    [attr.src]="node().attrs?.src"
+    [attr.alt]="node().attrs?.alt"
+    [attr.title]="node().attrs?.title"
+    [attr.width]="node().attrs?.width"
+    [ngStyle]="resizingStyle"
+    style="cursor: default"
+  />
+  @if (editing) {
+    <!-- Resize handle bars -->
+    <div
+      (mousedown)="startMouseResize($event, 'w')"
+      (touchstart)="startTouchResize($event, 'w')"
+      role="button"
+      tabindex="0"
+      class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-6 h-24 bg-white rounded-full shadow-lg z-50 cursor-ew-resize flex flex-col items-center justify-center border border-gray-200"
+    >
+      <!-- Grip dots -->
+      <div class="space-y-1.5">
+        <div class="w-1 h-1 rounded-full bg-gray-400"></div>
+        <div class="w-1 h-1 rounded-full bg-gray-400"></div>
+        <div class="w-1 h-1 rounded-full bg-gray-400"></div>
+      </div>
+    </div>
+
+    <div
+      (mousedown)="startMouseResize($event, 'e')"
+      (touchstart)="startTouchResize($event, 'e')"
+      role="button"
+      tabindex="0"
+      class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-6 h-24 bg-white rounded-full shadow-lg z-50 cursor-ew-resize flex flex-col items-center justify-center border border-gray-200"
+    >
+      <!-- Grip dots -->
+      <div class="space-y-1.5">
+        <div class="w-1 h-1 rounded-full bg-gray-400"></div>
+        <div class="w-1 h-1 rounded-full bg-gray-400"></div>
+        <div class="w-1 h-1 rounded-full bg-gray-400"></div>
+      </div>
+    </div>
+
+    <!-- Optional resize overlay to show active state -->
+    <div class="absolute inset-0 border-2 border-primary-200 rounded"></div>
+  }
+</div>

@@ -1,0 +1,48 @@
+<button
+  (menuOpened)="disableScroll()"
+  (menuClosed)="enableScroll()"
+  [class.cursor-pointer]="!isReadonly()"
+  [matMenuTriggerFor]="menu"
+  [disabled]="isReadonly()"
+  [ngClass]="{
+    'opacity-50': isReadonly()
+  }"
+  class="flex gap-2 items-center"
+>
+  <div class="flex items-center justify-center w-8 h-8">
+    @if (getDropDownItem(selectedActiveStatus())) {
+      <mat-icon
+        [fontIcon]="getDropDownItem(selectedActiveStatus()).iconName"
+        [ngClass]="getDropDownItem(selectedActiveStatus()).iconColor"
+        class="text-xl"
+      ></mat-icon>
+    } @else {
+      <mat-icon
+        fontIcon="circle"
+        class="text-xl text-gray-400"
+      ></mat-icon>
+    }
+  </div>
+  @if (!minimalMode()) {
+    <p class="text-slate text-base whitespace-nowrap">
+      {{ (getDropDownItem(selectedActiveStatus())?.label | translate) || 'Select status' }}
+    </p>
+  }
+</button>
+
+<mat-menu #menu="matMenu">
+  @for (status of dropdownItems; track $index) {
+    <button
+      (click)="selected(status.value)"
+      mat-menu-item
+      class="flex items-center"
+    >
+      <mat-icon
+        [fontIcon]="status.iconName"
+        [ngClass]="status.iconColor"
+        class="text-xl"
+      ></mat-icon>
+      {{ status.label | translate }}
+    </button>
+  }
+</mat-menu>

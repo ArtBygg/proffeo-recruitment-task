@@ -1,0 +1,7 @@
+@use '@angular/material' as mat;
+
+@mixin mat-dialog-tokens() {
+  @include mat.dialog-overrides(
+    (container-max-width: 1200px, container-shape: var(--radius-md, 0.375rem), supporting-text-color: var(--color-font))
+  );
+}

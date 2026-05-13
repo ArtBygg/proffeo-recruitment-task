@@ -1,0 +1,75 @@
+<div class="scrollbar-hide flex w-full max-w-full gap-2">
+  @if (getPreviousContext().year !== undefined) {
+    <div
+      (click)="onPrevious()"
+      class="bg-darkGray-100 flex w-32 min-w-32 max-w-32 cursor-pointer flex-col rounded-md px-4 py-2 hover:bg-darkGray-200"
+    >
+      <p class="w-full text-sm text-slate">{{ getPreviousContext().labelHeader }}</p>
+      <p class="text-lg font-medium text-white">{{ getPreviousContext().label }}</p>
+    </div>
+  }
+
+  @for (item of visibleModeData(); let i = $index; track item) {
+    <div
+      (click)="onItemClick(item)"
+      [ngClass]="selectedValue() === item ? 'bg-darkGray-300' : 'bg-darkGray-100 hover:bg-darkGray-200'"
+      [id]="'time-report-item-' + item"
+      class="flex w-32 min-w-32 max-w-32 cursor-pointer flex-col rounded-md px-4 py-2 transition-colors"
+    >
+      @if (selectedTimeMode() === 'MONTH') {
+        <p
+          [ngClass]="selectedValue() === item ? 'text-white' : 'text-slate'"
+          class="w-full text-sm"
+        >
+          {{ getYearFromItem(item.toString()) }}
+        </p>
+        <p
+          [ngClass]="selectedValue() === item ? 'text-white' : 'text-slate'"
+          class="text-lg font-medium"
+        >
+          {{ getMonthFromItem(item.toString()) }}
+        </p>
+      } @else if (selectedTimeMode() === 'DAY') {
+        <p
+          [ngClass]="selectedValue() === item ? 'text-white' : 'text-slate'"
+          class="w-full text-xs"
+        >
+          {{ selectedModeHeaderText() }}
+        </p>
+        <p
+          [ngClass]="selectedValue() === item ? 'text-white' : 'text-slate'"
+          class="text-md font-medium"
+        >
+          {{ getDayLabel(+item) }}
+        </p>
+      } @else {
+        <p
+          [ngClass]="selectedValue() === item ? 'text-white' : 'text-slate'"
+          class="w-full text-xs"
+        >
+          @if (selectedTimeMode() === 'WEEK') {
+            {{ getWeekRange(+item) + ' ' }}
+          }
+          {{ selectedModeHeaderText() }}
+        </p>
+        <p
+          [ngClass]="selectedValue() === item ? 'text-white' : 'text-slate'"
+          class="text-lg font-medium"
+        >
+          {{ selectedModeValuePrefix() }}
+          <span class="text-xl font-bold">{{ item }}</span>
+        </p>
+      }
+    </div>
+  }
+
+  @if (getNextContext().year !== undefined) {
+    <div
+      (click)="onNext()"
+      class="bg-darkGray-100 flex w-32 min-w-32 max-w-32 cursor-pointer flex-col rounded-md px-4 py-2 hover:bg-darkGray-200"
+    >
+      <p class="w-full text-sm text-slate">{{ getNextContext().labelHeader }}</p>
+      <p class="text-lg font-medium text-white">{{ getNextContext().label }}</p>
+    </div>
+  }
+</div>

@@ -1,0 +1,95 @@
+<proffeo-modal [hideDefaultTitle]="true">
+  <div
+    modal-header
+    class="flex flex-col gap-1"
+  >
+    @if (selectionMode === SelectMode.SINGLE) {
+      <h2 class="text-lg font-semibold text-slate-900">
+        {{ 'select-groups-modal.single-title' | translate }}
+      </h2>
+    } @else {
+      <h2 class="text-lg font-semibold text-slate-900">
+        {{ 'select-groups-modal.multi-title' | translate }}
+      </h2>
+    }
+  </div>
+
+  <div class="flex h-full min-h-0 w-full max-w-full flex-col gap-3">
+    <mat-form-field
+      appearance="outline"
+      subscriptSizing="dynamic"
+      class="w-full shrink-0"
+    >
+      <mat-icon
+        matPrefix
+        class="material-symbols-outlined text-slate-500"
+      >
+        search
+      </mat-icon>
+      <input
+        [formControl]="searchControl"
+        [placeholder]="'select-groups-modal.search-placeholder' | translate"
+        matInput
+      />
+    </mat-form-field>
+
+    <div class="min-h-0 flex-1 overflow-y-auto rounded-md border border-slate-200/80">
+      @for (root of displayGroups(); track root.id) {
+        <proffeo-select-groups-tree-node
+          [group]="root"
+          [depth]="0"
+          [selectionMode]="selectionMode"
+          [allowHierarchy]="allowHierarchy"
+          [searchLower]="searchLower() ?? ''"
+          [lockedIds]="lockedIds()"
+          [expandedIds]="expandedIds"
+          [selectedIds]="selectedIds"
+        />
+      }
+      @if (displayGroups().length === 0) {
+        <p class="p-4 text-sm text-slate-600">{{ 'placeholders.no-results-found' | translate }}</p>
+      }
+    </div>
+  </div>
+
+  <div
+    modal-actions
+    class="flex w-full flex-wrap items-center justify-between gap-3 border-t border-slate-200 bg-slate-50/90 py-2"
+  >
+    <div class="flex min-w-0 flex-col gap-0.5">
+      @if (selectionMode === SelectMode.SINGLE) {
+        <span class="text-xs font-medium uppercase tracking-wide text-slate-500">
+          {{ 'select-groups-modal.footer-single-label' | translate }}
+        </span>
+        <span class="truncate font-semibold text-slate-900">
+          @if (firstSelectedGroupName()) {
+            {{ firstSelectedGroupName() }}
+          } @else {
+            {{ 'select-groups-modal.footer-single-empty' | translate }}
+          }
+        </span>
+      } @else {
+        <span class="text-sm text-slate-700">
+          {{ 'select-groups-modal.footer-multi-summary' | translate: { count: selectedCount() } }}
+        </span>
+      }
+    </div>
+    <div class="flex shrink-0 items-center gap-2">
+      <button
+        mat-button
+        type="button"
+        mat-dialog-close
+      >
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        (click)="confirm()"
+        mat-flat-button
+        color="primary"
+        type="button"
+      >
+        {{ 'select-groups-modal.save-changes' | translate }}
+      </button>
+    </div>
+  </div>
+</proffeo-modal>

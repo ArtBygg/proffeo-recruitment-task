@@ -1,0 +1,13 @@
+@use '@angular/material' as mat;
+
+@mixin mat-button-tokens() {
+  @include mat.button-overrides(
+    (
+      outlined-container-shape: var(--radius-md),
+      outlined-container-height: var(--material-container-height),
+      outlined-outline-width: var(--border-width),
+      outlined-outline-color: var(--color-slate-200),
+      outlined-hover-state-layer-opacity: var(--color-slate-400)
+    )
+  );
+}

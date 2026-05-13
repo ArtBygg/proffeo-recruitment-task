@@ -1,0 +1,42 @@
+@if (url()) {
+  <div
+    [ngClass]="{
+      'h-16 w-16': size() === 'small',
+      'h-20 w-20': size() === 'medium',
+      'h-40 w-full': size() === 'large'
+    }"
+    class="relative rounded-md overflow-hidden"
+  >
+    <img
+      [ngClass]="{
+        'h-16 w-16': size() === 'small',
+        'h-20 w-20': size() === 'medium',
+        'h-40 w-full': size() === 'large'
+      }"
+      [src]="url()"
+      [alt]="projectName()"
+      class="object-cover"
+    />
+
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-white text-2xl font-semibold uppercase">
+        {{ projectName()?.charAt(0) }}
+      </span>
+    </div>
+  </div>
+} @else {
+  <div
+    [ngClass]="{
+      'h-16 w-16': size() === 'small',
+      'h-20 w-20': size() === 'medium',
+      'h-40 w-full': size() === 'large'
+    }"
+    class="relative flex items-center justify-center rounded-md overflow-hidden bg-gradient-to-br from-slate-400 to-slate-600"
+  >
+    <div class="absolute inset-0 bg-cover bg-center blur-sm opacity-80"></div>
+    <div class="absolute inset-0 bg-black/70"></div>
+    <span class="relative z-10 text-white text-2xl font-semibold uppercase">
+      {{ projectName()?.charAt(0) }}
+    </span>
+  </div>
+}

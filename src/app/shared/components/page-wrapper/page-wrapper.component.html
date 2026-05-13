@@ -1,0 +1,25 @@
+<div class="flex w-full items-center justify-center px-2 py-4 lg:p-8">
+  <div class="flex min-h-full items-center w-full flex-col gap-3 lg:gap-6">
+    <proffeo-breadcrumb class="flex self-start w-full" />
+    @if (!hideHeader()) {
+      <div class="flex flex-col gap-3 max-w-content w-full">
+        <div class="flex w-full flex-col gap-3 px-2">
+          <p class="text-3xl lg:text-4xl font-medium">{{ title() }}</p>
+        </div>
+        <div
+          #headerContent
+          [class.hidden]="!hasHeader"
+          class="flex w-full"
+        >
+          <ng-content select="[page-header]"></ng-content>
+        </div>
+      </div>
+    }
+    <div class="flex w-full min-h-full overflow-hidden max-w-content">
+      <ng-content class="min-h-full"></ng-content>
+    </div>
+    <div class="flex w-full flex-col gap-1 px-2">
+      <p class="text-font-300 font-medium capitalize text-sm text-left">version: {{ currentApplicationVersion }}</p>
+    </div>
+  </div>
+</div>

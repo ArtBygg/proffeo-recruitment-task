@@ -1,0 +1,25 @@
+<proffeo-modal [title]="'project-industries.modals.select-admin-modal-title' | translate">
+  <div class="flex flex-col w-full h-full gap-2">
+    @if (companyUsers()?.length) {
+      <proffeo-select-user-list
+        [(selectedUser)]="selectedUser"
+        [preselectedUserId]="preselectedUser()"
+        [originalUsers]="companyUsers()"
+      ></proffeo-select-user-list>
+    }
+  </div>
+  <div
+    modal-actions
+    class="flex w-full justify-end gap-2"
+  >
+    <proffeo-button
+      text="close"
+      matDialogClose
+    ></proffeo-button>
+    <proffeo-button
+      (click)="save()"
+      [type]="ButtonType.ACCENT"
+      text="save-and-close"
+    ></proffeo-button>
+  </div>
+</proffeo-modal>

@@ -1,0 +1,7 @@
+<mat-checkbox
+  (change)="onCheckboxChange($event)"
+  [checked]="localValue()"
+  [disabled]="disabled()"
+>
+  <p [class]="labelTailwindClasses()">{{ label() }}</p>
+</mat-checkbox>

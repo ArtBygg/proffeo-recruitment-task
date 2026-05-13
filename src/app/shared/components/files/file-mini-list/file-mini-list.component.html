@@ -1,0 +1,18 @@
+@if (files() !== undefined) {
+  <div class="flex overflow-x-auto gap-2.5 pb-2">
+    @for (file of files(); track file.id) {
+      <proffeo-mini-file-item
+        (preview)="onPreviewFile($event)"
+        (delete)="onDeleteFile($event)"
+        (download)="onDownloadFile($event)"
+        (setAsAvatar)="onSetAsAvatar($event)"
+        [file]="file"
+        [canSetAsAvatar]="canSetAsAvatar() && file.isImage()"
+        [isAvatar]="avatarFileId() === file.id"
+        class="w-44 shrink-0"
+      />
+    }
+  </div>
+} @else {
+  {{ 'loading-data' | translate }}
+}

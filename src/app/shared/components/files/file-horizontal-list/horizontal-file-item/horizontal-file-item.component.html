@@ -1,0 +1,63 @@
+<div
+  class="h-full flex flex-row border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-md transition-all duration-200"
+>
+  <proffeo-file-item-thumbnail
+    (click)="onPreview()"
+    [file]="file()"
+    [isAvatar]="isAvatar()"
+    class="cursor-pointer max-h-40 w-40 shrink-0"
+  />
+
+  <div class="flex flex-row items-center h-full w-full min-w-0 gap-1 p-2 justify-between relative">
+    <!-- File Info -->
+    <div class="flex flex-col h-full flex-1 min-w-0 gap-1 justify-between">
+      @if (showTitle()) {
+        <p
+          [matTooltip]="file()?.name"
+          class="text-gray-700 text-sm line-clamp-1 group-hover:text-accent-600 transition-colors"
+        >
+          {{ file()?.name }}
+        </p>
+      }
+      <proffeo-file-description
+        (descriptionChange)="onDescriptionChange($event)"
+        [description]="file()?.description"
+        class="block min-w-0 w-full"
+      />
+
+      <!-- User & Date -->
+      <div class="items-center justify-between">
+        <div class="flex items-center gap-2">
+          <proffeo-avatar
+            [user]="file()?.createdBy()"
+            [size]="avatarSize"
+          ></proffeo-avatar>
+          <span class="text-xs text-gray-500">
+            {{ file()?.createdAt | date: 'd.MM.yy' }}
+          </span>
+        </div>
+        @if (showOverlay()) {
+          <proffeo-file-item-actions
+            (clickOutside)="showOverlay.set(false)"
+            (mouseleave)="showOverlay.set(false)"
+            (preview)="onPreview()"
+            (delete)="onDelete()"
+            (download)="onDownload()"
+            (setAsAvatar)="onSetAsAvatar()"
+            [file]="file()"
+            [canSetAsAvatar]="canSetAsAvatar()"
+            [isAvatar]="isAvatar()"
+            proffeoClickedOutside
+            class="absolute bottom-0 right-0 w-full"
+          />
+        }
+      </div>
+    </div>
+
+    <mat-icon
+      (click)="showOverlay.set(true)"
+      fontIcon="more_vert"
+      class="cursor-pointer"
+    ></mat-icon>
+  </div>
+</div>

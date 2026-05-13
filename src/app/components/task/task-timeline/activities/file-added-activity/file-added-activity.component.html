@@ -1,0 +1,16 @@
+@if (files().length > 0) {
+  <div class="flex gap-1 items-center">
+    @if (!isMobile()) {
+      <span class="text-slate-500 text-sm">{{ 'task-details-modal-added-files' | translate }}:</span>
+    }
+    <proffeo-thumbnails-carousel
+      (thumbnailClick)="onThumbnailClick($event)"
+      [files]="files()"
+      [allowDelete]="false"
+    ></proffeo-thumbnails-carousel>
+  </div>
+} @else {
+  <div class="flex gap-1 items-center">
+    <span class="text-slate-500 text-sm">{{ 'file-added-activity-file-removed' | translate }}</span>
+  </div>
+}

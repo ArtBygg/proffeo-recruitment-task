@@ -1,0 +1,21 @@
+<proffeo-modal [title]="title">
+  <p
+    [innerHTML]="desc"
+    class="text-base"
+  ></p>
+  <div
+    modal-actions
+    class="flex w-full justify-end gap-2"
+  >
+    <proffeo-button
+      (click)="close(false)"
+      [type]="ButtonType.PRIMARY"
+      text="modals.confirmation-modal-cancel"
+    ></proffeo-button>
+    <proffeo-button
+      (click)="close(true)"
+      [type]="ButtonType.ACCENT"
+      text="modals.confirmation-modal-confirm"
+    ></proffeo-button>
+  </div>
+</proffeo-modal>

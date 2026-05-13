@@ -1,0 +1,41 @@
+<!--
+<mat-date-range-input
+  [rangePicker]="rangePicker"
+  class="w-0 h-0 absolute bottom-0 left-0 opacity-0"
+>
+  <input
+    matStartDate
+    placeholder="Od"
+    [value]="value().start"
+    (dateChange)="updateStart($event.value)"
+    (blur)="onTouched()"
+  />
+
+  <input
+    matEndDate
+    placeholder="Do"
+    [value]="value().end"
+    (dateChange)="updateEnd($event.value)"
+    (blur)="onTouched()"
+  />
+</mat-date-range-input>
+<input
+  (click)="rangePicker.open()"
+  [value]="getRangeParsedValue()"
+  [disabled]="disabled()"
+  [placeholder]="placeholder()"
+  [readonly]="true"
+  class="w-full placeholder:text-slate-500 h-[42px] text-sm focus:ring-rose-600"
+  type="text"
+/>
+@if (showIcon()) {
+  <mat-icon
+    [ngClass]="{ 'opacity-50': disabled() }"
+    (click)="rangePicker.open()"
+    fontIcon="calendar_month"
+    class="absolute cursor-pointer right-2 top-1/2 transform -translate-y-1/2 text-font-400"
+  ></mat-icon>
+}
+<mat-date-range-picker #rangePicker></mat-date-range-picker>
+
+-->

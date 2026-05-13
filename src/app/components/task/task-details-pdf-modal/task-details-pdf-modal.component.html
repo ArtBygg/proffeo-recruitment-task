@@ -1,0 +1,39 @@
+<proffeo-modal [title]="'task-details-pdf-create-title' | translate">
+  <p class="text-sm text-slate-500 mb-2">
+    {{ 'task-details-pdf-create-description' | translate }}
+  </p>
+
+  <div class="relative w-full">
+    @if (isLoading()) {
+      <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/60">
+        <mat-spinner diameter="48"></mat-spinner>
+      </div>
+    }
+
+    <proffeo-task-details-pdf
+      [(sectionsModel)]="sections"
+      [task]="task"
+    ></proffeo-task-details-pdf>
+  </div>
+
+  <div
+    modal-actions
+    class="flex w-full justify-end gap-2"
+  >
+    <button
+      [disabled]="isLoading()"
+      mat-stroked-button
+      mat-dialog-close
+    >
+      {{ 'task-details-pdf-create-cancel-text' | translate }}
+    </button>
+    <button
+      (click)="onPdfGenerate()"
+      [disabled]="isLoading()"
+      mat-flat-button
+      color="primary"
+    >
+      {{ 'task-details-pdf-create-generate-text' | translate }}
+    </button>
+  </div>
+</proffeo-modal>

@@ -1,0 +1,52 @@
+<div class="flex justify-start items-center">
+  <div
+    [style.padding-right]="showNumberOnly() ? 0 : paddingValue"
+    class="flex flex-nowrap justify-center items-center avatars-group-container"
+  >
+    @if (groupUsers()?.length) {
+      @for (
+        user of groupUsers() | slice: 0 : (showNumberOnly() ? 1 : showAvatarsCount());
+        track index;
+        let index = $index;
+        let first = $first
+      ) {
+        <div
+          (click)="onAvatarClick(user)"
+          [style.z-index]="getZIndex(index)"
+          [style.margin-left]="!marginFirstAvatar() && first ? 0 : marginValue"
+          class="relative"
+        >
+          @if (user) {
+            <proffeo-avatar
+              [user]="user"
+              [size]="avatarSize()"
+              [borderType]="user?.id === administratorId() ? AvatarBorderType.GroupAdmin : AvatarBorderType.User"
+              [avatarNumber]="showNumberOnly() ? groupUsers().length : null"
+            />
+          }
+        </div>
+      }
+    } @else {
+      <div
+        (click)="onAvatarClick(undefined)"
+        [style.z-index]="getZIndex(index)"
+        [style.margin-left]="!marginFirstAvatar() && first ? 0 : marginValue"
+        class="relative"
+      >
+        <proffeo-avatar
+          [user]="undefined"
+          [size]="avatarSize()"
+          [borderType]="AvatarBorderType.User"
+          [avatarNumber]="showNumberOnly() ? groupUsers().length : null"
+        />
+      </div>
+    }
+  </div>
+
+  @if (groupUsers() && showMore() && groupUsers().length > avatarsCount() && !showNumberOnly()) {
+    <div class="pl-2.5 text-slate-500">
+      <span>+</span>
+      {{ groupUsers().length - avatarsCount() }}
+    </div>
+  }
+</div>

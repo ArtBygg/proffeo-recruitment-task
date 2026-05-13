@@ -1,0 +1,56 @@
+<proffeo-modal [title]="'task-filters.user-role-modal-title' | translate">
+  <div class="flex flex-col gap-4">
+    <mat-form-field class="w-full">
+      <mat-label>{{ 'task-filters.user-role-user' | translate }}</mat-label>
+      <mat-select
+        (selectionChange)="selectedUserUserId.set($event.value)"
+        [value]="selectedUserUserId()"
+      >
+        <mat-option [value]="null">{{ 'task-filters.user-role-none' | translate }}</mat-option>
+        @for (user of data.availableUsers; track user.id) {
+          <mat-option [value]="user.id">{{ user.fullName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>{{ 'task-filters.user-role-industry-admin' | translate }}</mat-label>
+      <mat-select
+        (selectionChange)="selectedIndustryAdminUserId.set($event.value)"
+        [value]="selectedIndustryAdminUserId()"
+      >
+        <mat-option [value]="null">{{ 'task-filters.user-role-none' | translate }}</mat-option>
+        @for (user of data.availableIndustryAdmins; track user.id) {
+          <mat-option [value]="user.id">{{ user.fullName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>{{ 'task-filters.user-role-group-admin' | translate }}</mat-label>
+      <mat-select
+        (selectionChange)="selectedGroupAdminUserId.set($event.value)"
+        [value]="selectedGroupAdminUserId()"
+      >
+        <mat-option [value]="null">{{ 'task-filters.user-role-none' | translate }}</mat-option>
+        @for (user of data.availableGroupAdmins; track user.id) {
+          <mat-option [value]="user.id">{{ user.fullName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div
+    modal-actions
+    class="flex w-full justify-end gap-2"
+  >
+    <proffeo-button
+      text="close"
+      matDialogClose
+    ></proffeo-button>
+    <proffeo-button
+      (click)="save()"
+      [type]="ButtonType.ACCENT"
+      text="save-and-close"
+    ></proffeo-button>
+  </div>
+</proffeo-modal>

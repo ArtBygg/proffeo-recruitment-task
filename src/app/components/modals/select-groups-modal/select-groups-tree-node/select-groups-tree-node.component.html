@@ -1,0 +1,80 @@
+@if (isVisible()) {
+  <div
+    [ngClass]="{ 'bg-sky-50/80': isSelected() }"
+    class="relative flex min-w-0 w-full max-w-full flex-col border-b border-black/10"
+  >
+    <div class="relative w-full min-w-0 max-w-full py-2 pr-[196px] max-sm:pr-[148px]">
+      <div
+        [style.padding-left.px]="12 + depth() * 16"
+        class="flex min-w-0 items-center gap-2"
+      >
+        <button
+          (click)="showChevron() && toggleExpand()"
+          [class.opacity-0]="!showChevron()"
+          [disabled]="!showChevron()"
+          [attr.aria-expanded]="isExpanded()"
+          type="button"
+          class="flex h-8 w-8 shrink-0 items-center justify-center rounded text-slate-600 hover:bg-slate-100"
+        >
+          <mat-icon
+            [fontIcon]="isExpanded() ? 'stat_minus_1' : 'chevron_forward'"
+            class="material-symbols-outlined icon-lg text-slate-600!"
+          />
+        </button>
+
+        @if (selectionMode() === SelectMode.MULTIPLE) {
+          <mat-checkbox
+            (change)="onCheckboxChange($event.checked)"
+            [checked]="isSelected()"
+            [disabled]="isLocked()"
+            class="shrink-0"
+          />
+        } @else {
+          <mat-radio-button
+            (change)="onRadioSelect()"
+            [checked]="isSelected()"
+            [disabled]="isLocked()"
+            class="shrink-0"
+          />
+        }
+
+        <div class="min-w-0 flex-1">
+          <p class="truncate font-medium text-slate-800">{{ group().name }}</p>
+          <p class="truncate text-xs text-slate-500">
+            @if (group().childrenCount > 0) {
+              {{
+                'select-groups-modal.subtitle-members-children'
+                  | translate: { memberCount: memberCount(), childCount: group().childrenCount }
+              }}
+            } @else {
+              {{ 'select-groups-modal.subtitle-members-only' | translate: { memberCount: memberCount() } }}
+            }
+          </p>
+        </div>
+      </div>
+
+      <div class="absolute right-0 top-0 flex h-full w-[184px] items-center justify-start pl-2 max-sm:w-[132px]">
+        <proffeo-group-avatars
+          [groupUsers]="groupUsers()"
+          [showAvatarsCount]="3"
+          [avatarSize]="AvatarSize.EXTRA_SMALL"
+        />
+      </div>
+    </div>
+
+    @if (isExpanded() && allowHierarchy()) {
+      @for (child of childGroups(); track child.id) {
+        <proffeo-select-groups-tree-node
+          [group]="child"
+          [depth]="depth() + 1"
+          [selectionMode]="selectionMode()"
+          [allowHierarchy]="allowHierarchy()"
+          [searchLower]="searchLower()"
+          [lockedIds]="lockedIds()"
+          [expandedIds]="expandedIds()"
+          [selectedIds]="selectedIds()"
+        />
+      }
+    }
+  </div>
+}

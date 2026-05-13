@@ -1,0 +1,60 @@
+<div
+  [class]="isLoggedInUserReport() ? '' : 'opacity-50'"
+  class="bg-darkGray-100 flex w-full justify-between gap-2 rounded-lg border-opacity-10"
+>
+  <!-- Time column -->
+  <div class="bg-darkGray-300 flex flex-col gap-0.5 rounded-l-lg p-2 w-[68px] items-center justify-center">
+    <span class="text-lg font-semibold text-white opacity-75">
+      {{ report().dateFrom | date: 'HH:mm' }}
+    </span>
+    <span class="text-lg font-semibold text-white">
+      {{ report().dateTo | date: 'HH:mm' }}
+    </span>
+  </div>
+
+  <!-- Content -->
+  <div class="flex w-full items-center justify-between">
+    <div class="flex h-full max-w-[175px] flex-col justify-center py-2">
+      <p class="text-font truncate text-base font-medium">
+        {{ report().user()?.firstName + ' ' + report().user()?.lastName }}
+      </p>
+      <p class="text-font truncate text-sm">{{ report().description }}</p>
+    </div>
+    <div class="flex h-[68px] min-h-[68px] flex-col items-center justify-center gap-1 rounded-r-lg p-2">
+      <div class="flex gap-2">
+        <p class="text-font font-medium">{{ report().duration | intlDuration }}</p>
+        @if (isLoggedInUserReport()) {
+          <mat-icon
+            [matMenuTriggerFor]="matTaskCardMenu"
+            fontIcon="more_vert"
+            class="cursor-pointer"
+          ></mat-icon>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-menu #matTaskCardMenu="matMenu">
+  <button
+    (click)="onEditTimeReportCardClick(report())"
+    mat-menu-item
+  >
+    <mat-icon
+      fontIcon="edit"
+      class="mr-2 text-[25px] h-[25px] w-[25px] material-symbols-outlined"
+    ></mat-icon>
+    {{ 'reports-work-time-report-actions-menu-edit-report' | translate }}
+  </button>
+
+  <button
+    (click)="onDeleteTimeReportCardClick(report())"
+    mat-menu-item
+  >
+    <mat-icon
+      fontIcon="delete"
+      class="mr-2 text-[25px] h-[25px] w-[25px] material-symbols-outlined"
+    ></mat-icon>
+    {{ 'reports-work-time-report-actions-menu-delete-report' | translate }}
+  </button>
+</mat-menu>

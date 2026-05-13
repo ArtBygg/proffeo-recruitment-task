@@ -1,0 +1,89 @@
+<div
+  #menuTrigger="matMenuTrigger"
+  (menuOpened)="disableScroll()"
+  (menuClosed)="enableScroll()"
+  (click)="$event.stopPropagation()"
+  [matMenuTriggerFor]="dropdown"
+  [class.cursor-pointer]="!isReadonly()"
+  [class.disabled]="isReadonly()"
+  class="flex items-center menu-trigger-item"
+>
+  @if (percentageSliderPickerValueTpl) {
+    <ng-container *ngTemplateOutlet="percentageSliderPickerValueTpl.tpl; context: { $implicit: value }"></ng-container>
+  } @else {
+    @if (displayMode() === percentageDisplayMode.ICON_WITH_TEXT) {
+      <div class="flex gap-1 items-center">
+        <mat-icon
+          [fontIcon]="iconType()"
+          class="h-[22px]! w-[18px]! text-[20px]! opacity-50"
+        ></mat-icon>
+        <p class="text-sm">{{ value ?? 0 }}%</p>
+      </div>
+    }
+
+    @if (displayMode() === percentageDisplayMode.PROGRESS_BAR) {
+      <div
+        [style.width]="progressBarWidth()"
+        [style.height]="progressBarHeight()"
+        class="hover-opacity relative flex items-center justify-center rounded-full bg-slate-200"
+      >
+        <div
+          [style.width]="(value ?? 0) + '%'"
+          class="absolute left-0 flex h-full rounded-full bg-proffeo-green/60"
+        ></div>
+        <p
+          [class.text-white]="(value ?? 0) > 50"
+          [class.text-slate-700]="(value ?? 0) <= 50"
+          class="z-[1] text-sm font-medium transition-colors duration-200"
+        >
+          {{ value ?? 0 }}%
+        </p>
+      </div>
+    }
+
+    @if (displayMode() === percentageDisplayMode.MINIMAL_BAR || minimalMode()) {
+      <div class="flex gap-2 items-center">
+        @if (!minimalMode()) {
+          <div class="flex w-8 h-8 justify-center items-center">
+            <mat-icon
+              fontIcon="bar_chart"
+              class="text-[25px] h-[25px] w-[25px] text-slate-500"
+            ></mat-icon>
+          </div>
+        }
+        @if (minimalMode()) {
+          <div
+            class="flex flex-col rounded-full border border-black/10 shadow bg-slate-200 w-2.5 h-[44px] justify-end items-end"
+          >
+            <div
+              #percentageBar
+              class="w-full rounded-full"
+            ></div>
+          </div>
+        }
+        <span class="whitespace-nowrap">{{ value }} %</span>
+      </div>
+    }
+  }
+</div>
+
+<mat-menu
+  #dropdown
+  class="percentage-menu-panel"
+>
+  <div
+    (click)="$event.stopPropagation()"
+    class="py-1"
+  >
+    <proffeo-percentage-slider-picker
+      (newValue)="onValueChange($event)"
+      [value]="value"
+      [min]="min()"
+      [max]="max()"
+      [step]="step()"
+      [showSliderValue]="showSliderValue()"
+      [showLabel]="showLabel()"
+      class="percentage-slider-wrapper"
+    ></proffeo-percentage-slider-picker>
+  </div>
+</mat-menu>

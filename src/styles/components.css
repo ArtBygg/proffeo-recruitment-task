@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+@layer components {
+  .text-hover {
+    @apply cursor-pointer hover:text-slate-900 hover:font-medium duration-150 transition-all;
+  }
+
+  .inactive-task-tab {
+    @apply flex gap-1.5 opacity-70 items-center justify-center md:px-3.5 md:py-2.5 p-2 hover:opacity-100 transition-all duration-150 cursor-pointer;
+  }
+
+  .active-task-tab {
+    @apply text-accent flex border-b-2 border-accent gap-1.5 items-center justify-center md:px-3.5 md:py-2.5 p-2;
+  }
+}

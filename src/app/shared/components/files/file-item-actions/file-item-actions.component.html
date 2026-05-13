@@ -1,0 +1,39 @@
+<div class="border-t border-gray-100 animate-in fade-in-0 duration-200">
+  <div class="flex flex-wrap gap-2 justify-between bg-gray-50 p-1">
+    <div class="flex flex-wrap gap-2">
+      @if (isFileViewable(file())) {
+        <proffeo-button
+          (click)="onPreview($event)"
+          [iconSize]="IconSize.SM"
+          [tooltip]="'files.files-list-preview' | translate"
+          fontIcon="visibility"
+        ></proffeo-button>
+      }
+      <proffeo-button
+        (click)="onDownload($event)"
+        [iconSize]="IconSize.SM"
+        [tooltip]="'files.files-list-download' | translate"
+        fontIcon="download"
+      ></proffeo-button>
+
+      <!-- Set as Avatar -->
+      @if (file()?.isImage() && isAvatar() === false && canSetAsAvatar()) {
+        <proffeo-button
+          (click)="onSetAsAvatar($event)"
+          [iconSize]="IconSize.SM"
+          [disabled]="isAvatar()"
+          [tooltip]="'files.files-list-set-avatar' | translate"
+          fontIcon="account_circle"
+        ></proffeo-button>
+      }
+    </div>
+
+    <proffeo-button
+      (click)="onDelete($event)"
+      [iconSize]="IconSize.SM"
+      [type]="ButtonType.ACCENT"
+      [tooltip]="'files.files-list-delete' | translate"
+      fontIcon="delete"
+    ></proffeo-button>
+  </div>
+</div>

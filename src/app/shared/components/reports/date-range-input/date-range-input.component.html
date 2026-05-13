@@ -1,0 +1,18 @@
+<div class="flex w-full items-center justify-center">
+  <div class="bg-darkGray-200 flex items-center justify-center rounded-md px-4 py-2 text-white">
+    <mat-date-range-input [rangePicker]="picker">
+      <input
+        (dateChange)="selectRangeStart($event.value)"
+        [value]="dateRangeSelected()?.start"
+        matStartDate
+        placeholder="Start date"
+      />
+      <input
+        (dateChange)="selectRangeEnd($event.value)"
+        [value]="dateRangeSelected()?.end"
+        matEndDate
+        placeholder="End date"
+      />
+    </mat-date-range-input>
+  </div>
+</div>

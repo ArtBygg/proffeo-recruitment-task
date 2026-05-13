@@ -1,0 +1,24 @@
+<div class="flex h-full items-center">
+  <mat-icon
+    (click)="openPicker()"
+    [ngClass]="selectedTimeMode() === SelectedTimeReportTypeEnum.RANGE ? 'bg-darkGray-400 text-white' : 'text-slate'"
+    fontIcon="calendar_month"
+    class="flex items-center scale-125 justify-center rounded-full text-3xl font-medium cursor-pointer w-12 h-12"
+  />
+</div>
+
+<mat-form-field class="absolute h-0 w-0 overflow-hidden opacity-0">
+  <mat-date-range-input [rangePicker]="picker">
+    <input
+      (dateChange)="onDateRangeChange($event.value, null)"
+      matStartDate
+      placeholder="Start date"
+    />
+    <input
+      (dateChange)="onDateRangeChange(null, $event.value)"
+      matEndDate
+      placeholder="End date"
+    />
+  </mat-date-range-input>
+  <mat-date-range-picker #picker />
+</mat-form-field>

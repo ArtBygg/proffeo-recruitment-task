@@ -1,0 +1,120 @@
+/* To be deleted in terms of shared */
+.input-default {
+  @apply bg-primary px-3 py-2 rounded-md border border-slate-200 focus:outline-none focus:border-black/50 placeholder:text-font/60;
+}
+
+/* To be deleted in terms of shared */
+.invalid {
+  @apply bg-red-50 px-3 py-2 border-red-500/50 focus:outline-none focus:border-red-500;
+}
+
+/* To be changed in terms of tasks */
+.border-default {
+  @apply border-slate-200 border-1 rounded-md;
+}
+
+.border-primary {
+  @apply border-slate-800 border-1 rounded-md;
+}
+
+.border-hover {
+  @apply border border-slate-200 rounded-md hover:ring-1 hover:ring-secondary/30 hover:border-slate-300 duration-150 transition-all cursor-pointer;
+}
+
+.border-active {
+  @apply border border-slate-300 rounded-md ring-1 ring-secondary/30;
+}
+
+.hover-opacity {
+  @apply transition-all duration-150 hover:opacity-75 cursor-pointer;
+}
+
+.text-hover-medium {
+  @apply cursor-pointer hover:text-slate-900 hover:font-medium duration-150 transition-all;
+}
+
+.transition-default {
+  @apply transition-all duration-150;
+}
+
+.icon-xxs {
+  --icon-size: 12px !important;
+  --icon-opsz: 12 !important;
+}
+
+.icon-xs {
+  --icon-size: 16px !important;
+  --icon-opsz: 16 !important;
+}
+
+.icon-sm {
+  --icon-size: 18px !important;
+  --icon-opsz: 18 !important;
+}
+
+.icon-md {
+  --icon-size: 20px !important;
+  --icon-opsz: 20 !important;
+}
+
+.icon-base {
+  --icon-size: 24px !important;
+  --icon-opsz: 24 !important;
+}
+
+.icon-lg {
+  --icon-size: 28px !important;
+  --icon-opsz: 28 !important;
+}
+
+.icon-xl {
+  --icon-size: 32px !important;
+  --icon-opsz: 32 !important;
+}
+
+.icon-2xl {
+  --icon-size: 40px !important;
+  --icon-opsz: 40 !important;
+}
+
+.icon-3xl {
+  --icon-size: 55px !important;
+  --icon-opsz: 48 !important;
+}
+
+.order-1 {
+  order: 1;
+}
+.order-2 {
+  order: 2;
+}
+.order-3 {
+  order: 3;
+}
+.order-4 {
+  order: 4;
+}
+.order-5 {
+  order: 5;
+}
+.order-6 {
+  order: 6;
+}
+.order-7 {
+  order: 7;
+}
+.order-8 {
+  order: 8;
+}
+.order-9 {
+  order: 9;
+}
+.order-10 {
+  order: 10;
+}
+.order-11 {
+  order: 11;
+}
+.order-12 {
+  order: 12;
+}

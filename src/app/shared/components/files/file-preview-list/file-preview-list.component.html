@@ -1,0 +1,32 @@
+@if (files().length > 0) {
+  <div class="flex gap-1.5 items-center w-full overflow-x-auto">
+    @for (file of files(); track $index) {
+      <div class="flex relative p-1.5 items-center justify-center">
+        <div class="flex w-14 h-14 items-center justify-center border border-slate-200 rounded-md bg-white">
+          <span
+            (click)="onRemoveFile(file)"
+            class="flex w-6 h-6 rounded-full bg-accent items-center justify-center aspect-square absolute right-0 top-0 cursor-pointer transition-default hover:bg-accent/75"
+          >
+            <mat-icon
+              fontIcon="delete"
+              class="text-white! icon-sm"
+            ></mat-icon>
+          </span>
+          @if (isImage(file)) {
+            <img
+              [src]="getBlobUrl(file)"
+              class="w-14 h-14 rounded-md object-cover"
+            />
+          } @else {
+            <div class="w-14 h-14 flex items-center justify-center rounded-md text-slate-500">
+              <mat-icon
+                fontIcon="description"
+                class="icon-md"
+              ></mat-icon>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}

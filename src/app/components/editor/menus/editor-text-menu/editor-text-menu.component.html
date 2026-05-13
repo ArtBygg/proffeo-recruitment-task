@@ -1,0 +1,285 @@
+<tiptap-bubble-menu
+  [editor]="editor()"
+  [shouldShow]="shouldShowTextMenu"
+  [tippyOptions]="{ maxWidth: '90vw', duration: 100, delay: 0 }"
+  pluginKey="textMenu"
+>
+  <div
+    role="toolbar"
+    class="editor-menu p-1.5 shadow border rounded"
+  >
+    <button
+      [matTooltip]="'Heading ' + (getCurrentHeadingLevel() ?? 'None')"
+      [class.active]="getCurrentHeadingLevel() !== null"
+      [matMenuTriggerFor]="headingMenu"
+      type="button"
+      aria-label="Heading"
+      class="editor-menu-item"
+    >
+      <span class="text-sm font-bold">Heading {{ getCurrentHeadingLevel() }}</span>
+    </button>
+
+    <mat-menu #headingMenu="matMenu">
+      @for (headingLevel of headingLevels; track $index) {
+        <button
+          (click)="toggleHeading(headingLevel)"
+          mat-menu-item
+        >
+          <span>Heading {{ headingLevel }}</span>
+        </button>
+      }
+    </mat-menu>
+
+    <button
+      (click)="toggleBold()"
+      [class.active]="isBold"
+      [attr.aria-pressed]="isBold"
+      [disabled]="!editor().can().toggleBold()"
+      type="button"
+      matTooltip="Bold"
+      aria-label="Bold"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_bold"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+    <button
+      (click)="toggleItalic()"
+      [class.active]="isItalic"
+      [attr.aria-pressed]="isItalic"
+      [disabled]="!editor().can().toggleItalic()"
+      type="button"
+      matTooltip="Italic"
+      aria-label="Italic"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_italic"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+    <button
+      (click)="toggleUnderline()"
+      [class.active]="isUnderlined"
+      [attr.aria-pressed]="isUnderlined"
+      [disabled]="!editor().can().toggleUnderline()"
+      type="button"
+      matTooltip="Underline"
+      aria-label="Underline"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_underlined"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+    <button
+      (click)="toggleStrikethrough()"
+      [class.active]="isStrikethrough"
+      [attr.aria-pressed]="isStrikethrough"
+      [disabled]="!editor().can().toggleStrike()"
+      type="button"
+      matTooltip="Strikethrough"
+      aria-label="Strikethrough"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_strikethrough"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+    <button
+      (click)="toggleSubscript()"
+      [class.active]="isSubscript"
+      [attr.aria-pressed]="isSubscript"
+      [disabled]="!editor().can().toggleSubscript()"
+      type="button"
+      matTooltip="Subscript"
+      aria-label="Subscript"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="subscript"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+
+    <button
+      (click)="toggleSuperscript()"
+      [class.active]="isSuperscript"
+      [attr.aria-pressed]="isSuperscript"
+      [disabled]="!editor().can().toggleSuperscript()"
+      type="button"
+      matTooltip="Superscript"
+      aria-label="Superscript"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="superscript"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+
+    <button
+      (click)="toggleHighlight()"
+      [class.active]="isHighlighted"
+      [attr.aria-pressed]="isHighlighted"
+      [disabled]="!editor().can().toggleHighlight()"
+      type="button"
+      matTooltip="Highlight"
+      aria-label="Highlight"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_ink_highlighter"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+
+    <div class="flex space-x-1 px-1">
+      <button
+        (click)="setAlignment('left')"
+        [class.active]="isAlignLeft"
+        [attr.aria-pressed]="isAlignLeft"
+        [disabled]="!editor().can().setTextAlign('left')"
+        type="button"
+        matTooltip="Align Left"
+        aria-label="Align Left"
+        class="editor-menu-item"
+      >
+        <mat-icon
+          fontIcon="align_horizontal_left"
+          class="icon-md text-slate-500 material-symbols-outlined"
+        ></mat-icon>
+      </button>
+      <button
+        (click)="setAlignment('center')"
+        [class.active]="isAlignCenter"
+        [attr.aria-pressed]="isAlignCenter"
+        [disabled]="!editor().can().setTextAlign('center')"
+        type="button"
+        matTooltip="Align Center"
+        aria-label="Align Center"
+        class="editor-menu-item"
+      >
+        <mat-icon
+          fontIcon="align_horizontal_center"
+          class="icon-md text-slate-500 material-symbols-outlined"
+        ></mat-icon>
+      </button>
+      <button
+        (click)="setAlignment('right')"
+        [class.active]="isAlignRight"
+        [attr.aria-pressed]="isAlignRight"
+        [disabled]="!editor().can().setTextAlign('right')"
+        type="button"
+        matTooltip="Align Right"
+        aria-label="Align Right"
+        class="editor-menu-item"
+      >
+        <mat-icon
+          fontIcon="align_horizontal_right"
+          class="icon-md text-slate-500 material-symbols-outlined"
+        ></mat-icon>
+      </button>
+      <button
+        (click)="setAlignment('justify')"
+        [class.active]="isAlignJustify"
+        [attr.aria-pressed]="isAlignJustify"
+        [disabled]="!editor().can().setTextAlign('justify')"
+        type="button"
+        matTooltip="Align Justify"
+        aria-label="Align Justify"
+        class="editor-menu-item"
+      >
+        <mat-icon
+          fontIcon="align_horizontal_center"
+          class="icon-md text-slate-500 material-symbols-outlined"
+        ></mat-icon>
+      </button>
+    </div>
+    <button
+      (click)="toggleBulletList()"
+      [class.active]="isBulletList"
+      [attr.aria-pressed]="isBulletList"
+      [disabled]="!editor().can().toggleBulletList()"
+      type="button"
+      matTooltip="Bullet List"
+      aria-label="Bullet List"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_list_bulleted"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+    <button
+      (click)="toggleOrderedList()"
+      [class.active]="isOrderedList"
+      [attr.aria-pressed]="isOrderedList"
+      [disabled]="!editor().can().toggleOrderedList()"
+      type="button"
+      matTooltip="Ordered List"
+      aria-label="Ordered List"
+      class="editor-menu-item"
+    >
+      <mat-icon
+        fontIcon="format_list_numbered"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+
+    <button
+      #colorBtn
+      (click)="pickerOpen = !pickerOpen"
+      type="button"
+      matTooltip="Text Color"
+      aria-label="Text Color"
+      class="editor-menu-item relative"
+    >
+      <input
+        #picker
+        [(cpToggle)]="pickerOpen"
+        (colorPickerChange)="colorChanged($event)"
+        colorPicker
+        class="w-0 h-0 opacity-0 absolute right-0 bottom-0"
+      />
+      <mat-icon
+        fontIcon="format_color_text"
+        class="icon-md text-slate-500 material-symbols-outlined"
+      ></mat-icon>
+    </button>
+
+    <div class="flex gap-1">
+      <button
+        (click)="handleUndo()"
+        [disabled]="!editor().can().undo()"
+        type="button"
+        matTooltip="Undo"
+        aria-label="Undo"
+        class="editor-menu-item"
+      >
+        <mat-icon
+          fontIcon="undo"
+          class="icon-md text-slate-500 material-symbols-outlined"
+        ></mat-icon>
+      </button>
+
+      <button
+        (click)="handleRedo()"
+        [disabled]="!editor().can().redo()"
+        type="button"
+        matTooltip="Redo"
+        aria-label="Redo"
+        class="editor-menu-item"
+      >
+        <mat-icon
+          fontIcon="redo"
+          class="icon-md text-slate-500 material-symbols-outlined"
+        ></mat-icon>
+      </button>
+    </div>
+  </div>
+</tiptap-bubble-menu>

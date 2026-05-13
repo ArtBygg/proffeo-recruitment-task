@@ -1,0 +1,62 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title class="flex w-full items-center justify-between pr-4">
+      <span class="text-base font-semibold text-gray-800">{{ title() | translate }}</span>
+      @if (selectedCount > 0) {
+        <span class="filters-count">
+          {{ selectedCount }}
+        </span>
+      }
+    </mat-panel-title>
+
+    <mat-panel-description>
+      @if (showSearch()) {
+        <proffeo-input
+          (valueChange)="searchQuery.set($event)"
+          (click)="$event.stopPropagation()"
+          (keyup.space)="$event.stopPropagation()"
+          [value]="searchQuery()"
+          [placeholder]="'placeholders.search-input' | translate"
+          matIconName="search"
+        ></proffeo-input>
+      }
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div class="px-4">
+    @if (!hasSubOptions()) {
+      <div class="grid grid-cols-3 gap-2">
+        @for (item of filteredItems(); track item.id) {
+          @if (!item.subOptions) {
+            <div class="rounded px-2 py-1 transition-colors hover:bg-gray-50">
+              <proffeo-checkbox
+                (valueChange)="onToggle(item)"
+                [label]="item.label"
+                [value]="item.selected"
+                class="text-sm"
+              ></proffeo-checkbox>
+            </div>
+          }
+        }
+      </div>
+    } @else {
+      <div class="max-h-64 space-y-3 overflow-y-auto pr-2">
+        @for (item of filteredItems(); track item.id) {
+          @if (item.subOptions) {
+            <div class="mb-2 text-sm font-semibold text-gray-700">{{ item.label }}</div>
+            <div class="grid grid-cols-2 gap-1 md:grid-cols-3">
+              @for (subOption of item.subOptions; track subOption.id) {
+                <proffeo-checkbox
+                  (valueChange)="onSubToggle(item, subOption)"
+                  [label]="subOption.label"
+                  [value]="subOption.selected"
+                  class="text-xs"
+                ></proffeo-checkbox>
+              }
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</mat-expansion-panel>
